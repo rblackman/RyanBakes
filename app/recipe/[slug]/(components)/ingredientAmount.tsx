@@ -1,6 +1,4 @@
 import Fraction from 'app/recipe/[slug]/(components)/fraction';
-import getAllUnits from 'queries/getAllUnits';
-import { use } from 'react';
 import type { SanityReference } from 'sanity-codegen';
 import 'server-only';
 import type { Unit } from 'types/sanity-schema';
@@ -34,11 +32,11 @@ function AmountDisplay({ amount, display, noCount }: AmountProps) {
 interface Props {
 	amount: string;
 	unit: SanityReference<Unit>;
+	units: Unit[];
 	full?: boolean;
 }
 
-export default function IngredientAmount({ amount, unit: { _ref: unitRef }, full }: Props) {
-	const units = use(getAllUnits());
+export default function IngredientAmount({ amount, unit: { _ref: unitRef }, units, full }: Props) {
 	const { display, noCount, noUnit, name, abbreviation } = units.filter(({ _id: id }) => id === unitRef)[0];
 
 	const unitNode = <UnitDisplay name={name} abbreviation={abbreviation} noUnit={noUnit} full={full ?? false} />;

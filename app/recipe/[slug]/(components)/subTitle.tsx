@@ -1,13 +1,19 @@
-import getRecipeBySlug from 'queries/getRecipeBySlug';
-import { Fragment, ReactNode, use } from 'react';
-import 'server-only';
-import { Props } from '../page';
-import styles from './(styles)/subTitle.module.css';
-import Temp from './temp';
-import Time from './time';
+import getRecipeBySlug from "queries/getRecipeBySlug";
+import { Fragment, type ReactNode } from "react";
+import "server-only";
+import type { Props } from "../page";
+import styles from "./(styles)/subTitle.module.css";
+import Temp from "./temp";
+import Time from "./time";
 
-export default function SubTitle({ params: { slug } }: Props) {
-	const { preheat, bakeTime, totalTime, serves } = use(getRecipeBySlug(slug));
+interface SubTitleProps extends Readonly<Omit<Props, "params">> {
+	params: { slug: string } | Promise<{ slug: string }>;
+}
+
+export default async function SubTitle({ params }: SubTitleProps) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
+	const { preheat, bakeTime, totalTime, serves } = await getRecipeBySlug(slug);
 
 	if (!(preheat || bakeTime || totalTime || serves)) {
 		return null;
@@ -22,7 +28,7 @@ export default function SubTitle({ params: { slug } }: Props) {
 				<dd>
 					<Time totalMinutes={totalTime} />
 				</dd>
-			</Fragment>
+			</Fragment>,
 		);
 	}
 
@@ -33,7 +39,7 @@ export default function SubTitle({ params: { slug } }: Props) {
 				<dd>
 					<Time totalMinutes={bakeTime} />
 				</dd>
-			</Fragment>
+			</Fragment>,
 		);
 	}
 
@@ -44,7 +50,7 @@ export default function SubTitle({ params: { slug } }: Props) {
 				<dd>
 					<Temp fahrenheit={preheat} />
 				</dd>
-			</Fragment>
+			</Fragment>,
 		);
 	}
 
@@ -53,13 +59,13 @@ export default function SubTitle({ params: { slug } }: Props) {
 			<Fragment key="serves">
 				<dt>Serves</dt>
 				<dd>{serves}</dd>
-			</Fragment>
+			</Fragment>,
 		);
 	}
 
 	return (
 		<div className={styles.subHeading}>
-			{' '}
+			{" "}
 			<dl className={styles.dl}>{elements}</dl>
 		</div>
 	);

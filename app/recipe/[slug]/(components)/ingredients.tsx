@@ -1,13 +1,14 @@
 import Heading from 'app/(components)/heading';
+import getAllUnits from 'queries/getAllUnits';
 import getRecipeBySlug from 'queries/getRecipeBySlug';
-import { use } from 'react';
 import 'server-only';
-import { Props } from '../page';
 import styles from './(styles)/ingredients.module.css';
 import Ingredient from './ingredient';
 
-export default function Ingredients({ params: { slug } }: Props) {
-	const { ingredients } = use(getRecipeBySlug(slug));
+export default async function Ingredients({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
+	const [{ ingredients }, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
 
 	if (!ingredients) {
 		return null;
@@ -16,17 +17,17 @@ export default function Ingredients({ params: { slug } }: Props) {
 	return (
 		<>
 			<Heading level={3}>Ingredients</Heading>
-			<div className={styles.ingredientsTableWrap}>
-				<table className={styles.ingredientsTable}>
-					<thead className={styles.ingredientsTable_thead}>
+			<div className={styles['ingredientsTableWrap']}>
+				<table className={styles['ingredientsTable']}>
+					<thead className={styles['ingredientsTable_thead']}>
 						<tr>
 							<th scope="col">Ingredient</th>
 							<th scope="col">Amount</th>
 						</tr>
 					</thead>
-					<tbody className={styles.ingredientsTable_tbody}>
+					<tbody className={styles['ingredientsTable_tbody']}>
 						{ingredients.map((ingredient) => (
-							<Ingredient key={ingredient._key} ingredient={ingredient} />
+							<Ingredient key={ingredient._key} ingredient={ingredient} units={units} />
 						))}
 					</tbody>
 				</table>

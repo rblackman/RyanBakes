@@ -1,0 +1,19 @@
+{
+	"ignorePaths": [
+		"git/**/*"
+	],
+	"words": [
+		"clsx",
+		"codegen",
+		"esbuild",
+		"fillmax",
+		"focalpoint",
+		"Groq",
+		"Hotspot",
+		"nodenext",
+		"onrelease",
+		"Parens",
+		"portabletext",
+		"unrs"
+	]
+}

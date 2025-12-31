@@ -6,7 +6,7 @@ import styles from './(styles)/bakeModeToggle.module.css';
 export default function BakeModeToggle() {
 	const [wakeLock, setWakeLock] = useState<WakeLockSentinel | null>(null);
 	const [isBakeModeEnabled, setIsBakeModeEnabled] = useState(false);
-	const [hasWakeLockSupport, setHasWakeLockSupport] = useState(true);
+	const [hasWakeLockSupport, setHasWakeLockSupport] = useState(() => 'wakeLock' in navigator);
 
 	// Request the wake lock
 	const requestWakeLock = async () => {
@@ -63,11 +63,6 @@ export default function BakeModeToggle() {
 			document.removeEventListener('visibilitychange', handleVisibilityChange);
 		};
 	}, [isBakeModeEnabled]);
-
-	// Check if the Wake Lock API is supported on mount
-	useEffect(() => {
-		setHasWakeLockSupport('wakeLock' in navigator);
-	}, []);
 
 	// Toggle the "bake mode" on button click
 	const toggleBakeMode = async () => {

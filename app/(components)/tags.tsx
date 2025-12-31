@@ -10,7 +10,7 @@ interface Props {
 }
 
 export default function Tags({ tags, noMargin }: Props) {
-	const sorted = useMemo(() => tags.sort(), [tags]);
+	const sorted = useMemo(() => [...tags].sort(), [tags]);
 
 	const noMarginClass = noMargin === true ? styles.noMargin : null;
 	const mainClass = styles.tagList;

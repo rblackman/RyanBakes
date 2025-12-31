@@ -1,5 +1,7 @@
-const siteKey = process.env.NEXT_PUBLIC_SANITY_KEY;
-const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+import { clientEnv } from "shared/config/env.client";
+
+const siteKey = clientEnv.NEXT_PUBLIC_SANITY_KEY;
+const dataset = clientEnv.NEXT_PUBLIC_SANITY_DATASET;
 
 const baseAddress = `https://${siteKey}.api.sanity.io/v2021-10-21/data/query/${dataset}`;
 
