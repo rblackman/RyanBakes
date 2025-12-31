@@ -44,5 +44,6 @@
 		"start": "next start",
 		"typecheck": "pnpm exec tsc --noEmit",
 		"validate:env": "tsx --require dotenv/config scripts/validate-env.ts"
-	}
+	},
+	"type": "module"
 }
