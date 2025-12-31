@@ -5,6 +5,7 @@
 	"words": [
 		"clsx",
 		"codegen",
+		"esbuild",
 		"fillmax",
 		"focalpoint",
 		"Groq",
@@ -12,6 +13,7 @@
 		"nodenext",
 		"onrelease",
 		"Parens",
-		"portabletext"
+		"portabletext",
+		"unrs"
 	]
 }
