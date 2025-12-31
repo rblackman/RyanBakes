@@ -1,0 +1,11 @@
+{
+	"servers": {
+		"next-devtools": {
+			"command": "pnpm exec",
+			"args": [
+				"-y",
+				"next-devtools-mcp@latest"
+			]
+		}
+	}
+}

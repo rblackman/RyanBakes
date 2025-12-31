@@ -1,10 +1,11 @@
-import 'server-only';
-import Query from 'types/query';
-import { TagsPage } from 'types/sanity-schema';
-import buildGroqQuery from './lib/buildGroqQuery';
-import nextFetch from './lib/nextFetch';
+import "server-only";
+import { serverEnv } from "shared/config/env.server";
+import type Query from "types/query";
+import type { TagsPage } from "types/sanity-schema";
+import buildGroqQuery from "./lib/buildGroqQuery";
+import nextFetch from "./lib/nextFetch";
 
-const tagsPageKey = process.env.TAGS_PAGE_KEY;
+const tagsPageKey = serverEnv.TAGS_PAGE_KEY;
 
 export default async function getTagsPage(): Promise<TagsPage> {
 	const url = buildGroqQuery(`*[ _id == '${tagsPageKey}' ]`);
@@ -16,7 +17,9 @@ export default async function getTagsPage(): Promise<TagsPage> {
 	}
 
 	if (result.length > 1) {
-		console.warn(`Got more than one ${tagsPageKey}. Using the first.`, { result });
+		console.warn(`Got more than one ${tagsPageKey}. Using the first.`, {
+			result,
+		});
 	}
 
 	return result[0];

@@ -1,11 +1,11 @@
-import type { PortableTextComponents, PortableTextMarkComponentProps, PortableTextProps } from '@portabletext/react';
-import { PortableText as PortableTextComponent } from '@portabletext/react';
-import type { PortableTextBlock, TypedObject } from '@portabletext/types';
-import Fraction from 'app/recipe/[slug]/(components)/fraction';
-import Link from 'next/link';
-import { ReactNode } from 'react';
-import 'server-only';
-import Heading from './heading';
+import type { PortableTextComponents, PortableTextMarkComponentProps, PortableTextProps } from "@portabletext/react";
+import { PortableText as PortableTextComponent } from "@portabletext/react";
+import type { PortableTextBlock, TypedObject } from "@portabletext/types";
+import Fraction from "app/recipe/[slug]/(components)/fraction";
+import Link from "next/link";
+import type { ReactNode } from "react";
+import "server-only";
+import Heading from "./heading";
 
 interface ExternalLinkProps {
 	_type: string;
@@ -13,7 +13,7 @@ interface ExternalLinkProps {
 }
 
 function UnknownMark({ children, markType }: { children: ReactNode; markType: string }) {
-	console.warn('Unknown Mark', { children, markType });
+	console.warn("Unknown Mark", { children, markType });
 	return <span className="UNKNOWN_MARK">{children}</span>;
 }
 
@@ -22,13 +22,13 @@ const portableTextComponents: PortableTextComponents = {
 		h1: ({ children }) => <Heading level={2}>{children}</Heading>,
 		h2: ({ children }) => <Heading level={3}>{children}</Heading>,
 		h3: ({ children }) => <Heading level={4}>{children}</Heading>,
-		normal: ({ children }) => <p>{children}</p>
+		normal: ({ children }) => <p>{children}</p>,
 	},
 	marks: {
 		externalLink: ({ children, value, markType }: PortableTextMarkComponentProps<ExternalLinkProps>) => {
 			if (value) {
 				const { href } = value;
-				if (href.startsWith('/')) {
+				if (href.startsWith("/")) {
 					return <Link href={href}>{children}</Link>;
 				}
 				return <a href={href}>{children}</a>;
@@ -42,10 +42,12 @@ const portableTextComponents: PortableTextComponents = {
 				return <Fraction val={val} />;
 			}
 			return <UnknownMark markType={markType}>{children}</UnknownMark>;
-		}
-	}
+		},
+	},
 };
 
-export default function PortableText<B extends TypedObject = PortableTextBlock>(props: Exclude<PortableTextProps<B>, 'components'>) {
+export default function PortableText<B extends TypedObject = PortableTextBlock>(
+	props: Exclude<PortableTextProps<B>, "components">,
+) {
 	return <PortableTextComponent {...props} components={portableTextComponents} />;
 }

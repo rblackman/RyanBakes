@@ -1,22 +1,24 @@
-import Tags from 'app/(components)/tags';
-import throwError from 'helpers/throwError';
-import createImageBuilder from 'hooks/useImageBuilder';
-import type { Metadata } from 'next';
-import getAllRecipeSlugs from 'queries/getAllRecipeSlugs';
-import getRecipeBySlug from 'queries/getRecipeBySlug';
-import getSiteConfig from 'queries/getSiteConfig';
-import 'server-only';
-import BakeModeToggle from './(components)/bakeModeToggle';
-import Commentary from './(components)/commentary';
-import Hero from './(components)/hero';
-import Ingredients from './(components)/ingredients';
-import Steps from './(components)/steps';
+import Tags from "app/(components)/tags";
+import createImageBuilder from "hooks/useImageBuilder";
+import type { Metadata } from "next";
+import getAllRecipeSlugs from "queries/getAllRecipeSlugs";
+import getRecipeBySlug from "queries/getRecipeBySlug";
+import getSiteConfig from "queries/getSiteConfig";
+import "server-only";
+import { clientEnv } from "shared/config/env.client";
+import BakeModeToggle from "./(components)/bakeModeToggle";
+import Commentary from "./(components)/commentary";
+import Hero from "./(components)/hero";
+import Ingredients from "./(components)/ingredients";
+import Steps from "./(components)/steps";
 
 export type Props = {
 	params: { slug: string } | Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
+export async function generateMetadata({
+	params,
+}: Readonly<Props>): Promise<Metadata> {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
 
@@ -28,21 +30,23 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 		tags,
 		_createdAt: created,
 		_updatedAt: updated,
-		openGraphImage: { asset, alt }
+		openGraphImage: { asset, alt },
 	} = await getRecipeBySlug(slug);
 
-	const baseUrl: string = process.env['NEXT_PUBLIC_BASE_URL'] ?? throwError('Must provide NEXT_PUBLIC_BASE_URL env var');
-	const url = baseUrl ? new URL(`/recipe/${slug}`, baseUrl).toString() : `/recipe/${slug}`;
+	const baseUrl: string = clientEnv.NEXT_PUBLIC_BASE_URL;
+	const url = baseUrl
+		? new URL(`/recipe/${slug}`, baseUrl).toString()
+		: `/recipe/${slug}`;
 	const builder = createImageBuilder(asset);
 	const ogImage = builder.buildUrlWithOptions({
 		width: 1200,
 		height: 627,
-		quality: 0.6
+		quality: 0.6,
 	});
 	const twitterImage = builder.buildUrlWithOptions({
 		width: 4096,
 		height: 2048,
-		quality: 0.6
+		quality: 0.6,
 	});
 
 	return {
@@ -50,7 +54,7 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 		description,
 		keywords: tags,
 		openGraph: {
-			type: 'article',
+			type: "article",
 			url,
 			title: recipeTitle,
 			description,
@@ -59,23 +63,23 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 					url: ogImage,
 					alt,
 					width: 1200,
-					height: 627
-				}
+					height: 627,
+				},
 			],
 			publishedTime: created,
-			modifiedTime: updated
+			modifiedTime: updated,
 		},
 		twitter: {
-			card: 'summary_large_image',
+			card: "summary_large_image",
 			title: recipeTitle,
 			description,
 			images: [
 				{
 					url: twitterImage,
-					alt
-				}
-			]
-		}
+					alt,
+				},
+			],
+		},
 	};
 }
 

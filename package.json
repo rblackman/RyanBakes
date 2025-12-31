@@ -7,7 +7,8 @@
         "react-dom": "^19.2.3",
         "react-icons": "^5.5.0",
         "sanity-codegen": "^0.9.8",
-        "server-only": "^0.0.1"
+        "server-only": "^0.0.1",
+        "zod": "^4.3.2"
     },
     "devDependencies": {
         "@biomejs/biome": "2.3.2",
@@ -20,13 +21,14 @@
         "@vercel/toolbar": "^0.1.41",
         "biome": "^0.3.3",
         "dotenv": "^17.2.3",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.2.7",
         "next-devtools-mcp": "^0.3.7",
         "tsx": "^4.21.0",
         "typescript": "^5.9.3"
     },
     "engines": {
-        "node": ">=20.11.0",
-        "npm": ">=10.7.0"
+        "node": "v22.x"
     },
     "private": true,
     "scripts": {
@@ -36,9 +38,10 @@
         "lint": "biome check",
         "prebuild": "pnpm run validate:env",
         "predev": "pnpm run validate:env",
-        "prepare": "husky install",
+        "preinstall": "corepack enable",
+        "prepare": "husky",
         "start": "next start",
-        "typecheck": "biome check",
+        "typecheck": "pnpm exec tsc --noEmit",
         "validate:env": "tsx --require dotenv/config scripts/validate-env.ts"
     }
 }

@@ -1,10 +1,11 @@
-import 'server-only';
-import Query from 'types/query';
-import { RecipesPage } from 'types/sanity-schema';
-import buildGroqQuery from './lib/buildGroqQuery';
-import nextFetch from './lib/nextFetch';
+import "server-only";
+import { serverEnv } from "shared/config/env.server";
+import type Query from "types/query";
+import type { RecipesPage } from "types/sanity-schema";
+import buildGroqQuery from "./lib/buildGroqQuery";
+import nextFetch from "./lib/nextFetch";
 
-const recipesPageKey = process.env.RECIPES_PAGE_KEY;
+const recipesPageKey = serverEnv.RECIPES_PAGE_KEY;
 
 export default async function getRecipesPage(): Promise<RecipesPage> {
 	const url = buildGroqQuery(`*[ _id == '${recipesPageKey}' ]`);
@@ -16,7 +17,9 @@ export default async function getRecipesPage(): Promise<RecipesPage> {
 	}
 
 	if (result.length > 1) {
-		console.warn(`Got more than one ${recipesPageKey}. Using the first.`, { result });
+		console.warn(`Got more than one ${recipesPageKey}. Using the first.`, {
+			result,
+		});
 	}
 
 	return result[0];

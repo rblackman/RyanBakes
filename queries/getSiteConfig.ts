@@ -1,10 +1,11 @@
-import 'server-only';
-import Query from 'types/query';
-import { SiteConfig } from 'types/sanity-schema';
-import buildGroqQuery from './lib/buildGroqQuery';
-import nextFetch from './lib/nextFetch';
+import "server-only";
+import { serverEnv } from "shared/config/env.server";
+import type Query from "types/query";
+import type { SiteConfig } from "types/sanity-schema";
+import buildGroqQuery from "./lib/buildGroqQuery";
+import nextFetch from "./lib/nextFetch";
 
-const siteConfigKey = process.env.SITE_CONFIG_KEY;
+const siteConfigKey = serverEnv.SITE_CONFIG_KEY;
 
 export default async function getSiteConfig(): Promise<SiteConfig> {
 	const url = buildGroqQuery(`*[ _id == '${siteConfigKey}' ]`);
@@ -16,7 +17,9 @@ export default async function getSiteConfig(): Promise<SiteConfig> {
 	}
 
 	if (result.length > 1) {
-		console.warn(`Got more than one ${siteConfigKey}. Using the first.`, { result });
+		console.warn(`Got more than one ${siteConfigKey}. Using the first.`, {
+			result,
+		});
 	}
 
 	return result[0];

@@ -1,8 +1,8 @@
-import Heading from 'app/(components)/heading';
-import getAllUnits from 'queries/getAllUnits';
-import getRecipeBySlug from 'queries/getRecipeBySlug';
-import 'server-only';
-import Step from './step';
+import Heading from "app/(components)/heading";
+import getAllUnits from "queries/getAllUnits";
+import getRecipeBySlug from "queries/getRecipeBySlug";
+import "server-only";
+import Step from "./step";
 
 export default async function Steps({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
 	const resolvedParams = params instanceof Promise ? await params : params;
@@ -13,16 +13,17 @@ export default async function Steps({ params }: { params: { slug: string } | Pro
 		return null;
 	}
 
-	const getIngredientsForIndex = (index: number) => ingredients.filter(({ usedInSteps }) => (usedInSteps?.indexOf(index + 1) ?? -1) > -1);
+	const getIngredientsForIndex = (index: number) =>
+		ingredients.filter(({ usedInSteps }) => (usedInSteps?.indexOf(index + 1) ?? -1) > -1);
 
 	return (
 		<>
 			<Heading level={3}>Instructions</Heading>
-			<div role="list">
+			<ol>
 				{steps.map((step, i) => (
 					<Step key={step._key} step={step} ingredients={getIngredientsForIndex(i)} units={units} />
 				))}
-			</div>
+			</ol>
 		</>
 	);
 }

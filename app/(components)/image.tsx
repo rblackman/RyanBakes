@@ -1,15 +1,15 @@
-'use client';
-import clsx from 'clsx';
-import createImageBuilder from 'hooks/useImageBuilder';
-import NextImage, { ImageLoaderProps } from 'next/image';
-import { ImageWithAlt } from 'types/sanity-schema';
-import styles from './(styles)/image.module.css';
+"use client";
+import clsx from "clsx";
+import createImageBuilder from "hooks/useImageBuilder";
+import NextImage, { type ImageLoaderProps } from "next/image";
+import type { ImageWithAlt } from "types/sanity-schema";
+import styles from "./(styles)/image.module.css";
 
 interface OptionalBaseProps {
 	quality: number;
 	blur: number;
-	crop: 'top,left' | 'top,right' | 'bottom,left' | 'bottom,right' | 'center' | 'focalpoint' | 'entropy';
-	fit: 'clip' | 'crop' | 'fill' | 'fillmax' | 'max' | 'scale' | 'min';
+	crop: "top,left" | "top,right" | "bottom,left" | "bottom,right" | "center" | "focalpoint" | "entropy";
+	fit: "clip" | "crop" | "fill" | "fillmax" | "max" | "scale" | "min";
 	className?: string;
 	responsive?: boolean;
 	priority?: boolean;
@@ -33,7 +33,7 @@ type Props = FixedWidthProps | AspectRatioProps;
 
 function isFixedWidth(props: Props): props is FixedWidthProps {
 	const height = (props as FixedWidthProps)?.height;
-	if (typeof height === 'number') {
+	if (typeof height === "number") {
 		return true;
 	}
 	return false;
@@ -50,7 +50,7 @@ export default function Image(props: Props) {
 		className,
 		responsive,
 		priority,
-		alt: altOverride
+		alt: altOverride,
 	} = props;
 
 	const { baseUrl, buildUrlWithOptions } = createImageBuilder(asset);
@@ -62,34 +62,47 @@ export default function Image(props: Props) {
 	const aspectRatio = baseWidth / baseHeight;
 
 	// loader function
-	// respect values passed in, but request a specific image width and height
 	const loader = ({ width, quality }: ImageLoaderProps) => {
 		const factor = width / baseWidth;
+
 		return buildUrlWithOptions({
-			blur,
-			crop,
-			fit,
 			width: Math.round(baseWidth * factor),
 			height: Math.round(baseHeight * factor),
-			quality: (providedQuality ?? quality ?? 75) / 100
+			quality: (providedQuality ?? quality ?? 75) / 100,
+
+			...(blur !== undefined ? { blur } : {}),
+			...(crop !== undefined ? { crop } : {}),
+			...(fit !== undefined ? { fit } : {}),
 		});
 	};
 
 	const width = 20;
 	const height = 20 * aspectRatio;
-	const blurImageUrl = buildUrlWithOptions({ blur: 5, crop, fit, width, height, quality: 0.2 });
+
+	const blurImageUrl = buildUrlWithOptions({
+		width,
+		height,
+		quality: 0.2,
+		blur: 5,
+
+		...(crop !== undefined ? { crop } : {}),
+		...(fit !== undefined ? { fit } : {}),
+	});
 
 	// outer div is the container for our image
 	// it gets an aspect ratio and width.
 	// then the image is set to fill the container
 	return (
-		<div className={clsx(styles.image, className)} style={{ width: responsive ? '100%' : baseWidth, aspectRatio: aspectRatio }}>
+		<div
+			className={clsx(styles.image, className)}
+			style={{ width: responsive ? "100%" : baseWidth, aspectRatio: aspectRatio }}
+		>
 			<NextImage
 				src={baseUrl}
 				loader={loader}
 				fill
 				priority={priority ?? false}
-				alt={altOverride ?? (emptyAlt || !alt ? '' : alt)}
+				alt={altOverride ?? (emptyAlt || !alt ? "" : alt)}
 				sizes={`(max-width: ${baseWidth}px) 100vw, ${baseWidth}px`}
 				placeholder="blur"
 				blurDataURL={blurImageUrl}
