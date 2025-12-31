@@ -1,4 +1,4 @@
-import useImageBuilder from '@/hooks/useImageBuilder';
+import createImageBuilder from 'hooks/useImageBuilder';
 import Image from 'next/image';
 import 'server-only';
 import type { InlineImage } from 'types/sanity-schema';
@@ -8,7 +8,7 @@ export interface Props {
 }
 
 export default function ImageSection({ value: { asset, alt, emptyAlt, position } }: Props) {
-	const imageBuilder = useImageBuilder(asset);
+	const imageBuilder = createImageBuilder(asset);
 
 	const img2x = imageBuilder.buildUrlWithOptions({
 		crop: 'focalpoint',

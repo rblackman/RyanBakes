@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import getRecipeById from 'queries/getRecipeById';
-import { use } from 'react';
 import 'server-only';
 import styles from './(styles)/featuredRecipe.module.css';
 import Heading from './heading';
@@ -13,18 +12,18 @@ interface Props {
 	priority?: boolean;
 }
 
-export default function FeaturedRecipe({ id, priority }: Props) {
+export default async function FeaturedRecipe({ id, priority }: Props) {
 	const {
 		title,
 		picture,
 		commentary,
 		tags,
 		slug: { current: slug }
-	} = use(getRecipeById(id));
+	} = await getRecipeById(id);
 
 	return (
 		<div className={styles.featuredRecipe}>
-			<Image image={picture} width={350} aspectRatio={1} className={styles.img} priority={priority === true} />
+			<Image image={picture} width={350} aspectRatio={1} className={styles.img} priority={priority === true} alt={picture.alt} />
 			<Heading level={3} className={styles.heading}>
 				<Link href={`/recipe/${slug}`}>{title}</Link>
 			</Heading>

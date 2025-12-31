@@ -1,13 +1,13 @@
 import getRecipeBySlug from 'queries/getRecipeBySlug';
-import { Fragment, ReactNode, use } from 'react';
+import { Fragment, ReactNode } from 'react';
 import 'server-only';
 import { Props } from '../page';
 import styles from './(styles)/subTitle.module.css';
 import Temp from './temp';
 import Time from './time';
 
-export default function SubTitle({ params: { slug } }: Props) {
-	const { preheat, bakeTime, totalTime, serves } = use(getRecipeBySlug(slug));
+export default async function SubTitle({ params: { slug } }: Props) {
+	const { preheat, bakeTime, totalTime, serves } = await getRecipeBySlug(slug);
 
 	if (!(preheat || bakeTime || totalTime || serves)) {
 		return null;

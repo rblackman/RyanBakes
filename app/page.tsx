@@ -1,10 +1,9 @@
 import getHomepage from 'queries/getHomepage';
-import { use } from 'react';
 import 'server-only';
 import Block from './(components)/block';
 
-export default function Page() {
-	const { content } = use(getHomepage());
+export default async function Page() {
+	const { content } = await getHomepage();
 
 	return (
 		<main>

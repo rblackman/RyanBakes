@@ -1,8 +1,7 @@
 'use client';
 import clsx from 'clsx';
-import useImageBuilder from 'hooks/useImageBuilder';
+import createImageBuilder from 'hooks/useImageBuilder';
 import NextImage, { ImageLoaderProps } from 'next/image';
-import { useCallback, useMemo } from 'react';
 import { ImageWithAlt } from 'types/sanity-schema';
 import styles from './(styles)/image.module.css';
 
@@ -14,6 +13,7 @@ interface OptionalBaseProps {
 	className?: string;
 	responsive?: boolean;
 	priority?: boolean;
+	alt?: string;
 }
 
 interface BaseProps extends Partial<OptionalBaseProps> {
@@ -49,40 +49,35 @@ export default function Image(props: Props) {
 		fit,
 		className,
 		responsive,
-		priority
+		priority,
+		alt: altOverride
 	} = props;
 
-	const { baseUrl, buildUrlWithOptions } = useImageBuilder(asset);
+	const { baseUrl, buildUrlWithOptions } = createImageBuilder(asset);
 
 	// calculate height using either provided height or setting the aspect ratio
-	const baseHeight = useMemo(() => (isFixedWidth(props) ? props.height : Math.round(baseWidth / props.aspectRatio)), [baseWidth, isFixedWidth, props]);
+	const baseHeight = isFixedWidth(props) ? props.height : Math.round(baseWidth / props.aspectRatio);
 
 	// regardless of if we provide an explicit height, we want to set an aspect ratio for CSS
-	const aspectRatio = useMemo(() => baseWidth / baseHeight, [baseWidth, baseHeight]);
+	const aspectRatio = baseWidth / baseHeight;
 
 	// loader function
 	// respect values passed in, but request a specific image width and height
-	const loader = useCallback(
-		({ width, quality }: ImageLoaderProps) => {
-			const factor = width / baseWidth;
-			return buildUrlWithOptions({
-				blur,
-				crop,
-				fit,
-				width: Math.round(baseWidth * factor),
-				height: Math.round(baseHeight * factor),
-				quality: (providedQuality ?? quality ?? 75) / 100
-			});
-		},
-		[buildUrlWithOptions, baseWidth, baseHeight]
-	);
+	const loader = ({ width, quality }: ImageLoaderProps) => {
+		const factor = width / baseWidth;
+		return buildUrlWithOptions({
+			blur,
+			crop,
+			fit,
+			width: Math.round(baseWidth * factor),
+			height: Math.round(baseHeight * factor),
+			quality: (providedQuality ?? quality ?? 75) / 100
+		});
+	};
 
-	const blurImageUrl = useMemo(() => {
-		const width = 20;
-		const height = 20 * aspectRatio;
-
-		return buildUrlWithOptions({ blur: 5, crop, fit, width, height, quality: 0.2 });
-	}, [buildUrlWithOptions, aspectRatio]);
+	const width = 20;
+	const height = 20 * aspectRatio;
+	const blurImageUrl = buildUrlWithOptions({ blur: 5, crop, fit, width, height, quality: 0.2 });
 
 	// outer div is the container for our image
 	// it gets an aspect ratio and width.
@@ -94,9 +89,10 @@ export default function Image(props: Props) {
 				loader={loader}
 				fill
 				priority={priority ?? false}
-				alt={emptyAlt || !alt ? '' : alt}
+				alt={altOverride ?? (emptyAlt || !alt ? '' : alt)}
 				sizes={`(max-width: ${baseWidth}px) 100vw, ${baseWidth}px`}
-				placeholder="empty"
+				placeholder="blur"
+				blurDataURL={blurImageUrl}
 			/>
 		</div>
 	);

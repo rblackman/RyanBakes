@@ -2,17 +2,16 @@ import FeaturedRecipe from 'app/(components)/featuredRecipe';
 import Heading from 'app/(components)/heading';
 import PortableText from 'app/(components)/portableText';
 import getRecipesPage from 'queries/getRecipesPage';
-import { use } from 'react';
 import 'server-only';
 import SecondaryFeaturedRecipes from './(components)/secondaryFeaturedRecipes';
 
-export default function Page() {
+export default async function Page() {
 	const {
 		title,
 		intro,
 		featuredRecipe: { _ref: featuredId },
 		secondaryFeatured
-	} = use(getRecipesPage());
+	} = await getRecipesPage();
 
 	return (
 		<main>

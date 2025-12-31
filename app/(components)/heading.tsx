@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import assertUnreachable from 'helpers/assertUnreachable';
-import { createElement, CSSProperties, ReactNode, useMemo } from 'react';
+import { createElement, CSSProperties, ReactNode } from 'react';
 import 'server-only';
 
 interface Props {
@@ -12,39 +12,28 @@ interface Props {
 }
 
 export default function Heading({ level, children, sr, style: inlineStyles, className: providedClass }: Props) {
-	const heading = useMemo(() => {
-		switch (level) {
-			case 2:
-				return 'h2';
-			case 3:
-				return 'h3';
+	let heading: 'h2' | 'h3' | 'h4';
 
-			case 4:
-				return 'h4';
-			default:
-				assertUnreachable(level);
-				return 'h2';
-		}
-	}, [level]);
+	switch (level) {
+		case 2:
+			heading = 'h2';
+			break;
+		case 3:
+			heading = 'h3';
+			break;
+		case 4:
+			heading = 'h4';
+			break;
+		default:
+			assertUnreachable(level);
+			heading = 'h2';
+	}
 
-	const className = useMemo(() => {
-		const arr = new Array<string>();
-		if (providedClass && providedClass.length) {
-			arr.push(providedClass);
-		}
-		if (sr === true) {
-			arr.push('sr');
-		}
-		return clsx(arr);
-	}, [providedClass, sr]);
-
-	const props = useMemo(
-		() => ({
-			style: inlineStyles || {},
-			className
-		}),
-		[inlineStyles]
-	);
+	const className = clsx(providedClass, { sr: sr === true });
+	const props = {
+		style: inlineStyles || {},
+		className
+	};
 
 	return createElement(heading, props, children);
 }

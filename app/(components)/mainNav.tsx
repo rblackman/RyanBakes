@@ -1,14 +1,13 @@
 import Link from 'next/link';
 import getNavItems from 'queries/getNavItems';
 import getSiteConfig from 'queries/getSiteConfig';
-import { use } from 'react';
 import 'server-only';
 import styles from './(styles)/mainNav.module.css';
 import MainNavItem from './mainNavItem';
 
-export default function MainNav() {
-	const { title } = use(getSiteConfig());
-	const mainNav = use(getNavItems());
+export default async function MainNav() {
+	const { title } = await getSiteConfig();
+	const mainNav = await getNavItems();
 
 	return (
 		<div className={styles.headerWrap}>
