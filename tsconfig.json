@@ -3,6 +3,7 @@
     "allowJs": true,
     "baseUrl": ".",
     "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
     "isolatedModules": true,
@@ -12,21 +13,22 @@
       "dom.iterable",
       "esnext"
     ],
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
     "paths": {
-      "@/*": [
-        "./*"
+      "@shared/*": [
+        "src/shared/*"
       ],
-      "@/lib/*": [
-        "lib/*"
+      "@components/*": [
+        "src/shared/components/*"
       ],
-      "@/styles/*": [
-        "styles/*"
-      ],
-      "@/ui/*": [
-        "ui/*"
+      "@hooks/*": [
+        "src/shared/hooks/*"
       ]
     },
     "plugins": [
@@ -37,7 +39,8 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es2022"
+    "strictNullChecks": true,
+    "target": "ES2017"
   },
   "exclude": [
     "node_modules"

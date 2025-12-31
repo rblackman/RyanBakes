@@ -4,10 +4,12 @@ import 'server-only';
 import { Props } from '../page';
 import styles from './(styles)/commentary.module.css';
 
-export default async function Commentary({ params: { slug } }: Props) {
+export default async function Commentary({ params }: Readonly<Props>) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
 	const { commentary } = await getRecipeBySlug(slug);
 	return (
-		<div className={styles.introWrap}>
+		<div className={styles['introWrap']}>
 			<PortableText value={commentary} />
 		</div>
 	);

@@ -12,7 +12,7 @@ interface Props {
 	priority?: boolean;
 }
 
-export default async function FeaturedRecipe({ id, priority }: Props) {
+export default async function FeaturedRecipe({ id, priority }: Readonly<Props>) {
 	const {
 		title,
 		picture,
@@ -22,15 +22,15 @@ export default async function FeaturedRecipe({ id, priority }: Props) {
 	} = await getRecipeById(id);
 
 	return (
-		<div className={styles.featuredRecipe}>
-			<Image image={picture} width={350} aspectRatio={1} className={styles.img} priority={priority === true} alt={picture.alt} />
-			<Heading level={3} className={styles.heading}>
+		<div className={styles['featuredRecipe']}>
+			<Image image={picture} width={350} aspectRatio={1} className={styles['img']} priority={priority === true} alt={picture.alt} />
+			<Heading level={3} className={styles['heading']}>
 				<Link href={`/recipe/${slug}`}>{title}</Link>
 			</Heading>
-			<div className={styles.tags}>
+			<div className={styles['tags']}>
 				<Tags tags={tags} noMargin />
 			</div>
-			<div className={styles.blurb}>
+			<div className={styles['blurb']}>
 				<PortableText value={commentary} />
 				<PortableText value={commentary} />
 			</div>

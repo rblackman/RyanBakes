@@ -3,11 +3,12 @@ import createImageBuilder from 'hooks/useImageBuilder';
 import getRecipeBySlug from 'queries/getRecipeBySlug';
 import type { CSSProperties } from 'react';
 import 'server-only';
-import { Props } from '../page';
 import styles from './(styles)/hero.module.css';
 import SubTitle from './subTitle';
 
-export default async function Hero({ params: { slug } }: Props) {
+export default async function Hero({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
 	const {
 		title,
 		picture: { asset }
@@ -31,9 +32,9 @@ export default async function Hero({ params: { slug } }: Props) {
 	} as CSSProperties;
 
 	return (
-		<div className={styles.heroContainer} style={containerStyle}>
-			<div className={styles.headingWrap}>
-				<Heading level={2} className={styles.heading}>
+		<div className={styles['heroContainer']} style={containerStyle}>
+			<div className={styles['headingWrap']}>
+				<Heading level={2} className={styles['heading'] ?? ''}>
 					{title}
 				</Heading>
 				<SubTitle params={{ slug }} />

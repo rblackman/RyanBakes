@@ -4,11 +4,13 @@ import getAllTags from 'queries/getAllTags';
 import getRecipesByTag from 'queries/getRecipesByTag';
 import 'server-only';
 
-export interface Props {
-	params: { slug: string };
-}
+export type Props = {
+	params: { slug: string } | Promise<{ slug: string }>;
+};
 
-export default async function Tag({ params: { slug } }: Props) {
+export default async function Tag({ params }: Readonly<Props>) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
 	const { result: recipes } = await getRecipesByTag(slug);
 	return (
 		<>

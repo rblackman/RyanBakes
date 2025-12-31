@@ -18,7 +18,7 @@ export default function Ingredient({ ingredient: { name, amount, unit, notes }, 
 				{notes && notes.length > 0 && (
 					<>
 						{' '}
-						<span className={styles.note}>({notes})</span>
+						<span className={styles['note']}>({notes})</span>
 					</>
 				)}
 			</td>

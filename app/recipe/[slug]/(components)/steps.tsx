@@ -2,10 +2,11 @@ import Heading from 'app/(components)/heading';
 import getAllUnits from 'queries/getAllUnits';
 import getRecipeBySlug from 'queries/getRecipeBySlug';
 import 'server-only';
-import { Props } from '../page';
 import Step from './step';
 
-export default async function Steps({ params: { slug } }: Props) {
+export default async function Steps({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
 	const [{ ingredients, steps }, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
 
 	if (!(ingredients && steps)) {

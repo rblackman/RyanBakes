@@ -6,7 +6,13 @@ import styles from './(styles)/subTitle.module.css';
 import Temp from './temp';
 import Time from './time';
 
-export default async function SubTitle({ params: { slug } }: Props) {
+interface SubTitleProps extends Readonly<Omit<Props, 'params'>> {
+	params: { slug: string } | Promise<{ slug: string }>;
+}
+
+export default async function SubTitle({ params }: SubTitleProps) {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
 	const { preheat, bakeTime, totalTime, serves } = await getRecipeBySlug(slug);
 
 	if (!(preheat || bakeTime || totalTime || serves)) {
@@ -58,9 +64,9 @@ export default async function SubTitle({ params: { slug } }: Props) {
 	}
 
 	return (
-		<div className={styles.subHeading}>
+		<div className={styles['subHeading']}>
 			{' '}
-			<dl className={styles.dl}>{elements}</dl>
+			<dl className={styles['dl']}>{elements}</dl>
 		</div>
 	);
 }

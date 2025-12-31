@@ -2,7 +2,7 @@
 	"private": true,
 	"scripts": {
 		"dev": "next dev",
-		"turbo": "next dev --turbo",
+		"turbo": "next dev",
 		"build": "next build",
 		"start": "next start",
 		"lint": "eslint .",
