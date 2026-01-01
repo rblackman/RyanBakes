@@ -1,12 +1,19 @@
 {
-	"name": "ryan-bakes",
-	"version": "2.0.0",
-	"private": true,
-	"type": "module",
-	"packageManager": "pnpm@10.27.0",
+	"devDependencies": {
+		"@biomejs/biome": "2.3.10",
+		"@commitlint/cli": "^20.2.0",
+		"@commitlint/config-conventional": "^20.2.0",
+		"@types/node": "^25.0.3",
+		"husky": "^9.1.7",
+		"lint-staged": "^16.2.7",
+		"typescript": "^5.9.3"
+	},
 	"engines": {
 		"node": "v22.x"
 	},
+	"name": "ryan-bakes",
+	"packageManager": "pnpm@10.27.0",
+	"private": true,
 	"scripts": {
 		"build": "pnpm -r --filter=!ryan-bakes build",
 		"dev": "pnpm --filter website dev",
@@ -17,11 +24,6 @@
 		"typecheck": "pnpm -r --filter=!ryan-bakes typecheck",
 		"validate:env": "pnpm --filter website validate:env"
 	},
-	"devDependencies": {
-		"@biomejs/biome": "2.3.10",
-		"@commitlint/cli": "^20.2.0",
-		"@commitlint/config-conventional": "^20.2.0",
-		"husky": "^9.1.7",
-		"lint-staged": "^16.2.7"
-	}
+	"type": "module",
+	"version": "2.0.0"
 }
