@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import { BiPurchaseTagAlt } from "react-icons/bi";
-import "server-only";
 import styles from "./(styles)/tag.module.css";
 
 interface Props {
