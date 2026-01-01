@@ -194,7 +194,6 @@ and are written to `apps/website/.env` during CI.
 
 Sensitive credentials (e.g., deploy tokens) are stored as GitHub Secrets.
 
-
 ---
 
 ## Key Design Decisions
