@@ -62,4 +62,3 @@ apps/cms/.env.*
 
 # Sanity generated artifacts (never committed)
 apps/cms/schema.json
-packages/sanity-types/
