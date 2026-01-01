@@ -13,7 +13,7 @@ export interface Context {
 	parent: { [key: string]: unknown };
 }
 
-type SchemaType = 'https' | 'http' | 'mailto' | 'tel';
+type SchemaType = "https" | "http" | "mailto" | "tel";
 
 export interface UriOptions {
 	allowRelative: boolean;

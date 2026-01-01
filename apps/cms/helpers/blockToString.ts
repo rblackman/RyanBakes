@@ -10,9 +10,6 @@ export default function blockToString(blocks: unknown[]): string {
 		.join(" ");
 }
 
-export function blocksToString(
-	sections: { text: unknown[] }[],
-	separator: string = " / ",
-): string {
+export function blocksToString(sections: { text: unknown[] }[], separator: string = " / "): string {
 	return sections.map(({ text }) => blockToString(text)).join(separator);
 }
