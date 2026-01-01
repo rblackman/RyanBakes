@@ -1,8 +1,8 @@
-import { SanityKeyed } from 'sanity-codegen';
-import 'server-only';
-import { Ingredient as IngredientType, Unit } from 'types/sanity-schema';
-import styles from './(styles)/ingredient.module.css';
-import IngredientAmount from './ingredientAmount';
+import type { SanityKeyed } from "sanity-codegen";
+import "server-only";
+import type { Ingredient as IngredientType, Unit } from "types/sanity-schema";
+import styles from "./(styles)/ingredient.module.css";
+import IngredientAmount from "./ingredientAmount";
 
 interface Props {
 	ingredient: SanityKeyed<IngredientType>;
@@ -17,8 +17,8 @@ export default function Ingredient({ ingredient: { name, amount, unit, notes }, 
 				<IngredientAmount unit={unit} amount={amount} units={units} />
 				{notes && notes.length > 0 && (
 					<>
-						{' '}
-						<span className={styles['note']}>({notes})</span>
+						{" "}
+						<span className={styles.note}>({notes})</span>
 					</>
 				)}
 			</td>

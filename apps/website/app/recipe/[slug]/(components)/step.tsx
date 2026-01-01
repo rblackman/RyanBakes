@@ -1,10 +1,10 @@
-import Block from 'app/(components)/block';
-import Heading from 'app/(components)/heading';
-import { SanityKeyed } from 'sanity-codegen';
-import 'server-only';
-import { Ingredient as IngredientType, Step as SanityStep, Unit } from 'types/sanity-schema';
-import styles from './(styles)/step.module.css';
-import IngredientAmount from './ingredientAmount';
+import Block from "app/(components)/block";
+import Heading from "app/(components)/heading";
+import type { SanityKeyed } from "sanity-codegen";
+import "server-only";
+import type { Ingredient as IngredientType, Step as SanityStep, Unit } from "types/sanity-schema";
+import styles from "./(styles)/step.module.css";
+import IngredientAmount from "./ingredientAmount";
 
 interface Props {
 	ingredients: Array<SanityKeyed<IngredientType>>;
@@ -13,7 +13,7 @@ interface Props {
 }
 export default function Step({ ingredients, step: { title, content }, units }: Props) {
 	return (
-		<div className={styles.stepWrap} role="listitem">
+		<li className={styles.stepWrap}>
 			{ingredients && ingredients.length > 0 && (
 				<ul className={styles.ingredientsWrap}>
 					{ingredients.map(({ _key, name, amount, unit }) => (
@@ -32,6 +32,6 @@ export default function Step({ ingredients, step: { title, content }, units }: P
 					return <Block key={key} content={block} />;
 				})}
 			</div>
-		</div>
+		</li>
 	);
 }

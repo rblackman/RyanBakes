@@ -1,7 +1,7 @@
-import clsx from 'clsx';
-import assertUnreachable from 'helpers/assertUnreachable';
-import { createElement, CSSProperties, ReactNode } from 'react';
-import 'server-only';
+import clsx from "clsx";
+import assertUnreachable from "helpers/assertUnreachable";
+import { type CSSProperties, createElement, type ReactNode } from "react";
+import "server-only";
 
 interface Props {
 	level: 2 | 3 | 4;
@@ -12,27 +12,27 @@ interface Props {
 }
 
 export default function Heading({ level, children, sr, style: inlineStyles, className: providedClass }: Props) {
-	let heading: 'h2' | 'h3' | 'h4';
+	let heading: "h2" | "h3" | "h4";
 
 	switch (level) {
 		case 2:
-			heading = 'h2';
+			heading = "h2";
 			break;
 		case 3:
-			heading = 'h3';
+			heading = "h3";
 			break;
 		case 4:
-			heading = 'h4';
+			heading = "h4";
 			break;
 		default:
 			assertUnreachable(level);
-			heading = 'h2';
+			heading = "h2";
 	}
 
 	const className = clsx(providedClass, { sr: sr === true });
 	const props = {
 		style: inlineStyles || {},
-		className
+		className,
 	};
 
 	return createElement(heading, props, children);
@@ -40,5 +40,5 @@ export default function Heading({ level, children, sr, style: inlineStyles, clas
 
 Heading.defaultProps = {
 	sr: false,
-	style: undefined
+	style: undefined,
 };

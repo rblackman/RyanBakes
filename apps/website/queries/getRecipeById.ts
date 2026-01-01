@@ -1,12 +1,12 @@
-import 'server-only';
-import Query from 'types/query';
-import { Recipe } from 'types/sanity-schema';
-import buildGroqQuery from './lib/buildGroqQuery';
-import nextFetch from './lib/nextFetch';
+import "server-only";
+import type Query from "types/query";
+import type { Recipe } from "types/sanity-schema";
+import buildGroqQuery from "./lib/buildGroqQuery";
+import nextFetch from "./lib/nextFetch";
 
 export default async function getRecipeById(id: string): Promise<Recipe> {
 	if (!id || id.length === 0) {
-		throw new Error('Must provide an id');
+		throw new Error("Must provide an id");
 	}
 
 	const url = buildGroqQuery(`*[ _type == 'recipe' && _id == '${id}' ]`);

@@ -1,11 +1,11 @@
-import 'server-only';
-import type { TextSection } from 'types/sanity-schema';
-import PortableText from '../portableText';
+import "server-only";
+import type { TextSection } from "types/sanity-schema";
+import PortableText from "../portableText";
 
 export interface Props {
 	value: TextSection;
 }
 
-export default function TextSection({ value: { text } }: Props) {
+export default function CustomTextSection({ value: { text } }: Props) {
 	return <PortableText value={text} />;
 }

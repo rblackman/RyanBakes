@@ -16,9 +16,7 @@ export type Props = {
 	params: { slug: string } | Promise<{ slug: string }>;
 };
 
-export async function generateMetadata({
-	params,
-}: Readonly<Props>): Promise<Metadata> {
+export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
 
@@ -34,9 +32,7 @@ export async function generateMetadata({
 	} = await getRecipeBySlug(slug);
 
 	const baseUrl: string = clientEnv.NEXT_PUBLIC_BASE_URL;
-	const url = baseUrl
-		? new URL(`/recipe/${slug}`, baseUrl).toString()
-		: `/recipe/${slug}`;
+	const url = baseUrl ? new URL(`/recipe/${slug}`, baseUrl).toString() : `/recipe/${slug}`;
 	const builder = createImageBuilder(asset);
 	const ogImage = builder.buildUrlWithOptions({
 		width: 1200,

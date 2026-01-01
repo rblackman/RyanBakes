@@ -14,17 +14,16 @@
 }
 
 .dl dt::after {
-	content: ':';
+	content: ":";
 	font-weight: normal;
 	margin-right: 0.25rem;
 }
 
 .dl dd {
 	margin: 0;
-
 }
 
-.dl dd+dt {
+.dl dd + dt {
 	margin-left: 1rem;
 }
 
@@ -37,7 +36,7 @@
 		grid-gap: 0 0.2rem;
 	}
 
-	.dl dd+dt {
+	.dl dd + dt {
 		margin-left: 0;
 	}
 }

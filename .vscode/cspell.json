@@ -1,7 +1,5 @@
 {
-	"ignorePaths": [
-		"git/**/*"
-	],
+	"ignorePaths": ["git/**/*"],
 	"words": [
 		"clsx",
 		"codegen",

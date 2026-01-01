@@ -1,13 +1,13 @@
-import throwError from 'helpers/throwError';
-import 'server-only';
-import Query from 'types/query';
-import { Recipe } from 'types/sanity-schema';
-import buildGroqQuery from './lib/buildGroqQuery';
-import nextFetch from './lib/nextFetch';
+import throwError from "helpers/throwError";
+import "server-only";
+import type Query from "types/query";
+import type { Recipe } from "types/sanity-schema";
+import buildGroqQuery from "./lib/buildGroqQuery";
+import nextFetch from "./lib/nextFetch";
 
 export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
 	if (!slug || slug.length === 0) {
-		throwError('Must provide an slug');
+		throwError("Must provide an slug");
 	}
 
 	const url = buildGroqQuery(`*[ _type == 'recipe' && slug.current == '${slug}' ]`);
@@ -33,5 +33,5 @@ export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
 		throwError(`Could not find recipe with slug: ${slug}`);
 	}
 
-	return result[0]!;
+	return result[0];
 }

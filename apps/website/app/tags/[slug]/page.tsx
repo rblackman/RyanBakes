@@ -1,8 +1,8 @@
-import Heading from 'app/(components)/heading';
-import Link from 'next/link';
-import getAllTags from 'queries/getAllTags';
-import getRecipesByTag from 'queries/getRecipesByTag';
-import 'server-only';
+import Heading from "app/(components)/heading";
+import Link from "next/link";
+import getAllTags from "queries/getAllTags";
+import getRecipesByTag from "queries/getRecipesByTag";
+import "server-only";
 
 export type Props = {
 	params: { slug: string } | Promise<{ slug: string }>;

@@ -23,11 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 	};
 }
 
-export default async function RootLayout({
-	children,
-}: {
-	children: ReactNode;
-}) {
+export default async function RootLayout({ children }: { children: ReactNode }) {
 	const { lang } = await getSiteConfig();
 
 	return (

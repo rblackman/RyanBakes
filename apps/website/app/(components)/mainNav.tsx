@@ -1,9 +1,9 @@
-import Link from 'next/link';
-import getNavItems from 'queries/getNavItems';
-import getSiteConfig from 'queries/getSiteConfig';
-import 'server-only';
-import styles from './(styles)/mainNav.module.css';
-import MainNavItem from './mainNavItem';
+import Link from "next/link";
+import getNavItems from "queries/getNavItems";
+import getSiteConfig from "queries/getSiteConfig";
+import "server-only";
+import styles from "./(styles)/mainNav.module.css";
+import MainNavItem from "./mainNavItem";
 
 export default async function MainNav() {
 	const { title } = await getSiteConfig();

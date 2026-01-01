@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 
 export default function useTime(totalMinutes: number): { minutes: number; hours: number } {
 	const time = useMemo(() => {

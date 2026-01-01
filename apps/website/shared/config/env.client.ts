@@ -10,7 +10,6 @@ const rawClientEnv = {
 	NEXT_PUBLIC_SANITY_DATASET: process.env.NEXT_PUBLIC_SANITY_DATASET,
 } as const;
 
-
 export const clientEnv = ClientEnvSchema.parse(rawClientEnv);
 
 export type ClientEnv = z.infer<typeof ClientEnvSchema>;

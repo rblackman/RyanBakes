@@ -6,10 +6,19 @@ import type {
 	SanityImageHotspot,
 	SanityKeyed,
 	SanityKeyedReference,
-	SanityReference
-} from 'sanity-codegen';
+	SanityReference,
+} from "sanity-codegen";
 
-export type { SanityBlock, SanityDocument, SanityImageAsset, SanityImageCrop, SanityImageHotspot, SanityKeyed, SanityKeyedReference, SanityReference };
+export type {
+	SanityBlock,
+	SanityDocument,
+	SanityImageAsset,
+	SanityImageCrop,
+	SanityImageHotspot,
+	SanityKeyed,
+	SanityKeyedReference,
+	SanityReference,
+};
 
 /**
  * Recipe
@@ -17,7 +26,7 @@ export type { SanityBlock, SanityDocument, SanityImageAsset, SanityImageCrop, Sa
  *
  */
 export interface Recipe extends SanityDocument {
-	_type: 'recipe';
+	_type: "recipe";
 
 	/**
 	 * Title — `string`
@@ -31,7 +40,7 @@ export interface Recipe extends SanityDocument {
 	 *
 	 *
 	 */
-	slug: { _type: 'slug'; current: string };
+	slug: { _type: "slug"; current: string };
 
 	/**
 	 * Picture — `imageWithAlt`
@@ -131,7 +140,7 @@ export interface Recipe extends SanityDocument {
  * Configure global site settings.
  */
 export interface SiteConfig extends SanityDocument {
-	_type: 'siteConfig';
+	_type: "siteConfig";
 
 	/**
 	 * Site Title — `string`
@@ -175,7 +184,7 @@ export interface SiteConfig extends SanityDocument {
  *
  */
 export interface Unit extends SanityDocument {
-	_type: 'unit';
+	_type: "unit";
 
 	/**
 	 * Name — `string`
@@ -196,21 +205,21 @@ export interface Unit extends SanityDocument {
 	 *
 	 *
 	 */
-	system: 'Imperial' | 'Metric';
+	system: "Imperial" | "Metric";
 
 	/**
 	 * Unit Type — `string`
 	 *
 	 *
 	 */
-	type: 'Volume' | 'Weight';
+	type: "Volume" | "Weight";
 
 	/**
 	 * Display — `string`
 	 *
 	 *
 	 */
-	display: 'Fraction' | 'Decimal';
+	display: "Fraction" | "Decimal";
 
 	/**
 	 * No Unit — `boolean`
@@ -233,7 +242,7 @@ export interface Unit extends SanityDocument {
  *
  */
 export interface TagsPage extends SanityDocument {
-	_type: 'tagsPage';
+	_type: "tagsPage";
 
 	/**
 	 * Title — `string`
@@ -270,7 +279,7 @@ export interface TagsPage extends SanityDocument {
  *
  */
 export interface RecipesPage extends SanityDocument {
-	_type: 'recipesPage';
+	_type: "recipesPage";
 
 	/**
 	 * Title — `string`
@@ -307,7 +316,7 @@ export interface RecipesPage extends SanityDocument {
  *
  */
 export interface Page extends SanityDocument {
-	_type: 'page';
+	_type: "page";
 
 	/**
 	 * Title — `string`
@@ -321,7 +330,7 @@ export interface Page extends SanityDocument {
 	 *
 	 * Page slug
 	 */
-	slug: { _type: 'slug'; current: string };
+	slug: { _type: "slug"; current: string };
 
 	/**
 	 * Content — `array`
@@ -337,7 +346,7 @@ export interface Page extends SanityDocument {
  *
  */
 export interface NavItem extends SanityDocument {
-	_type: 'navItem';
+	_type: "navItem";
 
 	/**
 	 * Name — `string`
@@ -355,7 +364,7 @@ export interface NavItem extends SanityDocument {
 }
 
 export type ExternalLink = {
-	_type: 'externalLink';
+	_type: "externalLink";
 	/**
 	 * URL — `url`
 	 *
@@ -369,7 +378,7 @@ export type PortableText = Array<SanityKeyed<SanityBlock>>;
 export type SimplePortableText = Array<SanityKeyed<SanityBlock>>;
 
 export type ImageWithAlt = {
-	_type: 'imageWithAlt';
+	_type: "imageWithAlt";
 	asset: SanityReference<SanityImageAsset>;
 	crop?: SanityImageCrop;
 	hotspot?: SanityImageHotspot;
@@ -390,7 +399,7 @@ export type ImageWithAlt = {
 };
 
 export type Ingredient = {
-	_type: 'ingredient';
+	_type: "ingredient";
 	/**
 	 * Name — `string`
 	 *
@@ -428,7 +437,7 @@ export type Ingredient = {
 };
 
 export type RecipePreview = {
-	_type: 'recipePreview';
+	_type: "recipePreview";
 	/**
 	 * Large — `boolean`
 	 *
@@ -445,7 +454,7 @@ export type RecipePreview = {
 };
 
 export type InlineImage = {
-	_type: 'inlineImage';
+	_type: "inlineImage";
 	asset: SanityReference<SanityImageAsset>;
 	crop?: SanityImageCrop;
 	hotspot?: SanityImageHotspot;
@@ -469,14 +478,14 @@ export type InlineImage = {
 	 *
 	 *
 	 */
-	size?: 'Small' | 'Medium' | 'Full';
+	size?: "Small" | "Medium" | "Full";
 
 	/**
 	 * Position — `string`
 	 *
 	 *
 	 */
-	position: 'Left' | 'Right' | 'Block';
+	position: "Left" | "Right" | "Block";
 
 	/**
 	 * Aspect Ratio — `string`
@@ -487,7 +496,7 @@ export type InlineImage = {
 };
 
 export type Step = {
-	_type: 'step';
+	_type: "step";
 	/**
 	 * Title — `string`
 	 *
@@ -504,7 +513,7 @@ export type Step = {
 };
 
 export type TextSection = {
-	_type: 'textSection';
+	_type: "textSection";
 	/**
 	 * Text — `portableText`
 	 *

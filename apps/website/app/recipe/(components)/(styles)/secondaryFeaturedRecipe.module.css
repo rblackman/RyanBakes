@@ -13,9 +13,8 @@
 	display: grid;
 	grid-template-columns: 1fr;
 	grid-template-rows: min-content min-content min-content 1fr;
-	grid-template-areas: 'pic' 'name' 'tags' 'content';
+	grid-template-areas: "pic" "name" "tags" "content";
 	grid-gap: 0.5rem;
-
 }
 
 .recipeCard:first-child:hover {
@@ -26,11 +25,11 @@
 	transform: translateY(-1rem) rotate(3deg);
 }
 
-.recipeCard:hover+.recipeCard {
+.recipeCard:hover + .recipeCard {
 	margin-left: 0.1rem;
 }
 
-.recipeCard+.recipeCard {
+.recipeCard + .recipeCard {
 	margin-left: -5rem;
 }
 
@@ -65,13 +64,11 @@
 	-webkit-line-clamp: 4;
 	line-clamp: 4;
 	-webkit-box-orient: vertical;
-	box-orient: vertical;
 	overflow: hidden;
 	max-height: 7.5rem;
 }
 
-
-.content p+p {
+.content p + p {
 	display: none;
 }
 
@@ -79,5 +76,4 @@
 	.content p {
 		font-size: 0.8rem;
 	}
-
 }

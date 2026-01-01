@@ -2,10 +2,10 @@
 
 ## Monorepo layout
 
-This repository is now organized as a pnpm workspace:
+This repository is organized as a pnpm workspace:
 
-- `apps/website` — the existing Next.js app.
-- `apps/*` — future applications (for example, a Sanity studio).
+- `apps/website` — Next.js frontend.
+- `apps/sanity` — Sanity CMS schema and config.
 - `packages/*` — place shared libraries or config packages here as the monorepo grows.
 
 ## Common commands

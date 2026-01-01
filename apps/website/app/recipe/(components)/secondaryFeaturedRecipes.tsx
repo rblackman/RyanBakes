@@ -1,7 +1,7 @@
-import Heading from 'app/(components)/heading';
-import 'server-only';
-import styles from './(styles)/secondaryFeaturedRecipes.module.css';
-import SecondaryFeaturedRecipe from './secondaryFeaturedRecipe';
+import Heading from "app/(components)/heading";
+import "server-only";
+import styles from "./(styles)/secondaryFeaturedRecipes.module.css";
+import SecondaryFeaturedRecipe from "./secondaryFeaturedRecipe";
 
 interface Props {
 	ids: string[];

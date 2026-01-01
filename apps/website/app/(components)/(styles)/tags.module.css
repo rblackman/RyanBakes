@@ -16,10 +16,9 @@
 	margin-bottom: 0;
 }
 
-.tagList li+li {
+.tagList li + li {
 	margin-left: 1rem;
 }
-
 
 .tagList.small {
 	flex-flow: row nowrap;
@@ -33,6 +32,6 @@
 	margin-right: 0.1rem;
 }
 
-.tagList.small li+li {
+.tagList.small li + li {
 	margin-left: 0.25rem;
 }

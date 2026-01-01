@@ -1,13 +1,13 @@
-import 'server-only';
-import Query from 'types/query';
-import buildGroqQuery from './lib/buildGroqQuery';
-import nextFetch from './lib/nextFetch';
+import "server-only";
+import type Query from "types/query";
+import buildGroqQuery from "./lib/buildGroqQuery";
+import nextFetch from "./lib/nextFetch";
 
 export interface NavItemQueryResult {
 	id: string;
 	name: string;
 	pageInfo: {
-		type: 'recipesPage' | 'tagsPage' | 'page';
+		type: "recipesPage" | "tagsPage" | "page";
 		slug: { current: string } | null;
 	};
 }

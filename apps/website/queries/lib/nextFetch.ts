@@ -4,8 +4,8 @@ export default function nextFetch(url: string, { cache, revalidate }: { cache?: 
 	}
 
 	if (cache === false) {
-		return fetch(url, { cache: 'no-cache' });
+		return fetch(url, { cache: "no-cache" });
 	}
 
-	return fetch(url, { cache: 'force-cache' });
+	return fetch(url, { cache: "force-cache" });
 }

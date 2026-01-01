@@ -1,5 +1,5 @@
 import { clientEnv } from "shared/config/env.client";
-import { SanityImageAsset, SanityReference } from "types/sanity-schema";
+import type { SanityImageAsset, SanityReference } from "types/sanity-schema";
 
 const sanityKey = clientEnv.NEXT_PUBLIC_SANITY_KEY;
 const dataset = clientEnv.NEXT_PUBLIC_SANITY_DATASET;
@@ -7,14 +7,7 @@ const dataset = clientEnv.NEXT_PUBLIC_SANITY_DATASET;
 interface OptionalBaseOptions {
 	quality: number;
 	blur: number;
-	crop:
-		| "top,left"
-		| "top,right"
-		| "bottom,left"
-		| "bottom,right"
-		| "center"
-		| "focalpoint"
-		| "entropy";
+	crop: "top,left" | "top,right" | "bottom,left" | "bottom,right" | "center" | "focalpoint" | "entropy";
 	dpr: number;
 	fit: "clip" | "crop" | "fill" | "fillmax" | "max" | "scale" | "min";
 }
@@ -46,9 +39,7 @@ export interface ImageBuilder {
 	buildUrlWithOptions: (options: Options) => string;
 }
 
-export default function createImageBuilder({
-	_ref: ref,
-}: SanityReference<SanityImageAsset>): ImageBuilder {
+export default function createImageBuilder({ _ref: ref }: SanityReference<SanityImageAsset>): ImageBuilder {
 	const baseUrl = (() => {
 		if (ref) {
 			const splits = ref.split("-");
@@ -60,9 +51,7 @@ export default function createImageBuilder({
 
 	const buildUrlWithOptions = (options: Options) => {
 		const { quality, blur, crop, dpr, fit, width } = options;
-		const height = isFixedWidth(options)
-			? options.height
-			: Math.round(width / options.aspectRatio);
+		const height = isFixedWidth(options) ? options.height : Math.round(width / options.aspectRatio);
 
 		const params = new URLSearchParams({
 			quality: (quality ?? 75).toString(),

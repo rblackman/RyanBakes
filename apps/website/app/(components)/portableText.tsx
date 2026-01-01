@@ -19,10 +19,10 @@ function UnknownMark({ children, markType }: { children: ReactNode; markType: st
 
 const portableTextComponents: PortableTextComponents = {
 	block: {
-		h1: ({ children }) => <Heading level={2}>{children}</Heading>,
-		h2: ({ children }) => <Heading level={3}>{children}</Heading>,
-		h3: ({ children }) => <Heading level={4}>{children}</Heading>,
-		normal: ({ children }) => <p>{children}</p>,
+		h1: ({ children }: { children: ReactNode }) => <Heading level={2}>{children}</Heading>,
+		h2: ({ children }: { children: ReactNode }) => <Heading level={3}>{children}</Heading>,
+		h3: ({ children }: { children: ReactNode }) => <Heading level={4}>{children}</Heading>,
+		normal: ({ children }: { children: ReactNode }) => <p>{children}</p>,
 	},
 	marks: {
 		externalLink: ({ children, value, markType }: PortableTextMarkComponentProps<ExternalLinkProps>) => {
@@ -35,7 +35,7 @@ const portableTextComponents: PortableTextComponents = {
 			}
 			return <UnknownMark markType={markType}>{children}</UnknownMark>;
 		},
-		fraction: ({ children, markType }) => {
+		fraction: ({ children, markType }: { children: ReactNode; markType: string }) => {
 			const childArray = children as string[];
 			if (childArray && childArray.length >= 1) {
 				const val = childArray[0];

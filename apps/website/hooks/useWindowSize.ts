@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import useDebounce from './useDebounce';
+import { useEffect, useState } from "react";
+import useDebounce from "./useDebounce";
 
 interface Size {
 	width: number | undefined;
@@ -11,24 +11,24 @@ export default function useWindowSize() {
 	// Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
 	const [windowSize, setWindowSize] = useState<Size>({
 		width: undefined,
-		height: undefined
+		height: undefined,
 	});
 
-	const handleResize = useDebounce<{}, void>(() => {
+	const handleResize = useDebounce<unknown, void>(() => {
 		// Set window width/height to state
 		setWindowSize({
 			width: window.innerWidth,
-			height: window.innerHeight
+			height: window.innerHeight,
 		});
 	}, 100);
 
 	useEffect(() => {
 		// Add event listener
-		window.addEventListener('resize', handleResize);
+		window.addEventListener("resize", handleResize);
 		// Call handler right away so state gets updated with initial window size
 		handleResize({});
 		// Remove event listener on cleanup
-		return () => window.removeEventListener('resize', handleResize);
+		return () => window.removeEventListener("resize", handleResize);
 	}, [handleResize]); // Empty array ensures that effect is only run on mount
 	return windowSize;
 }

@@ -5,7 +5,5 @@
 		"EditorConfig.EditorConfig",
 		"github.vscode-github-actions"
 	],
-	"unwantedRecommendations": [
-		"esbenp.prettier-vscode"
-	]
+	"unwantedRecommendations": ["esbenp.prettier-vscode"]
 }

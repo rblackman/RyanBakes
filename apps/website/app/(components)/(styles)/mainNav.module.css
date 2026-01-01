@@ -8,7 +8,6 @@
 	color: var(--primary-contrast);
 	text-decoration-color: transparent;
 	transition: text-decoration-color var(--animation-duration) ease-out;
-
 }
 
 .headerWrap :is(a):hover {
@@ -16,12 +15,11 @@
 	transition: text-decoration-color var(--animation-duration) ease-in;
 }
 
-
 .header {
 	display: grid;
 	grid-template-columns: max-content 1fr;
 	grid-template-rows: 1fr;
-	grid-template-areas: 'title nav';
+	grid-template-areas: "title nav";
 	grid-gap: 1rem;
 	align-items: center;
 }

@@ -1,6 +1,6 @@
 {
-	"name": "ryanbakes-monorepo",
-	"version": "0.0.0",
+	"name": "ryan-bakes",
+	"version": "2.0.0",
 	"private": true,
 	"type": "module",
 	"packageManager": "pnpm@10.27.0",
@@ -8,13 +8,13 @@
 		"node": "v22.x"
 	},
 	"scripts": {
-		"build": "pnpm -r --filter=!ryanbakes-monorepo build",
+		"build": "pnpm -r --filter=!ryan-bakes build",
 		"dev": "pnpm --filter website dev",
-		"format": "pnpm -r --filter=!ryanbakes-monorepo format",
-		"lint": "pnpm -r --filter=!ryanbakes-monorepo lint",
+		"format": "pnpm -r --filter=!ryan-bakes format",
+		"lint": "pnpm -r --filter=!ryan-bakes lint",
 		"preinstall": "corepack enable",
 		"prepare": "husky",
-		"typecheck": "pnpm -r --filter=!ryanbakes-monorepo typecheck",
+		"typecheck": "pnpm -r --filter=!ryan-bakes typecheck",
 		"validate:env": "pnpm --filter website validate:env"
 	},
 	"devDependencies": {

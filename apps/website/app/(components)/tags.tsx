@@ -1,7 +1,7 @@
-import { useMemo } from 'react';
-import 'server-only';
-import styles from './(styles)/tags.module.css';
-import Tag from './tag';
+import { useMemo } from "react";
+import "server-only";
+import styles from "./(styles)/tags.module.css";
+import Tag from "./tag";
 
 interface Props {
 	tags: string[];
@@ -28,5 +28,5 @@ export default function Tags({ tags, noMargin }: Props) {
 
 Tags.defaultProps = {
 	noMargin: false,
-	small: false
+	small: false,
 };

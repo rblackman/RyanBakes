@@ -1,13 +1,13 @@
-import { useMemo } from 'react';
-import 'server-only';
-import styles from './(styles)/fraction.module.css';
+import { useMemo } from "react";
+import "server-only";
+import styles from "./(styles)/fraction.module.css";
 
 function FractionPart({ val }: { val: string }) {
-	const hasSlash = useMemo(() => val && val.length > 0 && val.indexOf('/') > 0, [val]);
+	const hasSlash = useMemo(() => val && val.length > 0 && val.indexOf("/") > 0, [val]);
 
 	const [numerator, denominator] = useMemo(() => {
 		if (hasSlash) {
-			return val.split('/').map((num) => num.trim());
+			return val.split("/").map((num) => num.trim());
 		}
 		return [null, null];
 	}, [val, hasSlash]);
@@ -25,7 +25,7 @@ function FractionPart({ val }: { val: string }) {
 }
 
 export default function Fraction({ val }: { val: string }) {
-	const parts = useMemo(() => val.split(' '), [val]);
+	const parts = useMemo(() => val.split(" "), [val]);
 
 	return (
 		<>

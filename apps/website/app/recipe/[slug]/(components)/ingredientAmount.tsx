@@ -1,9 +1,9 @@
-import Fraction from 'app/recipe/[slug]/(components)/fraction';
-import type { SanityReference } from 'sanity-codegen';
-import 'server-only';
-import type { Unit } from 'types/sanity-schema';
+import Fraction from "app/recipe/[slug]/(components)/fraction";
+import type { SanityReference } from "sanity-codegen";
+import "server-only";
+import type { Unit } from "types/sanity-schema";
 
-interface UnitDisplayProps extends Pick<Unit, 'name' | 'abbreviation' | 'noUnit'> {
+interface UnitDisplayProps extends Pick<Unit, "name" | "abbreviation" | "noUnit"> {
 	full: boolean;
 }
 
@@ -12,11 +12,11 @@ function UnitDisplay({ name, abbreviation, noUnit, full }: UnitDisplayProps) {
 		return null;
 	}
 
-	return <span>{(full || 'short') === 'short' ? abbreviation : name}</span>;
+	return <span>{(full || "short") === "short" ? abbreviation : name}</span>;
 }
 
 interface AmountProps {
-	display: 'Fraction' | 'Decimal';
+	display: "Fraction" | "Decimal";
 	amount: string;
 	noCount: boolean;
 }
@@ -25,7 +25,7 @@ function AmountDisplay({ amount, display, noCount }: AmountProps) {
 	if (noCount) {
 		return null;
 	} else {
-		return display === 'Fraction' ? <Fraction val={amount} /> : <span>{amount}</span>;
+		return display === "Fraction" ? <Fraction val={amount} /> : <span>{amount}</span>;
 	}
 }
 
@@ -51,5 +51,5 @@ export default function IngredientAmount({ amount, unit: { _ref: unitRef }, unit
 }
 
 IngredientAmount.defaultProps = {
-	full: false
+	full: false,
 };
