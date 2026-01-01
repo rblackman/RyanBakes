@@ -19,7 +19,7 @@
 
 		"prebuild": "pnpm --filter cms typegen && pnpm run validate:env",
 		"predev": "pnpm run validate:env",
-		"validate:env": "pnpm -w exec tsx --require dotenv/config apps/website/scripts/validate-env.ts"
+		"validate:env": "pnpm -w exec tsx --require dotenv/config apps/website/scripts/validate-env.ts dotenv_config_path=apps/website/.env"
 	},
 	"dependencies": {
 		"@portabletext/react": "^6.0.2",
