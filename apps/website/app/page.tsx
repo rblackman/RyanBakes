@@ -8,7 +8,7 @@ export default async function Page() {
 	return (
 		<main>
 			<div className="content">
-				{content.map((block) => (
+				{content?.map((block) => (
 					<Block key={block._key} content={block} />
 				))}
 			</div>

@@ -12,26 +12,30 @@ interface Props {
 }
 
 export default async function SecondaryFeaturedRecipe({ id, index }: Props) {
-	const {
-		title,
-		tags,
-		picture,
-		slug: { current: slug },
-	} = await getRecipeById(id);
+	const recipe = await getRecipeById(id);
+
+	const title = recipe.title ?? "";
+	const tags = recipe.tags ?? [];
+	const picture = recipe.picture;
+	const slug = recipe.slug?.current ?? "";
 
 	return (
 		<div className={styles.recipeCard} style={{ zIndex: 1000 + index }}>
-			<Image
-				image={picture}
-				width={400}
-				aspectRatio={300 / 125}
-				className={styles.pic}
-				responsive
-				alt={picture.alt ?? ""}
-			/>
+			{picture && (
+				<Image
+					image={picture}
+					width={400}
+					aspectRatio={300 / 125}
+					className={styles.pic}
+					responsive
+					alt={picture.alt ?? ""}
+				/>
+			)}
+
 			<Heading level={4} className={styles.name}>
-				<Link href={`/recipe/${slug}`}>{title}</Link>
+				<Link href={slug ? `/recipe/${slug}` : "/recipe"}>{title}</Link>
 			</Heading>
+
 			<div className={styles.tags}>
 				<Tags tags={tags} noMargin small />
 			</div>

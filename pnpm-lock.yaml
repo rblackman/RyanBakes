@@ -72,6 +72,9 @@ importers:
       '@portabletext/react':
         specifier: ^6.0.2
         version: 6.0.2(react@19.2.3)
+      '@ryan-bakes/sanity-types':
+        specifier: workspace:*
+        version: link:../../packages/sanity-types
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -106,6 +109,8 @@ importers:
       next-devtools-mcp:
         specifier: ^0.3.7
         version: 0.3.7
+
+  packages/sanity-types: {}
 
 packages:
 

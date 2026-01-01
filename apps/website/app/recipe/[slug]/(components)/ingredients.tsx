@@ -8,9 +8,10 @@ import Ingredient from "./ingredient";
 export default async function Ingredients({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
+
 	const [{ ingredients }, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
 
-	if (!ingredients) {
+	if (!ingredients || ingredients.length === 0) {
 		return null;
 	}
 

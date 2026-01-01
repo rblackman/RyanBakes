@@ -1,5 +1,5 @@
+import type { TextSection } from "@ryan-bakes/sanity-types";
 import "server-only";
-import type { TextSection } from "types/sanity-schema";
 import PortableText from "../portableText";
 
 export interface Props {
@@ -7,5 +7,8 @@ export interface Props {
 }
 
 export default function CustomTextSection({ value: { text } }: Props) {
+	if (!text || text.length === 0) {
+		return null;
+	}
 	return <PortableText value={text} />;
 }

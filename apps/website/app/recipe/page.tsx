@@ -6,24 +6,27 @@ import "server-only";
 import SecondaryFeaturedRecipes from "./(components)/secondaryFeaturedRecipes";
 
 export default async function Page() {
-	const {
-		title,
-		intro,
-		featuredRecipe: { _ref: featuredId },
-		secondaryFeatured,
-	} = await getRecipesPage();
+	const recipesPage = await getRecipesPage();
+
+	const title = recipesPage.title ?? "Recipes";
+	const intro = recipesPage.intro ?? [];
+	const featuredId = recipesPage.featuredRecipe?._ref;
+	const secondaryIds = (recipesPage.secondaryFeatured ?? [])
+		.map(({ _ref }) => _ref)
+		.filter((id): id is string => Boolean(id));
 
 	return (
 		<main>
 			<div className="content">
 				<Heading level={2}>{title}</Heading>
+
 				<div>
 					<PortableText value={intro} />
 				</div>
 
-				<FeaturedRecipe id={featuredId} priority />
+				{featuredId && <FeaturedRecipe id={featuredId} priority />}
 
-				<SecondaryFeaturedRecipes ids={secondaryFeatured.map(({ _ref }) => _ref)} />
+				{secondaryIds.length > 0 && <SecondaryFeaturedRecipes ids={secondaryIds} />}
 			</div>
 		</main>
 	);

@@ -1,6 +1,6 @@
+import type { Page } from "@ryan-bakes/sanity-types";
 import "server-only";
 import type Query from "types/query";
-import type { Page } from "types/sanity-schema";
 import buildGroqQuery from "./lib/buildGroqQuery";
 import nextFetch from "./lib/nextFetch";
 

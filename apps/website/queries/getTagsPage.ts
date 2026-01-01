@@ -1,7 +1,7 @@
+import type { TagsPage } from "@ryan-bakes/sanity-types";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
 import type Query from "types/query";
-import type { TagsPage } from "types/sanity-schema";
 import buildGroqQuery from "./lib/buildGroqQuery";
 import nextFetch from "./lib/nextFetch";
 

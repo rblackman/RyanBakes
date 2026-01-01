@@ -21,32 +21,40 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 	const { slug } = resolvedParams;
 
 	const { title: siteTitle } = await getSiteConfig();
+	const recipe = await getRecipeBySlug(slug);
 
-	const {
-		title: recipeTitle,
-		description,
-		tags,
-		_createdAt: created,
-		_updatedAt: updated,
-		openGraphImage: { asset, alt },
-	} = await getRecipeBySlug(slug);
+	const recipeTitle = recipe.title ?? "";
+	const description = recipe.description ?? "";
+	const tags = recipe.tags ?? [];
+	const created = recipe._createdAt;
+	const updated = recipe._updatedAt;
 
 	const baseUrl: string = clientEnv.NEXT_PUBLIC_BASE_URL;
 	const url = baseUrl ? new URL(`/recipe/${slug}`, baseUrl).toString() : `/recipe/${slug}`;
-	const builder = createImageBuilder(asset);
-	const ogImage = builder.buildUrlWithOptions({
-		width: 1200,
-		height: 627,
-		quality: 0.6,
-	});
-	const twitterImage = builder.buildUrlWithOptions({
-		width: 4096,
-		height: 2048,
-		quality: 0.6,
-	});
+
+	const openGraphImage = recipe.openGraphImage;
+
+	let ogImage: string | undefined;
+	let twitterImage: string | undefined;
+	let ogAlt: string | undefined;
+
+	if (openGraphImage?.asset) {
+		const builder = createImageBuilder(openGraphImage.asset);
+		ogImage = builder.buildUrlWithOptions({
+			width: 1200,
+			height: 627,
+			quality: 60,
+		});
+		twitterImage = builder.buildUrlWithOptions({
+			width: 4096,
+			height: 2048,
+			quality: 60,
+		});
+		ogAlt = openGraphImage.alt ?? undefined;
+	}
 
 	return {
-		title: `${siteTitle} | ${recipeTitle}`,
+		title: `${siteTitle ?? ""} | ${recipeTitle}`,
 		description,
 		keywords: tags,
 		openGraph: {
@@ -54,14 +62,16 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 			url,
 			title: recipeTitle,
 			description,
-			images: [
-				{
-					url: ogImage,
-					alt,
-					width: 1200,
-					height: 627,
-				},
-			],
+			images: ogImage
+				? [
+						{
+							url: ogImage,
+							alt: ogAlt,
+							width: 1200,
+							height: 627,
+						},
+					]
+				: [],
 			publishedTime: created,
 			modifiedTime: updated,
 		},
@@ -69,26 +79,22 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 			card: "summary_large_image",
 			title: recipeTitle,
 			description,
-			images: [
-				{
-					url: twitterImage,
-					alt,
-				},
-			],
+			images: twitterImage ? [{ url: twitterImage, alt: ogAlt }] : [],
 		},
 	};
 }
 
 export default async function Page(props: Readonly<Props>) {
-	const { params } = props;
-	const { slug } = await params;
+	const resolvedParams = props.params instanceof Promise ? await props.params : props.params;
+	const { slug } = resolvedParams;
+
 	const { tags } = await getRecipeBySlug(slug);
 
 	return (
 		<main>
 			<Hero {...props} />
 			<div className="content">
-				<Tags tags={tags} />
+				<Tags tags={tags ?? []} />
 				<Commentary {...props} />
 				<BakeModeToggle />
 				<Ingredients {...props} />

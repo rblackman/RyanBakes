@@ -1,7 +1,7 @@
+import type { Recipe } from "@ryan-bakes/sanity-types";
 import throwError from "helpers/throwError";
 import "server-only";
 import type Query from "types/query";
-import type { Recipe } from "types/sanity-schema";
 import buildGroqQuery from "./lib/buildGroqQuery";
 import nextFetch from "./lib/nextFetch";
 

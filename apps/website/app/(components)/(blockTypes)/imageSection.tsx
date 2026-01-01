@@ -1,14 +1,18 @@
+import type { InlineImage } from "@ryan-bakes/sanity-types";
 import throwError from "helpers/throwError";
 import createImageBuilder from "hooks/useImageBuilder";
 import Image from "next/image";
 import "server-only";
-import type { InlineImage } from "types/sanity-schema";
 
 export interface Props {
 	value: InlineImage;
 }
 
 export default function ImageSection({ value: { asset, alt, emptyAlt } }: Props) {
+	if (!asset) {
+		return null;
+	}
+
 	const imageBuilder = createImageBuilder(asset);
 
 	const img2x = imageBuilder.buildUrlWithOptions({

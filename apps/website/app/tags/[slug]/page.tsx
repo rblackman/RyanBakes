@@ -11,7 +11,9 @@ export type Props = {
 export default async function Tag({ params }: Readonly<Props>) {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
+
 	const { result: recipes } = await getRecipesByTag(slug);
+
 	return (
 		<>
 			<Heading level={3}>Tag: {slug}</Heading>
@@ -19,12 +21,21 @@ export default async function Tag({ params }: Readonly<Props>) {
 			<Heading level={4} sr>
 				Recipes
 			</Heading>
+
 			<ul>
-				{recipes.map(({ _id: id, title, slug: { current: slug } }) => (
-					<li key={id}>
-						<Link href={`/recipe/${slug}`}>{title}</Link>
-					</li>
-				))}
+				{recipes.map(({ _id: id, title, slug: recipeSlug }) => {
+					const recipeSlugValue = recipeSlug?.current;
+
+					if (!recipeSlugValue) {
+						return null;
+					}
+
+					return (
+						<li key={id}>
+							<Link href={`/recipe/${recipeSlugValue}`}>{title ?? "Untitled"}</Link>
+						</li>
+					);
+				})}
 			</ul>
 		</>
 	);

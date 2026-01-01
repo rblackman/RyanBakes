@@ -1,5 +1,5 @@
+import type { SanityImageAssetReference } from "@ryan-bakes/sanity-types";
 import { clientEnv } from "shared/config/env.client";
-import type { SanityImageAsset, SanityReference } from "types/sanity-schema";
 
 const sanityKey = clientEnv.NEXT_PUBLIC_SANITY_KEY;
 const dataset = clientEnv.NEXT_PUBLIC_SANITY_DATASET;
@@ -39,7 +39,7 @@ export interface ImageBuilder {
 	buildUrlWithOptions: (options: Options) => string;
 }
 
-export default function createImageBuilder({ _ref: ref }: SanityReference<SanityImageAsset>): ImageBuilder {
+export default function createImageBuilder({ _ref: ref }: SanityImageAssetReference): ImageBuilder {
 	const baseUrl = (() => {
 		if (ref) {
 			const splits = ref.split("-");

@@ -35,3 +35,10 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Sanity generated types
+/packages/sanity-types/index.d.ts
+/packages/sanity-types/*.d.ts
+/packages/sanity-types/*.ts
+/apps/cms/schema.json
+/packages/sanity-types/sanity.types.ts

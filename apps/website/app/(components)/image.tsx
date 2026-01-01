@@ -1,8 +1,8 @@
 "use client";
+import type { ImageWithAlt } from "@ryan-bakes/sanity-types";
 import clsx from "clsx";
 import createImageBuilder from "hooks/useImageBuilder";
 import NextImage, { type ImageLoaderProps } from "next/image";
-import type { ImageWithAlt } from "types/sanity-schema";
 import styles from "./(styles)/image.module.css";
 
 interface OptionalBaseProps {
@@ -52,6 +52,10 @@ export default function Image(props: Props) {
 		priority,
 		alt: altOverride,
 	} = props;
+
+	if (!asset) {
+		return null;
+	}
 
 	const { baseUrl, buildUrlWithOptions } = createImageBuilder(asset);
 

@@ -9,10 +9,25 @@ import SubTitle from "./subTitle";
 export default async function Hero({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
-	const {
-		title,
-		picture: { asset },
-	} = await getRecipeBySlug(slug);
+
+	const recipe = await getRecipeBySlug(slug);
+
+	const title = recipe.title ?? "";
+	const asset = recipe.picture?.asset;
+
+	if (!asset) {
+		return (
+			<div className={styles.heroContainer}>
+				<div className={styles.headingWrap}>
+					<Heading level={2} className={styles.heading ?? ""}>
+						{title}
+					</Heading>
+					<SubTitle params={{ slug }} />
+				</div>
+			</div>
+		);
+	}
+
 	const imageBuilder = createImageBuilder(asset);
 
 	const baseUrl = imageBuilder.buildUrlWithOptions({

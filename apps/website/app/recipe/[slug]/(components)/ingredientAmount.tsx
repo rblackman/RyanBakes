@@ -1,9 +1,11 @@
+import type { Unit, UnitReference } from "@ryan-bakes/sanity-types";
 import Fraction from "app/recipe/[slug]/(components)/fraction";
-import type { SanityReference } from "sanity-codegen";
 import "server-only";
-import type { Unit } from "types/sanity-schema";
 
-interface UnitDisplayProps extends Pick<Unit, "name" | "abbreviation" | "noUnit"> {
+interface UnitDisplayProps {
+	name: string;
+	abbreviation: string;
+	noUnit: boolean;
 	full: boolean;
 }
 
@@ -24,32 +26,36 @@ interface AmountProps {
 function AmountDisplay({ amount, display, noCount }: AmountProps) {
 	if (noCount) {
 		return null;
-	} else {
-		return display === "Fraction" ? <Fraction val={amount} /> : <span>{amount}</span>;
 	}
+
+	return display === "Fraction" ? <Fraction val={amount} /> : <span>{amount}</span>;
 }
 
 interface Props {
 	amount: string;
-	unit: SanityReference<Unit>;
+	unit?: UnitReference;
 	units: Unit[];
 	full?: boolean;
 }
 
-export default function IngredientAmount({ amount, unit: { _ref: unitRef }, units, full }: Props) {
-	const { display, noCount, noUnit, name, abbreviation } = units.filter(({ _id: id }) => id === unitRef)[0];
+export default function IngredientAmount({ amount, unit, units, full = false }: Props) {
+	const unitRef = unit?._ref;
 
-	const unitNode = <UnitDisplay name={name} abbreviation={abbreviation} noUnit={noUnit} full={full ?? false} />;
-	const amountNode = <AmountDisplay amount={amount} display={display} noCount={noCount} />;
+	const resolvedUnit = units.find(({ _id }) => {
+		return _id === unitRef;
+	});
+
+	// If we can't resolve the referenced unit, render amount only.
+	if (!resolvedUnit) {
+		return <AmountDisplay amount={amount} display="Decimal" noCount={false} />;
+	}
+
+	const { display = "Decimal", noCount = false, noUnit = false, name = "", abbreviation = "" } = resolvedUnit;
 
 	return (
 		<>
-			{amountNode}
-			{unitNode}
+			<AmountDisplay amount={amount} display={display} noCount={noCount} />
+			<UnitDisplay name={name} abbreviation={abbreviation} noUnit={noUnit} full={full} />
 		</>
 	);
 }
-
-IngredientAmount.defaultProps = {
-	full: false,
-};

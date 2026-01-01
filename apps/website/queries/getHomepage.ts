@@ -1,12 +1,16 @@
+import type { Page } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
-import type { Page } from "types/sanity-schema";
 import getPageById from "./getPageById";
 import getSiteConfig from "./getSiteConfig";
 
 export default async function getHomepage(): Promise<Page> {
-	const {
-		homepage: { _ref: ref },
-	} = await getSiteConfig();
-	const page = await getPageById(ref);
-	return page;
+	const siteConfig = await getSiteConfig();
+
+	const ref = siteConfig.homepage?._ref;
+	if (!ref) {
+		throwError("SiteConfig.homepage is not set (missing reference).");
+	}
+
+	return await getPageById(ref);
 }

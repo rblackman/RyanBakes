@@ -1,24 +1,28 @@
+import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
 import assertUnreachable from "helpers/assertUnreachable";
 import "server-only";
-import type { InlineImage, RecipePreview, SanityKeyed, TextSection } from "types/sanity-schema";
 import ImageSectionComponent from "./(blockTypes)/imageSection";
 import TextSectionComponent from "./(blockTypes)/textSection";
 
+type Keyed<T> = T & { _key: string };
+
 interface Props {
-	content: SanityKeyed<InlineImage> | SanityKeyed<TextSection> | SanityKeyed<RecipePreview>;
+	content: Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
 }
 
 export default function Block({ content }: Props) {
-	const { _type: type } = content;
-	switch (type) {
-		case "inlineImage":
-			return <ImageSectionComponent value={content as InlineImage} />;
-		case "textSection":
-			return <TextSectionComponent value={content as TextSection} />;
-		case "recipePreview":
+	switch (content._type) {
+		case "inlineImage": {
+			return <ImageSectionComponent value={content} />;
+		}
+		case "textSection": {
+			return <TextSectionComponent value={content} />;
+		}
+		case "recipePreview": {
 			return <p>RECIPE PREVIEW</p>;
-		default:
-			assertUnreachable(type);
+		}
+		default: {
+			return assertUnreachable(content);
+		}
 	}
-	return null;
 }

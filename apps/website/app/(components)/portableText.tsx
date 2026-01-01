@@ -1,4 +1,9 @@
-import type { PortableTextComponents, PortableTextMarkComponentProps, PortableTextProps } from "@portabletext/react";
+import type {
+	PortableTextComponentProps,
+	PortableTextComponents,
+	PortableTextMarkComponentProps,
+	PortableTextProps,
+} from "@portabletext/react";
 import { PortableText as PortableTextComponent } from "@portabletext/react";
 import type { PortableTextBlock, TypedObject } from "@portabletext/types";
 import Fraction from "app/recipe/[slug]/(components)/fraction";
@@ -17,12 +22,22 @@ function UnknownMark({ children, markType }: { children: ReactNode; markType: st
 	return <span className="UNKNOWN_MARK">{children}</span>;
 }
 
+type BlockProps = PortableTextComponentProps<PortableTextBlock>;
+
 const portableTextComponents: PortableTextComponents = {
 	block: {
-		h1: ({ children }: { children: ReactNode }) => <Heading level={2}>{children}</Heading>,
-		h2: ({ children }: { children: ReactNode }) => <Heading level={3}>{children}</Heading>,
-		h3: ({ children }: { children: ReactNode }) => <Heading level={4}>{children}</Heading>,
-		normal: ({ children }: { children: ReactNode }) => <p>{children}</p>,
+		h1: ({ children }: BlockProps) => {
+			return <Heading level={2}>{children}</Heading>;
+		},
+		h2: ({ children }: BlockProps) => {
+			return <Heading level={3}>{children}</Heading>;
+		},
+		h3: ({ children }: BlockProps) => {
+			return <Heading level={4}>{children}</Heading>;
+		},
+		normal: ({ children }: BlockProps) => {
+			return <p>{children}</p>;
+		},
 	},
 	marks: {
 		externalLink: ({ children, value, markType }: PortableTextMarkComponentProps<ExternalLinkProps>) => {
@@ -36,11 +51,14 @@ const portableTextComponents: PortableTextComponents = {
 			return <UnknownMark markType={markType}>{children}</UnknownMark>;
 		},
 		fraction: ({ children, markType }: { children: ReactNode; markType: string }) => {
-			const childArray = children as string[];
-			if (childArray && childArray.length >= 1) {
-				const val = childArray[0];
+			const childArray = children as unknown as Array<string | ReactNode>;
+			const first = childArray?.[0];
+			const val = typeof first === "string" ? first : "";
+
+			if (val) {
 				return <Fraction val={val} />;
 			}
+
 			return <UnknownMark markType={markType}>{children}</UnknownMark>;
 		},
 	},

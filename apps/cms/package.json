@@ -11,8 +11,9 @@
 		"dev": "sanity dev",
 		"build": "sanity build",
 		"deploy": "sanity deploy",
-		"typegen": "sanity typegen generate",
-		"typecheck": "pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit"
+		"schema:extract": "sanity schema extract --path ./schema.json",
+		"typecheck": "pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit",
+		"typegen": "pnpm run schema:extract && sanity typegen generate"
 	},
 	"dependencies": {
 		"@sanity/dashboard": "^5.0.1",

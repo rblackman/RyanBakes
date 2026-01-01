@@ -1,20 +1,23 @@
-import type { SanityKeyed } from "sanity-codegen";
+import type { Ingredient as IngredientType, Unit } from "@ryan-bakes/sanity-types";
 import "server-only";
-import type { Ingredient as IngredientType, Unit } from "types/sanity-schema";
 import styles from "./(styles)/ingredient.module.css";
 import IngredientAmount from "./ingredientAmount";
 
+type Keyed<T> = T & { _key: string };
+
 interface Props {
-	ingredient: SanityKeyed<IngredientType>;
+	ingredient: Keyed<IngredientType>;
 	units: Unit[];
 }
 
-export default function Ingredient({ ingredient: { name, amount, unit, notes }, units }: Props) {
+export default function Ingredient({ ingredient, units }: Props) {
+	const { name, amount, unit, notes } = ingredient;
+
 	return (
 		<tr>
-			<td>{name}</td>
+			<td>{name ?? ""}</td>
 			<td>
-				<IngredientAmount unit={unit} amount={amount} units={units} />
+				{unit && <IngredientAmount amount={amount ?? ""} unit={unit} units={units} />}
 				{notes && notes.length > 0 && (
 					<>
 						{" "}
