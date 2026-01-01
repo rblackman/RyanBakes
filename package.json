@@ -1,30 +1,60 @@
 {
+	"name": "ryan-bakes",
+	"version": "2.0.0",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@10.27.0",
+	"engines": {
+		"node": "v22.x"
+	},
+	"author": {
+		"name": "Ryan Blackman",
+		"url": "https://github.com/rblackman"
+	},
+	"homepage": "https://ryan-bakes.com/",
+	"bugs": {
+		"url": "https://github.com/rblackman/RyanBakes/issues"
+	},
+	"repository": {
+		"type": "github",
+		"url": "https://github.com/rblackman/RyanBakes"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "2.3.10",
 		"@commitlint/cli": "^20.2.0",
 		"@commitlint/config-conventional": "^20.2.0",
 		"@types/node": "^25.0.3",
+		"@types/react": "^19.2.7",
+		"@types/react-dom": "^19.2.3",
 		"husky": "^9.1.7",
 		"lint-staged": "^16.2.7",
 		"tsx": "^4.21.0",
 		"typescript": "^5.9.3"
 	},
-	"engines": {
-		"node": "v22.x"
-	},
-	"name": "ryan-bakes",
-	"packageManager": "pnpm@10.27.0",
-	"private": true,
 	"scripts": {
-		"build": "pnpm -r --filter=!ryan-bakes build",
-		"dev": "pnpm --filter website dev",
-		"format": "pnpm -r --filter=!ryan-bakes format",
-		"lint": "pnpm -r --filter=!ryan-bakes lint",
 		"preinstall": "corepack enable",
 		"prepare": "husky",
+
+		"dev:website": "pnpm --filter website dev",
+		"dev:cms": "pnpm --filter cms dev",
+		"dev:all": "pnpm -r --parallel --filter website --filter cms dev",
+
+		"build": "pnpm -r --filter=!ryan-bakes build",
+		"build:website": "pnpm --filter website build",
+		"build:cms": "pnpm --filter cms build",
+
+		"start": "pnpm --filter website start",
+
+		"format": "pnpm -r --filter=!ryan-bakes format",
+		"lint": "pnpm -r --filter=!ryan-bakes lint",
+
 		"typecheck": "pnpm -r --filter=!ryan-bakes typecheck",
-		"validate:env": "pnpm --filter website validate:env"
-	},
-	"type": "module",
-	"version": "2.0.0"
+		"typecheck:website": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
+		"typecheck:cms": "pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit",
+
+		"validate:env": "pnpm --filter website validate:env",
+
+		"typegen": "pnpm --filter cms typegen",
+		"deploy:cms": "pnpm --filter cms deploy"
+	}
 }

@@ -1,4 +1,26 @@
 {
+	"name": "website",
+	"version": "2.0.0",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@10.27.0",
+	"engines": {
+		"node": "v22.x"
+	},
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+
+		"format": "pnpm -w exec biome format --write .",
+		"lint": "pnpm -w exec biome check .",
+
+		"typecheck": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
+
+		"prebuild": "pnpm run validate:env",
+		"predev": "pnpm run validate:env",
+		"validate:env": "pnpm -w exec tsx --require dotenv/config apps/website/scripts/validate-env.ts"
+	},
 	"dependencies": {
 		"@portabletext/react": "^6.0.2",
 		"clsx": "^2.1.1",
@@ -11,29 +33,8 @@
 	},
 	"devDependencies": {
 		"@portabletext/types": "^4.0.1",
-		"@types/react": "^19.2.7",
-		"@types/react-dom": "^19.2.3",
 		"@vercel/toolbar": "^0.1.41",
 		"dotenv": "^17.2.3",
 		"next-devtools-mcp": "^0.3.7"
-	},
-	"engines": {
-		"node": "v22.x"
-	},
-	"name": "website",
-	"packageManager": "pnpm@10.27.0",
-	"private": true,
-	"scripts": {
-		"build": "next build",
-		"dev": "next dev",
-		"format": "pnpm -w exec biome format --write .",
-		"lint": "pnpm -w exec biome check .",
-		"prebuild": "pnpm run validate:env",
-		"predev": "pnpm run validate:env",
-		"start": "next start",
-		"typecheck": "pnpm -w exec tsc -p tsconfig.json --noEmit",
-		"validate:env": "pnpm -w exec tsx --require dotenv/config scripts/validate-env.ts"
-	},
-	"type": "module",
-	"version": "2.0.0"
+	}
 }

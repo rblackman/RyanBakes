@@ -6,6 +6,7 @@
 		"clsx",
 		"codegen",
 		"esbuild",
+		"fieldsets",
 		"fillmax",
 		"focalpoint",
 		"Groq",
