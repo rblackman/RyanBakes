@@ -107,7 +107,7 @@ p {
 
 a {
 	color: var(--text);
-	text-decoration-color: var(--secondary);
+	text-decoration-color: var(--secondary-dark);
 }
 
 .sr {

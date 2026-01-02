@@ -2,22 +2,41 @@
 	--max-content-width: 1900px;
 	--line-height: 1.6;
 
-	--text: #000000;
-	--bg: #ffffff;
-	--bg-alt: #f0fdf8;
-	--bg-subtle: linear-gradient(90deg, #eee, #fff);
-	--card-shadow: -2rem 0 3rem -2rem #838a88;
+	/* Neutral ramp for surfaces, borders, and body text */
+	--neutral-50: #f7f8fa;
+	--neutral-100: #eef1f4;
+	--neutral-200: #d8dee6;
+	--neutral-400: #9aa5b5;
+	--neutral-900: #1f2a36;
 
-	--primary: #0d19a3;
-	--primary_r: 13;
-	--primary_g: 25;
-	--primary_b: 163;
+	--text: var(--neutral-900);
+	--bg: var(--neutral-50);
+	--bg-alt: var(--neutral-100);
+	--bg-subtle: linear-gradient(90deg, #eef1f4, #f7f8fa);
+	--card-shadow: -2rem 0 3rem -2rem var(--neutral-400);
+
+	/* Blue primary */
+	--primary: #0c2d57;
+	--primary-light: #e7edf7;
+	--primary-dark: #081c35;
+	--primary_r: 12;
+	--primary_g: 45;
+	--primary_b: 87;
 	--primary-contrast: #ffffff;
-	--secondary: #15db95;
-	--secondary_r: 21;
-	--secondary_g: 219;
-	--secondary_b: 149;
-	--secondary-contrast: #000000;
+
+	/* Jade secondary */
+	--secondary: #2fb37c;
+	--secondary-light: #e4f7ef;
+	--secondary-dark: #1f7b55;
+	--secondary_r: 47;
+	--secondary_g: 179;
+	--secondary_b: 124;
+	--secondary-contrast: #0a110c;
+
+	/* Warm accent for highlights */
+	--accent-warm: #f08a5d;
+
+	/* Feedback */
 	--error: #f57390;
 	--error-contrast: #030e12;
 
