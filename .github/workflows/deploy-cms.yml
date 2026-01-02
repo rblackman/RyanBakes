@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
+    # Only allow deploys from main
+    if: ${{ github.ref == 'refs/heads/main' }}
+
     # Optional but recommended: create a GitHub Environment named "production"
     # and require approvals there.
     environment: production
