@@ -204,7 +204,7 @@ Sensitive credentials (e.g., deploy tokens) are stored as GitHub Secrets.
   - `SITE_CONFIG_KEY`
   - `TAGS_PAGE_KEY`
 - Dev containers run `./scripts/write-website-env.sh` after creation/update to write `apps/website/.env` from those variables.
-- The script no-ops if the file already exists or if any variables are missing. You can run it manually at any time if you add secrets later.
+- The script no-ops if the file already exists or if any variables are missing. If writing the `apps/website/.env` file fails (for example, due to a filesystem error), the script will exit with a non-zero status. You can run it manually at any time if you add secrets later.
 
 ---
 
