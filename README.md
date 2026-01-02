@@ -194,6 +194,18 @@ and are written to `apps/website/.env` during CI.
 
 Sensitive credentials (e.g., deploy tokens) are stored as GitHub Secrets.
 
+### Codespaces / Dev Containers
+
+- Add **Codespaces secrets** (User or Repository → Codespaces secrets) for:
+  - `NEXT_PUBLIC_BASE_URL`
+  - `NEXT_PUBLIC_SANITY_DATASET`
+  - `NEXT_PUBLIC_SANITY_KEY`
+  - `RECIPES_PAGE_KEY`
+  - `SITE_CONFIG_KEY`
+  - `TAGS_PAGE_KEY`
+- Dev containers run `./scripts/write-website-env.sh` after creation/update to write `apps/website/.env` from those variables.
+- The script no-ops if the file already exists or if any variables are missing. You can run it manually at any time if you add secrets later.
+
 ---
 
 ## Key Design Decisions

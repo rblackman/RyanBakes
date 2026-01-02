@@ -9,8 +9,8 @@
 		"ghcr.io/devcontainers/features/github-cli:1": {}
 	},
 	"mounts": ["source=ryan-bakes-pnpm-store,target=/home/node/.pnpm-store,type=volume"],
-	"postCreateCommand": "corepack enable && pnpm install --frozen-lockfile",
-	"updateContentCommand": "pnpm install --frozen-lockfile",
+	"postCreateCommand": "corepack enable && pnpm install --frozen-lockfile && ./scripts/write-website-env.sh",
+	"updateContentCommand": "pnpm install --frozen-lockfile && ./scripts/write-website-env.sh",
 	"remoteUser": "vscode",
 	"containerEnv": {
 		"NEXT_TELEMETRY_DISABLED": "1",
