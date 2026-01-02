@@ -57,6 +57,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
+      # Optional: keep this for one run, then delete it
       - name: Debug shell availability
         working-directory: apps/website
         shell: bash
@@ -66,15 +67,15 @@ jobs:
           ls -la /bin/sh || true
           ls -la /usr/bin/sh || true
 
-      - name: Build (prebuilt output)
-        working-directory: apps/website
-        run: pnpm dlx vercel@latest build --token=${{ secrets.VERCEL_TOKEN }}
-
-      - name: Deploy Prebuilt
+      - name: Deploy (Vercel builds remotely)
         id: deploy
         working-directory: apps/website
         run: |
-          URL=$(pnpm dlx vercel@latest deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
+          URL=$(
+            pnpm dlx vercel@latest deploy \
+              --environment=preview \
+              --token=${{ secrets.VERCEL_TOKEN }}
+          )
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
       - name: Comment Preview URL
