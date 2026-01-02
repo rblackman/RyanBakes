@@ -1,5 +1,5 @@
 {
-	"ignorePaths": ["git/**/*"],
+	"ignorePaths": ["**/node_modules/**", "**/.next/**", "**/.turbo/**", "**/.vercel/**", "git/**/*"],
 	"words": [
 		"autoapprove",
 		"clsx",

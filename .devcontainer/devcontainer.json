@@ -1,0 +1,46 @@
+{
+	"name": "Ryan Bakes",
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "22",
+			"pnpm": "true"
+		},
+		"ghcr.io/devcontainers/features/github-cli:1": {}
+	},
+	"mounts": ["source=ryan-bakes-pnpm-store,target=/home/node/.pnpm-store,type=volume"],
+	"postCreateCommand": "corepack enable && pnpm install --frozen-lockfile",
+	"updateContentCommand": "pnpm install --frozen-lockfile",
+	"remoteUser": "node",
+	"containerEnv": {
+		"NEXT_TELEMETRY_DISABLED": "1",
+		"SANITY_STUDIO_TELEMETRY_DISABLED": "1"
+	},
+	"forwardPorts": [3000, 3333],
+	"portsAttributes": {
+		"3000": {
+			"label": "Website",
+			"onAutoForward": "notify"
+		},
+		"3333": {
+			"label": "Sanity Studio",
+			"onAutoForward": "notify"
+		}
+	},
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"typescript.tsdk": "${containerWorkspaceFolder}/node_modules/typescript/lib",
+				"cSpell.configFile": "${containerWorkspaceFolder}/.vscode/cspell.json"
+			},
+			"extensions": [
+				"biomejs.biome",
+				"EditorConfig.EditorConfig",
+				"github.vscode-github-actions",
+				"redhat.vscode-yaml",
+				"sanity-io.vscode-sanity",
+				"streetsidesoftware.code-spell-checker"
+			]
+		}
+	}
+}
