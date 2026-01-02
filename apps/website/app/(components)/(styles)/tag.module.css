@@ -8,11 +8,19 @@
 	align-items: center;
 	color: var(--text);
 	text-decoration-color: transparent;
+	transition:
+		color var(--animation-duration) ease-in-out,
+		text-decoration-color var(--animation-duration) ease-in-out;
 }
 
 .tagLink:hover,
 .tagLink:focus-visible {
 	text-decoration-color: var(--secondary);
+}
+
+.tagLink:focus-visible {
+	outline: var(--focus-outline-width) solid var(--focus-outline-color);
+	outline-offset: var(--focus-outline-offset);
 }
 
 .tagLink_Svg {
