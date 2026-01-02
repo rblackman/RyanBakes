@@ -1,0 +1,18 @@
+# Normalize text files to use LF in the repository and on checkout
+* text=auto eol=lf
+
+# Ensure common binary formats are left untouched
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.svg binary
+*.ttf binary
+*.otf binary
+*.woff binary
+*.woff2 binary
+*.mp4 binary
+*.mov binary
+*.pdf binary
