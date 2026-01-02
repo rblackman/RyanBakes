@@ -15,17 +15,22 @@ export default function MainNavItem({
 }: Props) {
 	let url: string;
 	switch (type) {
-		case "page":
-			url = `/${slug?.current}`;
+		case "page": {
+			const currentSlug = slug?.current;
+			url = currentSlug ? `/${currentSlug}` : "/";
 			break;
-		case "recipesPage":
+		}
+		case "recipesPage": {
 			url = "/recipe";
 			break;
-		case "tagsPage":
-			url = "tags";
+		}
+		case "tagsPage": {
+			url = "/tags";
 			break;
-		default:
+		}
+		default: {
 			assertUnreachable(type);
+		}
 	}
 	return (
 		<Link className={styles.mainNavItem} href={url}>

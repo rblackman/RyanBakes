@@ -13,8 +13,16 @@ export default async function Steps({ params }: { params: { slug: string } | Pro
 		return null;
 	}
 
-	const getIngredientsForIndex = (index: number) =>
-		ingredients.filter(({ usedInSteps }) => (usedInSteps?.indexOf(index + 1) ?? -1) > -1);
+	function getIngredientsForIndex(index: number) {
+		if (!ingredients || ingredients.length === 0) {
+			return [];
+		}
+
+		return ingredients.filter(({ usedInSteps }) => {
+			const usedSteps = usedInSteps ?? [];
+			return usedSteps.indexOf(index + 1) > -1;
+		});
+	}
 
 	return (
 		<>

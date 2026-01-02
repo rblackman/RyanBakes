@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import clsx from "clsx";
 import "server-only";
 import styles from "./(styles)/tags.module.css";
 import Tag from "./tag";
@@ -9,24 +9,19 @@ interface Props {
 	small?: boolean;
 }
 
-export default function Tags({ tags, noMargin }: Props) {
-	const sorted = useMemo(() => [...tags].sort(), [tags]);
+export default function Tags({ tags, noMargin = false, small = false }: Props) {
+	const sorted = [...tags].sort();
 
-	const noMarginClass = noMargin === true ? styles.noMargin : null;
-	const mainClass = styles.tagList;
-	const smallClass = styles.small;
-	const className = `${mainClass} ${noMarginClass} ${smallClass}`.trimEnd();
+	const className = clsx(styles.tagList, {
+		[styles.noMargin]: noMargin,
+		[styles.small]: small,
+	});
 
 	return (
 		<ul className={className}>
-			{sorted.map((tag) => (
-				<Tag tag={tag} key={tag} />
-			))}
+			{sorted.map((tag) => {
+				return <Tag tag={tag} key={tag} />;
+			})}
 		</ul>
 	);
 }
-
-Tags.defaultProps = {
-	noMargin: false,
-	small: false,
-};
