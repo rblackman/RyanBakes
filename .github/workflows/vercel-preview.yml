@@ -17,15 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
-    # Skip PRs from forks (secrets unavailable)
+    # Skip PRs from forks (vars/secrets unavailable)
     if: ${{ github.event.pull_request.head.repo.fork == false }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
+      - name: Enable Corepack and activate pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@10.27.0 --activate
+          pnpm -v
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -48,34 +51,21 @@ jobs:
           tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
 
       - name: Pull Vercel Environment (preview)
-        run: >
-          pnpm -w dlx vercel@latest
-          pull
-          --yes
-          --environment=preview
-          --cwd=apps/website
-          --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/website
+        run: pnpm dlx vercel@latest pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Build (prebuilt output)
-        run: >
-          pnpm -w dlx vercel@latest
-          build
-          --cwd=apps/website
-          --token=${{ secrets.VERCEL_TOKEN }}
+        working-directory: apps/website
+        run: pnpm dlx vercel@latest build --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Prebuilt
         id: deploy
+        working-directory: apps/website
         run: |
-          URL=$(
-            pnpm -w dlx vercel@latest \
-              deploy \
-              --prebuilt \
-              --cwd=apps/website \
-              --token=${{ secrets.VERCEL_TOKEN }}
-          )
+          URL=$(pnpm dlx vercel@latest deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$URL" >> "$GITHUB_OUTPUT"
 
       - name: Comment Preview URL
@@ -84,5 +74,4 @@ jobs:
           PR_NUMBER: ${{ github.event.pull_request.number }}
           PREVIEW_URL: ${{ steps.deploy.outputs.url }}
         run: |
-          gh pr comment "$PR_NUMBER" \
-            --body "Vercel Preview: ${PREVIEW_URL}"
+          gh pr comment "$PR_NUMBER" --body "Vercel Preview: ${PREVIEW_URL}"
