@@ -1,0 +1,75 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Dev: Website",
+			"type": "shell",
+			"command": "pnpm dev:website",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "always"
+			},
+			"detail": "Start the Next.js dev server for the website on port 3000."
+		},
+		{
+			"label": "Dev: CMS",
+			"type": "shell",
+			"command": "pnpm dev:cms",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"presentation": {
+				"panel": "dedicated",
+				"reveal": "always"
+			},
+			"detail": "Start the Sanity Studio dev server on port 3333."
+		},
+		{
+			"label": "Typegen",
+			"type": "shell",
+			"command": "pnpm typegen",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"detail": "Extract the Sanity schema and regenerate types."
+		},
+		{
+			"label": "Lint (Biome)",
+			"type": "shell",
+			"command": "pnpm lint",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"detail": "Run Biome across the workspace."
+		},
+		{
+			"label": "Typecheck",
+			"type": "shell",
+			"command": "pnpm typecheck",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": "$tsc",
+			"detail": "Run TypeScript checks across all packages."
+		},
+		{
+			"label": "CI Verify",
+			"type": "shell",
+			"command": "pnpm ci:verify",
+			"options": {
+				"cwd": "${workspaceFolder}"
+			},
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Mirror the CI verify pipeline locally."
+		}
+	]
+}
