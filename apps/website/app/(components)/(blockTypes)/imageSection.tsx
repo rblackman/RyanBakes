@@ -37,7 +37,7 @@ export default function ImageSection({ value: { asset, alt, emptyAlt } }: Props)
 
 	return (
 		<Image
-			style={{ display: "block", margin: "1rem 0", padding: "o.5rem" }}
+			style={{ display: "block", margin: "1rem 0", padding: "0.5rem" }}
 			src={img2x}
 			alt={altText}
 			width={400}

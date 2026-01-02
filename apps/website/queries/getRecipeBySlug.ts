@@ -29,9 +29,5 @@ export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
 		console.warn(`Got more than one recipe with slug ${slug}. Using the first.`, { slug, result });
 	}
 
-	if (result.length === 0) {
-		throwError(`Could not find recipe with slug: ${slug}`);
-	}
-
 	return result[0];
 }
