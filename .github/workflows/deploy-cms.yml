@@ -1,0 +1,49 @@
+name: Deploy CMS
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-cms
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build + Deploy Sanity Studio
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # Only allow deploys from main
+    if: ${{ github.ref == 'refs/heads/main' }}
+
+    # Optional but recommended: create a GitHub Environment named "production"
+    # and require approvals there.
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+          cache: "pnpm"
+
+      - name: Enable Corepack (pnpm)
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Keep the canonical ordering: extract -> typegen -> build -> deploy
+      - name: Typegen (schema extract + sanity typegen)
+        run: pnpm run typegen
+
+      - name: Build CMS
+        run: pnpm run build:cms
+
+      - name: Deploy CMS
+        run: pnpm run deploy:cms
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}

@@ -1,0 +1,147 @@
+* {
+	box-sizing: border-box;
+	margin: 0;
+}
+
+html {
+	font-size: 20px;
+	overflow-x: hidden;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	font-family:
+		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+		"Helvetica Neue", sans-serif;
+	line-height: var(--line-height);
+	color: var(--text);
+	background: var(--bg);
+}
+
+:is(h2, h3, h4) {
+	line-height: 1.2;
+}
+
+:is(h2, h3, h4):not(:first-child) {
+	margin-top: 3rem;
+}
+
+h2 {
+	font-size: 3rem;
+}
+
+h3 {
+	margin: 0 0 2rem;
+	text-transform: uppercase;
+	font-size: 2rem;
+	font-weight: normal;
+}
+
+h4 {
+	margin: 0.5rem 0 1rem;
+	font-size: 1.25rem;
+}
+
+@media only screen and (max-width: 640px) {
+	:is(h2, h3, h4):not(:first-child) {
+		margin-top: 1.5rem;
+	}
+
+	h2 {
+		font-size: 2rem;
+	}
+
+	h3 {
+		margin: 0 0 1rem;
+		text-transform: uppercase;
+		font-size: 1.2rem;
+		font-weight: normal;
+	}
+
+	h4 {
+		margin: 0.3rem 0 0.5rem;
+		font-size: 1rem;
+	}
+}
+
+article * + * {
+	margin-top: 1rem;
+}
+
+header,
+.content,
+footer {
+	width: 100%;
+	max-width: clamp(0px, 90vw, var(--max-content-width));
+	margin: 0 auto;
+}
+
+.content {
+	width: 100%;
+	padding: clamp(2rem, 2rem, 50vh) clamp(2rem, 5vw, 3rem) 6rem;
+	min-height: 100vh;
+}
+
+@media only screen and (max-width: 660px) {
+	.content {
+		padding: clamp(2vh, 2rem, 50vh) clamp(0.5rem, 1vw, 3rem) 3rem;
+	}
+}
+
+header,
+footer {
+	padding: 0 clamp(1rem, 5vw, 3rem);
+}
+
+a {
+	text-underline-offset: 0.15em;
+}
+
+p {
+	line-height: var(--line-height);
+	margin: 0 0 1rem 0;
+	max-width: 75ch;
+}
+
+a {
+	color: var(--text);
+	text-decoration-color: var(--secondary);
+}
+
+.sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+.responsiveAspectRatio {
+	aspect-ratio: var(--hero-aspectRatio_W) / var(--hero-aspectRatio_H);
+}
+
+@media only screen and (max-width: 1921px) {
+	:root {
+		--hero-aspectRatio_W: 8;
+		--hero-aspectRatio_H: 3;
+	}
+}
+
+@media only screen and (max-width: 1000px) {
+	:root {
+		--hero-aspectRatio_W: 1;
+		--hero-aspectRatio_H: 1;
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	:root {
+		--hero-aspectRatio_W: 3;
+		--hero-aspectRatio_H: 4;
+	}
+}

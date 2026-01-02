@@ -1,19 +1,25 @@
 {
-	"ignorePaths": [
-		"git/**/*"
-	],
+	"ignorePaths": ["git/**/*"],
 	"words": [
+		"autoapprove",
 		"clsx",
 		"codegen",
 		"esbuild",
+		"fieldsets",
 		"fillmax",
 		"focalpoint",
 		"Groq",
+		"hmarr",
 		"Hotspot",
+		"lintstagedrc",
+		"lockfiles",
 		"nodenext",
 		"onrelease",
 		"Parens",
 		"portabletext",
-		"unrs"
+		"prebuild",
+		"typegen",
+		"unrs",
+		"vercel"
 	]
 }

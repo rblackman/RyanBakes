@@ -1,0 +1,41 @@
+{
+	"name": "website",
+	"version": "2.0.0",
+	"private": true,
+	"type": "module",
+	"packageManager": "pnpm@10.27.0",
+	"engines": {
+		"node": "v22.x"
+	},
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+
+		"format": "pnpm -w exec biome format --write .",
+		"lint": "pnpm -w exec biome check .",
+
+		"typecheck": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
+
+		"prebuild": "pnpm --filter cms typegen && pnpm run validate:env",
+		"predev": "pnpm run validate:env",
+		"validate:env": "pnpm -w exec tsx --require dotenv/config apps/website/scripts/validate-env.ts dotenv_config_path=apps/website/.env"
+	},
+	"dependencies": {
+		"@portabletext/react": "^6.0.2",
+		"@ryan-bakes/sanity-types": "workspace:*",
+		"clsx": "^2.1.1",
+		"next": "^16.1.1",
+		"react": "^19.2.3",
+		"react-dom": "^19.2.3",
+		"react-icons": "^5.5.0",
+		"server-only": "^0.0.1",
+		"zod": "^4.3.3"
+	},
+	"devDependencies": {
+		"@portabletext/types": "^4.0.1",
+		"@vercel/toolbar": "^0.1.41",
+		"dotenv": "^17.2.3",
+		"next-devtools-mcp": "^0.3.7"
+	}
+}

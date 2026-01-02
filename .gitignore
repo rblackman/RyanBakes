@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules
 /.pnp
 .pnp.js
 
@@ -9,11 +10,11 @@
 /coverage
 
 # next.js
-/.next/
-/out/
+**/.next/
+**/out/
 
 # production
-/build
+**/build
 
 # misc
 .DS_Store
@@ -28,9 +29,36 @@ yarn-error.log*
 # local env files
 .env*
 !.env*.example
+**/.env*
+!**/.env*.example
 
 # vercel
 .vercel
 
 # typescript
 *.tsbuildinfo
+
+# Sanity generated types
+/packages/sanity-types/index.d.ts
+/packages/sanity-types/*.d.ts
+/packages/sanity-types/*.ts
+/apps/cms/schema.json
+/packages/sanity-types/sanity.types.ts
+
+
+# Sanity
+
+# --- Sanity Studio ---
+apps/cms/.sanity/
+apps/cms/.cache/
+apps/cms/.tmp/
+apps/cms/.vite/
+apps/cms/dist/
+apps/cms/build/
+
+# Sanity environment files
+apps/cms/.env
+apps/cms/.env.*
+
+# Sanity generated artifacts (never committed)
+apps/cms/schema.json

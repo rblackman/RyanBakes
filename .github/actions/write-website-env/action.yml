@@ -1,0 +1,46 @@
+name: "Write website .env for CI"
+description: "Validates required environment variables and writes apps/website/.env"
+inputs:
+  next_public_base_url:
+    description: "NEXT_PUBLIC_BASE_URL"
+    required: true
+  next_public_sanity_dataset:
+    description: "NEXT_PUBLIC_SANITY_DATASET"
+    required: true
+  next_public_sanity_key:
+    description: "NEXT_PUBLIC_SANITY_KEY"
+    required: true
+  recipes_page_key:
+    description: "RECIPES_PAGE_KEY"
+    required: true
+  site_config_key:
+    description: "SITE_CONFIG_KEY"
+    required: true
+  tags_page_key:
+    description: "TAGS_PAGE_KEY"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - name: Validate required inputs
+      shell: bash
+      run: |
+        test -n "${{ inputs.next_public_base_url }}" || (echo "Missing input next_public_base_url" && exit 1)
+        test -n "${{ inputs.next_public_sanity_dataset }}" || (echo "Missing input next_public_sanity_dataset" && exit 1)
+        test -n "${{ inputs.next_public_sanity_key }}" || (echo "Missing input next_public_sanity_key" && exit 1)
+        test -n "${{ inputs.recipes_page_key }}" || (echo "Missing input recipes_page_key" && exit 1)
+        test -n "${{ inputs.site_config_key }}" || (echo "Missing input site_config_key" && exit 1)
+        test -n "${{ inputs.tags_page_key }}" || (echo "Missing input tags_page_key" && exit 1)
+
+    - name: Write apps/website/.env
+      shell: bash
+      run: |
+        cat > apps/website/.env << EOF
+        NEXT_PUBLIC_BASE_URL=${{ inputs.next_public_base_url }}
+        NEXT_PUBLIC_SANITY_DATASET=${{ inputs.next_public_sanity_dataset }}
+        NEXT_PUBLIC_SANITY_KEY=${{ inputs.next_public_sanity_key }}
+        RECIPES_PAGE_KEY=${{ inputs.recipes_page_key }}
+        SITE_CONFIG_KEY=${{ inputs.site_config_key }}
+        TAGS_PAGE_KEY=${{ inputs.tags_page_key }}
+        EOF

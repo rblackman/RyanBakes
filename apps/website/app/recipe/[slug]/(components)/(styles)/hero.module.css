@@ -1,0 +1,68 @@
+.heroContainer {
+	position: relative;
+	width: 100%;
+	aspect-ratio: var(--hero-aspectRatio_W) / var(--hero-aspectRatio_H);
+	/* force to be full width and not go beyond device height */
+	max-height: 100vh;
+	min-width: 100%;
+	overflow: hidden;
+	background-color: var(--primary);
+	background-position: center;
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-image: var(--bgUrl);
+	display: grid;
+	place-content: end start;
+}
+
+.headingWrap {
+	background: rgba(var(--primary_r), var(--primary_g), var(--primary_b), 0.85);
+	color: var(--primary-contrast);
+	padding: 1rem 4rem;
+	max-width: 90vw;
+	backdrop-filter: blur(5px);
+	margin: 0 0 1rem;
+}
+
+@media only screen and (max-width: 1921px) {
+	.heroContainer {
+		--hero-aspectRatio_W: 8;
+		--hero-aspectRatio_H: 3;
+		background-image: var(--bgUrl-desk);
+	}
+}
+
+@media only screen and (max-width: 1000px) {
+	.heroContainer {
+		--hero-aspectRatio_W: 1;
+		--hero-aspectRatio_H: 1;
+		background-image: var(--bgUrl-tablet);
+	}
+}
+
+@media only screen and (max-width: 768px) {
+	.heroContainer {
+		--hero-aspectRatio_W: 3;
+		--hero-aspectRatio_H: 4;
+		background-image: var(--bgUrl-mobile);
+	}
+
+	.headingWrap {
+		padding: 1rem 1.5rem;
+	}
+}
+
+.heading {
+	font-size: 2rem;
+}
+
+@media only screen and (min-width: 1001px) {
+	.headingWrap {
+		padding: 1rem 6rem;
+	}
+
+	.heading {
+		font-size: 4rem;
+	}
+}
