@@ -9,10 +9,6 @@ interface Props {
 	small?: boolean;
 }
 
-function renderTag(tag: string) {
-	return <Tag tag={tag} key={tag} />;
-}
-
 export default function Tags({ tags, noMargin = false, small = false }: Props) {
 	const sorted = [...tags].sort();
 
@@ -24,7 +20,7 @@ export default function Tags({ tags, noMargin = false, small = false }: Props) {
 	return (
 		<ul className={className}>
 			{sorted.map((tag) => {
-				return renderTag(tag);
+				return <Tag tag={tag} key={tag} />;
 			})}
 		</ul>
 	);
