@@ -12,7 +12,7 @@
 
 .tagLink:hover,
 .tagLink:focus-visible {
-	text-decoration-color: var(--secondary);
+	text-decoration-color: var(--secondary-dark);
 }
 
 .tagLink_Svg {
