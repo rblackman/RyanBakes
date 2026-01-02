@@ -51,7 +51,6 @@ jobs:
           tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
 
       - name: Pull Vercel Environment (preview)
-        working-directory: apps/website
         run: pnpm dlx vercel@latest pull --yes --environment=preview --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -59,7 +58,6 @@ jobs:
 
       - name: Deploy (Vercel builds remotely)
         id: deploy
-        working-directory: apps/website
         run: |
           URL=$(
             pnpm dlx vercel@latest deploy \
