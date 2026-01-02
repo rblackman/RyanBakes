@@ -11,7 +11,7 @@
 	"mounts": ["source=ryan-bakes-pnpm-store,target=/home/node/.pnpm-store,type=volume"],
 	"postCreateCommand": "corepack enable && pnpm install --frozen-lockfile",
 	"updateContentCommand": "pnpm install --frozen-lockfile",
-	"remoteUser": "node",
+	"remoteUser": "vscode",
 	"containerEnv": {
 		"NEXT_TELEMETRY_DISABLED": "1",
 		"SANITY_STUDIO_TELEMETRY_DISABLED": "1"
