@@ -57,6 +57,15 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
+      - name: Debug shell availability
+        working-directory: apps/website
+        shell: bash
+        run: |
+          echo "PATH=$PATH"
+          command -v sh || true
+          ls -la /bin/sh || true
+          ls -la /usr/bin/sh || true
+
       - name: Build (prebuilt output)
         working-directory: apps/website
         run: pnpm dlx vercel@latest build --token=${{ secrets.VERCEL_TOKEN }}
