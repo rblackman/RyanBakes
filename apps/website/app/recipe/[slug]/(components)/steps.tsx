@@ -2,6 +2,7 @@ import Heading from "app/(components)/heading";
 import getAllUnits from "queries/getAllUnits";
 import getRecipeBySlug from "queries/getRecipeBySlug";
 import "server-only";
+import styles from "./(styles)/steps.module.css";
 import Step from "./step";
 
 export default async function Steps({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
@@ -27,7 +28,7 @@ export default async function Steps({ params }: { params: { slug: string } | Pro
 	return (
 		<>
 			<Heading level={3}>Instructions</Heading>
-			<ol>
+			<ol className={styles.ol}>
 				{steps.map((step, i) => (
 					<Step key={step._key} step={step} ingredients={getIngredientsForIndex(i)} units={units} />
 				))}
