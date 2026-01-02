@@ -57,6 +57,6 @@
 		"validate:env": "pnpm --filter website validate:env",
 
 		"typegen": "pnpm --filter cms run schema:extract && pnpm --filter cms run typegen",
-		"deploy:cms": "pnpm --filter cms deploy"
+		"deploy:cms": "pnpm --filter cms run deploy"
 	}
 }
