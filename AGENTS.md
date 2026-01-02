@@ -141,6 +141,7 @@ When making changes:
   - When changing things in the Website, test the website (`pnpm run build:website`)
 - Update documentation appropriately:
   - `AGENTS.md`, `ARCHITECTURE.md`, `README.md`
+- For commit comments, follow the conventions laid out in `commitlint.config.mjs`. Add an expanded description with a more complete accounting of the changes.
 
 ## For Humans
 

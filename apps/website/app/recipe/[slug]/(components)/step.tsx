@@ -27,9 +27,9 @@ export default function Step({ ingredients, step: { title, content }, units }: P
 		<li className={styles.stepWrap}>
 			{ingredients && ingredients.length > 0 && (
 				<ul className={styles.ingredientsWrap}>
-					{ingredients.map(({ _key, amount, unit }) => (
+					{ingredients.map(({ _key, amount, name, unit }) => (
 						<li key={_key}>
-							<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} />
+							<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} /> &ndash; {name}
 						</li>
 					))}
 				</ul>
