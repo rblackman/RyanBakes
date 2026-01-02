@@ -57,23 +57,12 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
-      # Optional: keep this for one run, then delete it
-      - name: Debug shell availability
-        working-directory: apps/website
-        shell: bash
-        run: |
-          echo "PATH=$PATH"
-          command -v sh || true
-          ls -la /bin/sh || true
-          ls -la /usr/bin/sh || true
-
       - name: Deploy (Vercel builds remotely)
         id: deploy
         working-directory: apps/website
         run: |
           URL=$(
             pnpm dlx vercel@latest deploy \
-              --environment=preview \
               --token=${{ secrets.VERCEL_TOKEN }}
           )
           echo "url=$URL" >> "$GITHUB_OUTPUT"
