@@ -1,9 +1,11 @@
 {
 	"recommendations": [
 		"biomejs.biome",
+		"streetsidesoftware.code-spell-checker",
 		"redhat.vscode-yaml",
 		"EditorConfig.EditorConfig",
-		"github.vscode-github-actions"
+		"github.vscode-github-actions",
+		"sanity-io.vscode-sanity"
 	],
 	"unwantedRecommendations": ["esbenp.prettier-vscode"]
 }

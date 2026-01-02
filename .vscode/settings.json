@@ -21,7 +21,7 @@
 		"editor.defaultFormatter": "vscode.markdown-language-features"
 	},
 	"[typescript]": {
-		"editor.defaultFormatter": "vscode.typescript-language-features"
+		"editor.defaultFormatter": "biomejs.biome"
 	},
 	"[typescriptreact]": {
 		"editor.defaultFormatter": "biomejs.biome"
@@ -30,6 +30,7 @@
 		"editor.defaultFormatter": "redhat.vscode-yaml"
 	},
 	"biome.enabled": true,
+	"cSpell.configFile": ".vscode/cspell.json",
 	"editor.codeActionsOnSave": {
 		"source.fixAll.biome": "explicit",
 		"source.organizeImports.biome": "explicit"
@@ -56,6 +57,16 @@
 	},
 	"files.insertFinalNewline": true,
 	"files.trimTrailingWhitespace": true,
+	"files.watcherExclude": {
+		"**/.next": true,
+		"**/.nitro": true,
+		"**/.output": true,
+		"**/.sanity": true,
+		"**/.turbo": true,
+		"**/.vercel": true,
+		"**/dist": true,
+		"**/node_modules": true
+	},
 	"prettier.enable": false,
 	"prettier.requireConfig": true,
 	"search.exclude": {
@@ -68,5 +79,6 @@
 		"**/dist": true,
 		"**/node_modules": true
 	},
+	"typescript.enablePromptUseWorkspaceTsdk": true,
 	"typescript.tsdk": "node_modules/typescript/lib"
 }
