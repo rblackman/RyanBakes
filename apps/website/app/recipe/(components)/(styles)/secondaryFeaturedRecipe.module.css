@@ -83,6 +83,10 @@
 	.recipeCard:not(:first-child):hover {
 		transform: none;
 	}
+
+	.recipeCard:hover + .recipeCard {
+		margin-left: -5rem;
+	}
 }
 
 @media only screen and (max-width: 640px) {
