@@ -24,7 +24,7 @@
 	.stepWrap ul {
 		padding-left: 0.5rem;
 		margin-left: 0.5rem;
-		border-left: 0.1rem solid var(--secondary);
+		border-left: 0.1rem solid var(--secondary-dark);
 	}
 }
 

@@ -11,7 +11,8 @@
 }
 
 .headerWrap :is(a:hover, a:focus-visible) {
-	text-decoration-color: var(--secondary);
+	text-decoration-color: var(--secondary-dark);
+	transition: text-decoration-color var(--animation-duration) ease-in;
 }
 
 .headerWrap :is(a:focus-visible) {

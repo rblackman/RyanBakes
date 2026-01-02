@@ -14,7 +14,7 @@
 .ingredientsTable_thead th {
 	text-align: left;
 	padding: 0.25rem 1rem 0.125rem 1rem;
-	border-bottom: 0.1rem solid var(--secondary);
+	border-bottom: 0.1rem solid var(--secondary-dark);
 }
 
 .ingredientsTable_tbody tr:nth-of-type(even) {
