@@ -7,12 +7,17 @@
 .headerWrap :is(a) {
 	color: var(--primary-contrast);
 	text-decoration-color: transparent;
-	transition: text-decoration-color var(--animation-duration) ease-out;
+	transition: text-decoration-color var(--animation-duration) ease-in-out;
 }
 
-.headerWrap :is(a):hover {
+.headerWrap :is(a:hover, a:focus-visible) {
 	text-decoration-color: var(--secondary-dark);
 	transition: text-decoration-color var(--animation-duration) ease-in;
+}
+
+.headerWrap :is(a:focus-visible) {
+	outline: var(--focus-outline-width) solid var(--focus-outline-color);
+	outline-offset: var(--focus-outline-offset);
 }
 
 .header {
@@ -20,7 +25,7 @@
 	grid-template-columns: max-content 1fr;
 	grid-template-rows: 1fr;
 	grid-template-areas: "title nav";
-	grid-gap: 1rem;
+	gap: 1rem;
 	align-items: center;
 }
 

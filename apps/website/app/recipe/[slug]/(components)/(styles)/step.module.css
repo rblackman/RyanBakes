@@ -4,7 +4,7 @@
 	grid-template-columns: clamp(10vw, 20rem, 50vw) 1fr;
 	grid-template-rows: 1fr;
 	grid-template-areas: "ing step";
-	grid-gap: 2rem;
+	gap: 2rem;
 	align-items: center;
 	background: var(--bg);
 }
@@ -17,7 +17,7 @@
 	.stepWrap {
 		grid-template-columns: 1fr;
 		grid-template-rows: 1fr auto;
-		grid-gap: 1rem;
+		gap: 1rem;
 		grid-template-areas: "step" "ing";
 	}
 

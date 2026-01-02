@@ -2,7 +2,9 @@
 	--card-padding: 0.75rem;
 	width: clamp(12rem, 15rem, 20rem);
 	min-height: 17.5rem;
-	transition: all var(--animation-duration) ease-in-out;
+	transition:
+		transform var(--animation-duration) ease-in-out,
+		margin-left var(--animation-duration) ease-in-out;
 	transition-delay: 0.1s;
 	background: var(--bg-subtle);
 	box-shadow: var(--card-shadow);
@@ -14,7 +16,7 @@
 	grid-template-columns: 1fr;
 	grid-template-rows: min-content min-content min-content 1fr;
 	grid-template-areas: "pic" "name" "tags" "content";
-	grid-gap: 0.5rem;
+	gap: 0.5rem;
 }
 
 .recipeCard:first-child:hover {
@@ -70,6 +72,21 @@
 
 .content p + p {
 	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.recipeCard {
+		transition: none;
+	}
+
+	.recipeCard:first-child:hover,
+	.recipeCard:not(:first-child):hover {
+		transform: none;
+	}
+
+	.recipeCard:hover + .recipeCard {
+		margin-left: -5rem;
+	}
 }
 
 @media only screen and (max-width: 640px) {

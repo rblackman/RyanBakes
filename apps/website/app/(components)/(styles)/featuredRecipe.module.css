@@ -8,7 +8,7 @@
 	grid-template-columns: max-content 1fr;
 	grid-template-rows: min-content min-content 1fr;
 	grid-template-areas: "img title" "img tags" "img blurb";
-	grid-gap: var(--featured-padding);
+	gap: var(--featured-padding);
 	max-height: 350px;
 	overflow: hidden;
 }
