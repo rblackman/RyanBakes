@@ -4,6 +4,8 @@
 	flex-flow: row wrap;
 	margin: 0 0 clamp(5vh, 3rem, 50vh);
 	font-size: 0.75rem;
+	list-style: none;
+	gap: 1rem;
 }
 
 .tagList svg {
@@ -16,13 +18,10 @@
 	margin-bottom: 0;
 }
 
-.tagList li + li {
-	margin-left: 1rem;
-}
-
 .tagList.small {
 	flex-flow: row nowrap;
 	font-size: 0.7rem;
+	gap: 0.25rem;
 	overflow-x: hidden;
 }
 
@@ -30,8 +29,4 @@
 	width: 0.8rem;
 	height: 0.8rem;
 	margin-right: 0.1rem;
-}
-
-.tagList.small li + li {
-	margin-left: 0.25rem;
 }

@@ -38,6 +38,7 @@
 		--hero-aspectRatio_W: 1;
 		--hero-aspectRatio_H: 1;
 		background-image: var(--bgUrl-tablet);
+		background-attachment: scroll;
 	}
 }
 

@@ -1,6 +1,10 @@
 :root {
 	--max-content-width: 1900px;
 	--line-height: 1.6;
+	--content-padding-inline: clamp(1.5rem, 4vw, 3rem);
+	--content-padding-block-start: clamp(1.5rem, 4vh, 3rem);
+	--content-padding-block-end: clamp(3rem, 8vh, 6rem);
+	--header-footer-padding-inline: clamp(1rem, 5vw, 3rem);
 
 	--text: #000000;
 	--bg: #ffffff;
@@ -31,4 +35,13 @@
 	--bp_mobile: 768px;
 
 	--animation-duration: 0.2s;
+	--focus-outline-color: var(--secondary);
+	--focus-outline-offset: 0.2rem;
+	--focus-outline-width: 0.15rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	:root {
+		--animation-duration: 0s;
+	}
 }
