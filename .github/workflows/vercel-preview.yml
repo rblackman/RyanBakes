@@ -53,6 +53,7 @@ jobs:
           pull
           --yes
           --environment=preview
+          --cwd=apps/website
           --token=${{ secrets.VERCEL_TOKEN }}
         env:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -62,6 +63,7 @@ jobs:
         run: >
           pnpm -w dlx vercel@latest
           build
+          --cwd=apps/website
           --token=${{ secrets.VERCEL_TOKEN }}
 
       - name: Deploy Prebuilt
@@ -71,6 +73,7 @@ jobs:
             pnpm -w dlx vercel@latest \
               deploy \
               --prebuilt \
+              --cwd=apps/website \
               --token=${{ secrets.VERCEL_TOKEN }}
           )
           echo "url=$URL" >> "$GITHUB_OUTPUT"
