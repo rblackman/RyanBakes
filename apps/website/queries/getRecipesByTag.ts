@@ -10,5 +10,5 @@ export default async function getRecipesByTag(tag: string): Promise<Recipe[]> {
 		throwError("Must provide a tag");
 	}
 
-	return fetchSanity<Recipe[]>(recipesByTagQuery, { tag }, { revalidate: 60, tags: ["recipe", `tag:${tag}`] });
+	return fetchSanity<Recipe[]>(recipesByTagQuery, { tag }, { revalidate: 3_600, tags: ["recipe", `tag:${tag}`] });
 }

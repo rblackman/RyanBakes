@@ -13,7 +13,7 @@ export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
 	const recipe = await fetchSanity<Recipe | null>(
 		recipeBySlugQuery,
 		{ slug },
-		{ revalidate: 60, tags: ["recipe", `recipe:${slug}`] },
+		{ revalidate: 3_600, tags: ["recipe", `recipe:${slug}`] },
 	);
 
 	if (!recipe) {

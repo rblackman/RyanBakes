@@ -10,7 +10,11 @@ export default async function getPageById(id: string): Promise<Page> {
 		throwError("Must provide an id");
 	}
 
-	const page = await fetchSanity<Page | null>(pageByIdQuery, { id }, { revalidate: 300, tags: ["page", `page:${id}`] });
+	const page = await fetchSanity<Page | null>(
+		pageByIdQuery,
+		{ id },
+		{ revalidate: 3_600, tags: ["page", `page:${id}`] },
+	);
 
 	if (!page) {
 		throwError(`Could not find page with id: ${id}`);

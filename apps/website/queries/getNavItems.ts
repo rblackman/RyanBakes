@@ -1,5 +1,5 @@
-import "server-only";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 export interface NavItemQueryResult {
 	id: string;
@@ -13,5 +13,5 @@ export interface NavItemQueryResult {
 const navItemsQuery = groq`*[_type == "navItem"]{ "id": _id, name, "pageInfo": page->{ "type": _type, slug } }`;
 
 export default async function getNavItems(): Promise<NavItemQueryResult[]> {
-	return fetchSanity<NavItemQueryResult[]>(navItemsQuery, {}, { revalidate: 300, tags: ["navItem"] });
+	return fetchSanity<NavItemQueryResult[]>(navItemsQuery, {}, { revalidate: 3_600, tags: ["navItem"] });
 }
