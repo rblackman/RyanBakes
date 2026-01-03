@@ -6,9 +6,9 @@ import ImageSectionComponent from "./block-types/image-section";
 import RecipePreviewComponent from "./block-types/recipe-preview";
 import TextSectionComponent from "./block-types/text-section";
 
-interface Props {
+type Props = Readonly<{
 	content: Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
-}
+}>;
 
 export default function Block({ content }: Props) {
 	switch (content._type) {

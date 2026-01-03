@@ -1,9 +1,9 @@
 import useTime from "@hooks/useTime";
 import "server-only";
 
-interface Props {
+type Props = Readonly<{
 	totalMinutes: number;
-}
+}>;
 
 export default function Time({ totalMinutes }: Props) {
 	const { hours, minutes } = useTime(totalMinutes);

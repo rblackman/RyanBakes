@@ -5,9 +5,9 @@ import type { CSSProperties } from "react";
 import RecipeMeta from "../meta";
 import styles from "./hero.module.css";
 
-interface Props {
+type Props = Readonly<{
 	recipe: Recipe;
-}
+}>;
 
 export default function RecipeHero({ recipe }: Props) {
 	const title = recipe.title ?? "";

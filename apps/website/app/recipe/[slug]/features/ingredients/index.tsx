@@ -4,10 +4,10 @@ import type Keyed from "@t/keyed";
 import IngredientRow from "./ingredient-row";
 import styles from "./ingredients.module.css";
 
-interface Props {
+type Props = Readonly<{
 	ingredients: Array<Keyed<IngredientType>>;
 	units: Unit[];
-}
+}>;
 
 export default function RecipeIngredients({ ingredients, units }: Props) {
 	if (ingredients.length === 0) {

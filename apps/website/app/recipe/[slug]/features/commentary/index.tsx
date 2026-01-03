@@ -2,11 +2,11 @@ import PortableText from "@components/ui/portable-text";
 import type { TypedObject } from "@portabletext/types";
 import styles from "./commentary.module.css";
 
-interface Props {
+type Props = Readonly<{
 	commentary: TypedObject[] | undefined;
-}
+}>;
 
-export default function RecipeCommentary({ commentary }: Readonly<Props>) {
+export default function RecipeCommentary({ commentary }: Props) {
 	if (!commentary || commentary.length === 0) {
 		return null;
 	}

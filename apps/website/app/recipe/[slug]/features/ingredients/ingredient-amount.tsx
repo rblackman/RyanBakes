@@ -1,12 +1,12 @@
 import Fraction from "@components/ui/fraction";
 import type { Unit, UnitReference } from "@ryan-bakes/sanity-types";
 
-interface UnitDisplayProps {
+type UnitDisplayProps = Readonly<{
 	name: string;
 	abbreviation: string;
 	noUnit: boolean;
 	full: boolean;
-}
+}>;
 
 function UnitDisplay({ name, abbreviation, noUnit, full }: UnitDisplayProps) {
 	if (noUnit) {
@@ -16,11 +16,11 @@ function UnitDisplay({ name, abbreviation, noUnit, full }: UnitDisplayProps) {
 	return <span>{(full || "short") === "short" ? abbreviation : name}</span>;
 }
 
-interface AmountProps {
+type AmountProps = Readonly<{
 	display: "Fraction" | "Decimal";
 	amount: string;
 	noCount: boolean;
-}
+}>;
 
 function AmountDisplay({ amount, display, noCount }: AmountProps) {
 	if (noCount) {
@@ -30,12 +30,12 @@ function AmountDisplay({ amount, display, noCount }: AmountProps) {
 	return display === "Fraction" ? <Fraction val={amount} /> : <span>{amount}</span>;
 }
 
-interface Props {
+type Props = Readonly<{
 	amount: string;
 	unit?: UnitReference;
 	units: Unit[];
 	full?: boolean;
-}
+}>;
 
 export default function IngredientAmount({ amount, unit, units, full = false }: Props) {
 	const unitRef = unit?._ref;

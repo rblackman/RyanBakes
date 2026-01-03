@@ -1,10 +1,10 @@
 import Card from "@components/ui/card";
 import type { Recipe } from "@ryan-bakes/sanity-types";
 
-interface Props {
+type Props = Readonly<{
 	recipe: Recipe;
 	index: number;
-}
+}>;
 
 export default function SecondaryFeaturedRecipe({ recipe, index }: Props) {
 	const title = recipe.title ?? "";

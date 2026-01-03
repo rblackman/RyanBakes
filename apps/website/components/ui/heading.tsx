@@ -3,13 +3,13 @@ import clsx from "clsx";
 import { type CSSProperties, createElement, type ReactNode } from "react";
 import "server-only";
 
-interface Props {
+type Props = Readonly<{
 	level: 2 | 3 | 4;
 	children: ReactNode;
 	style?: CSSProperties | undefined;
 	sr?: boolean;
 	className?: string;
-}
+}>;
 
 export default function Heading({ level, children, sr, style: inlineStyles, className: providedClass }: Props) {
 	let heading: "h2" | "h3" | "h4";
