@@ -16,7 +16,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		openGraph: {
 			title,
 			description,
-			url: canonical,
+			...(canonical ? { url: canonical } : {}),
 		},
 		twitter: {
 			card: "summary_large_image",
