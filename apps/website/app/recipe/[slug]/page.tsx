@@ -1,4 +1,4 @@
-import Tags from "app/(components)/tags";
+import Tags from "components/generic/tags";
 import createImageBuilder from "hooks/useImageBuilder";
 import type { Metadata } from "next";
 import getAllRecipeSlugs from "queries/getAllRecipeSlugs";
@@ -6,7 +6,7 @@ import getRecipeBySlug from "queries/getRecipeBySlug";
 import getSiteConfig from "queries/getSiteConfig";
 import "server-only";
 import { clientEnv } from "shared/config/env.client";
-import BakeModeToggle from "./(components)/bakeModeToggle";
+import BakeModeToggle from "../../../components/generic/bake-mode-toggle";
 import Commentary from "./(components)/commentary";
 import Hero from "./(components)/hero";
 import Ingredients from "./(components)/ingredients";

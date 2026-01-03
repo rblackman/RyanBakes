@@ -3,9 +3,9 @@ import getSiteConfig from "queries/getSiteConfig";
 import type { ReactNode } from "react";
 import "server-only";
 import { clientEnv } from "shared/config/env.client";
+import MainNav from "../components/menu/mainNav";
 import "../styles/global.css";
 import "../styles/variables.css";
-import MainNav from "./(components)/mainNav";
 
 export const viewport: Viewport = {
 	themeColor: "#0d19a3",
