@@ -1,26 +1,29 @@
-import Heading from "@components/generic/heading";
-import Image from "@components/generic/image";
-import PortableText from "@components/generic/portableText";
-import Tags from "@components/generic/tags";
+import Heading from "@components/ui/heading";
+import Image from "@components/ui/image";
+import PortableText from "@components/ui/portable-text";
+import Tags from "@components/ui/tags";
+import type { Recipe } from "@ryan-bakes/sanity-types";
 import clsx from "clsx";
 import Link from "next/link";
-import getRecipeById from "queries/getRecipeById";
-import "server-only";
 import styles from "./featured-recipe.module.css";
 
 type Props = Readonly<{
-	id: string;
+	recipe: Recipe | undefined;
 	priority?: boolean;
 	large?: boolean;
 }>;
 
-export default async function FeaturedRecipe({ id, priority = false, large = false }: Props) {
-	const recipe = await getRecipeById(id);
+export default function FeaturedRecipe({ recipe, priority = false, large = false }: Props) {
+	if (!recipe) {
+		return null;
+	}
+
 	const title = recipe.title ?? "";
 	const picture = recipe.picture;
 	const commentary = recipe.commentary ?? [];
 	const tags = recipe.tags ?? [];
 	const slug = recipe.slug?.current ?? "";
+	const href = slug ? `/recipe/${slug}` : "/recipe";
 
 	const recipeClass = clsx(styles.featuredRecipe, {
 		[styles.large]: large,
@@ -41,7 +44,7 @@ export default async function FeaturedRecipe({ id, priority = false, large = fal
 			)}
 
 			<Heading level={3} className={styles.heading}>
-				<Link href={slug ? `/recipe/${slug}` : "/recipe"}>{title}</Link>
+				<Link href={href}>{title}</Link>
 			</Heading>
 
 			<div className={styles.tags}>

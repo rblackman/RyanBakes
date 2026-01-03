@@ -1,7 +1,8 @@
-import FeaturedRecipe from "@components/generic/featured-recipe";
+import FeaturedRecipe from "@components/features/recipe/featured-recipe";
 import throwError from "@helpers/throwError";
 import type { RecipePreview } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
+import getRecipeById from "queries/getRecipeById";
 import "server-only";
 
 type Props = Readonly<{
@@ -15,5 +16,7 @@ export default async function RecipePreviewComponent({ value: { _key, recipe: re
 
 	const { _ref: id } = recipeRef;
 
-	return <FeaturedRecipe id={id} large={large ?? false} />;
+	const recipe = await getRecipeById(id);
+
+	return <FeaturedRecipe recipe={recipe} large={large ?? false} />;
 }

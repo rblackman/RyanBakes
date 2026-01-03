@@ -1,6 +1,6 @@
-import Heading from "@components/generic/heading";
-import Image from "@components/generic/image";
-import Tags from "@components/generic/tags";
+import Heading from "@components/ui/heading";
+import Image from "@components/ui/image";
+import Tags from "@components/ui/tags";
 import type { ImageWithAlt } from "@ryan-bakes/sanity-types";
 import Link from "next/link";
 import "server-only";
@@ -14,7 +14,7 @@ type Props = Readonly<{
 	index: number;
 }>;
 
-export default async function Card({ title, tags, picture, href, index }: Props) {
+export default function Card({ title, tags, picture, href, index }: Props) {
 	return (
 		<div className={styles.card} style={{ zIndex: 1000 + index }}>
 			{picture && (

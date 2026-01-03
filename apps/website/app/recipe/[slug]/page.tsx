@@ -1,16 +1,19 @@
-import BakeModeToggle from "@components/generic/bake-mode-toggle";
-import Tags from "@components/generic/tags";
+import BakeModeToggle from "@components/ui/bake-mode-toggle";
+import Tags from "@components/ui/tags";
 import createImageBuilder from "@hooks/useImageBuilder";
+import type { Ingredient, Step } from "@ryan-bakes/sanity-types";
 import { clientEnv } from "@shared/config/env.client";
+import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
 import getAllRecipeSlugs from "queries/getAllRecipeSlugs";
+import getAllUnits from "queries/getAllUnits";
 import getRecipeBySlug from "queries/getRecipeBySlug";
 import getSiteConfig from "queries/getSiteConfig";
 import "server-only";
-import Commentary from "./(components)/commentary";
-import Hero from "./(components)/hero";
-import Ingredients from "./(components)/ingredients";
-import Steps from "./(components)/steps";
+import RecipeCommentary from "./features/commentary/recipe-commentary";
+import RecipeHero from "./features/hero/recipe-hero";
+import RecipeIngredients from "./features/ingredients/recipe-ingredients";
+import RecipeSteps from "./features/steps/recipe-steps";
 
 export type Props = {
 	params: { slug: string } | Promise<{ slug: string }>;
@@ -88,17 +91,21 @@ export default async function Page(props: Readonly<Props>) {
 	const resolvedParams = props.params instanceof Promise ? await props.params : props.params;
 	const { slug } = resolvedParams;
 
-	const { tags } = await getRecipeBySlug(slug);
+	const [recipe, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
+	const tags = recipe.tags ?? [];
+	const ingredients: Array<Keyed<Ingredient>> = recipe.ingredients ?? [];
+	const steps: Array<Keyed<Step>> = recipe.steps ?? [];
+	const commentary = recipe.commentary ?? [];
 
 	return (
 		<main>
-			<Hero {...props} />
+			<RecipeHero recipe={recipe} />
 			<div className="content">
-				<Tags tags={tags ?? []} />
-				<Commentary {...props} />
+				<Tags tags={tags} />
+				<RecipeCommentary commentary={commentary} />
 				<BakeModeToggle />
-				<Ingredients {...props} />
-				<Steps {...props} />
+				<RecipeIngredients ingredients={ingredients} units={units} />
+				<RecipeSteps ingredients={ingredients} steps={steps} units={units} />
 			</div>
 		</main>
 	);

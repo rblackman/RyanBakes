@@ -1,28 +1,32 @@
-import Heading from "@components/generic/heading";
+import Heading from "@components/ui/heading";
 import createImageBuilder from "@hooks/useImageBuilder";
-import getRecipeBySlug from "queries/getRecipeBySlug";
+import type { Recipe } from "@ryan-bakes/sanity-types";
 import type { CSSProperties } from "react";
-import "server-only";
-import SubTitle from "../sub-title";
+import RecipeMeta from "../meta/recipe-meta";
 import styles from "./hero.module.css";
 
-export default async function Hero({ params }: { params: { slug: string } | Promise<{ slug: string }> }) {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	const { slug } = resolvedParams;
+interface Props {
+	recipe: Recipe;
+}
 
-	const recipe = await getRecipeBySlug(slug);
-
+export default function RecipeHero({ recipe }: Props) {
 	const title = recipe.title ?? "";
 	const asset = recipe.picture?.asset;
+	const metaProps = {
+		preheat: recipe.preheat,
+		bakeTime: recipe.bakeTime,
+		totalTime: recipe.totalTime,
+		serves: recipe.serves,
+	};
 
 	if (!asset) {
 		return (
 			<div className={styles.heroContainer}>
 				<div className={styles.headingWrap}>
-					<Heading level={2} className={styles.heading ?? ""}>
+					<Heading level={2} className={styles.heading}>
 						{title}
 					</Heading>
-					<SubTitle params={{ slug }} />
+					<RecipeMeta {...metaProps} />
 				</div>
 			</div>
 		);
@@ -83,10 +87,10 @@ export default async function Hero({ params }: { params: { slug: string } | Prom
 	return (
 		<div className={styles.heroContainer} style={containerStyle}>
 			<div className={styles.headingWrap}>
-				<Heading level={2} className={styles.heading ?? ""}>
+				<Heading level={2} className={styles.heading}>
 					{title}
 				</Heading>
-				<SubTitle params={{ slug }} />
+				<RecipeMeta {...metaProps} />
 			</div>
 		</div>
 	);

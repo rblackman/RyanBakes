@@ -1,9 +1,11 @@
-import FeaturedRecipe from "@components/generic/featured-recipe";
-import Heading from "@components/generic/heading";
-import PortableText from "@components/generic/portableText";
+import FeaturedRecipe from "@components/features/recipe/featured-recipe";
+import Heading from "@components/ui/heading";
+import PortableText from "@components/ui/portable-text";
+import type { Recipe } from "@ryan-bakes/sanity-types";
+import getRecipeById from "queries/getRecipeById";
 import getRecipesPage from "queries/getRecipesPage";
 import "server-only";
-import SecondaryFeaturedRecipes from "./(components)/secondary-featured-recipes";
+import SecondaryFeaturedRecipes from "./features/secondary-featured-recipes";
 
 export default async function Page() {
 	const recipesPage = await getRecipesPage();
@@ -11,9 +13,32 @@ export default async function Page() {
 	const title = recipesPage.title ?? "Recipes";
 	const intro = recipesPage.intro ?? [];
 	const featuredId = recipesPage.featuredRecipe?._ref;
-	const secondaryIds = (recipesPage.secondaryFeatured ?? [])
-		.map(({ _ref }) => _ref)
-		.filter((id): id is string => Boolean(id));
+	const secondaryIds: string[] = (recipesPage.secondaryFeatured ?? [])
+		.map((recipe: { _ref?: string | undefined } | null | undefined): string | undefined => recipe?._ref)
+		.filter((id: string | undefined): id is string => Boolean(id));
+
+	const recipeIds: string[] = [...new Set([...(featuredId ? [featuredId] : []), ...secondaryIds])];
+	const recipesById = new Map<string, Recipe>();
+
+	if (recipeIds.length > 0) {
+		await Promise.all(
+			recipeIds.map(async (id) => {
+				const recipe = await getRecipeById(id);
+				recipesById.set(id, recipe);
+			}),
+		);
+	}
+
+	const featuredRecipe = featuredId ? recipesById.get(featuredId) : undefined;
+	const secondaryRecipes = secondaryIds
+		.map((id, index) => {
+			const recipe = recipesById.get(id);
+			if (!recipe) {
+				return undefined;
+			}
+			return { recipe, index };
+		})
+		.filter((value): value is { recipe: Recipe; index: number } => Boolean(value));
 
 	return (
 		<main>
@@ -24,9 +49,9 @@ export default async function Page() {
 					<PortableText value={intro} />
 				</div>
 
-				{featuredId && <FeaturedRecipe id={featuredId} priority large />}
+				{featuredRecipe && <FeaturedRecipe recipe={featuredRecipe} priority large />}
 
-				{secondaryIds.length > 0 && <SecondaryFeaturedRecipes ids={secondaryIds} />}
+				{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
 			</div>
 		</main>
 	);

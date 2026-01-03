@@ -1,4 +1,4 @@
-import Fraction from "@components/generic/fraction";
+import Fraction from "@components/ui/fraction";
 import type {
 	PortableTextComponentProps,
 	PortableTextComponents,

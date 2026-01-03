@@ -1,4 +1,4 @@
-import Tag from "@components/generic/tag";
+import Tag from "@components/ui/tag";
 import clsx from "clsx";
 import "server-only";
 import styles from "./tags.module.css";

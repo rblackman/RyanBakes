@@ -1,4 +1,4 @@
-import PortableText from "@components/generic/portableText";
+import PortableText from "@components/ui/portable-text";
 import type { TextSection } from "@ryan-bakes/sanity-types";
 import "server-only";
 

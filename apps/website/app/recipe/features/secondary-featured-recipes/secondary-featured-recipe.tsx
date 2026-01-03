@@ -1,15 +1,12 @@
-import Card from "@components/generic/card";
-import getRecipeById from "queries/getRecipeById";
-import "server-only";
+import Card from "@components/ui/card";
+import type { Recipe } from "@ryan-bakes/sanity-types";
 
 interface Props {
-	id: string;
+	recipe: Recipe;
 	index: number;
 }
 
-export default async function SecondaryFeaturedRecipe({ id, index }: Props) {
-	const recipe = await getRecipeById(id);
-
+export default function SecondaryFeaturedRecipe({ recipe, index }: Props) {
 	const title = recipe.title ?? "";
 	const tags = recipe.tags ?? [];
 	const picture = recipe.picture;

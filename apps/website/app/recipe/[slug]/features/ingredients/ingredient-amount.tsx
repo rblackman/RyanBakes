@@ -1,6 +1,5 @@
-import Fraction from "@components/generic/fraction";
+import Fraction from "@components/ui/fraction";
 import type { Unit, UnitReference } from "@ryan-bakes/sanity-types";
-import "server-only";
 
 interface UnitDisplayProps {
 	name: string;

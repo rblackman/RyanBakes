@@ -1,5 +1,5 @@
-import Block from "@components/generic/block";
-import Heading from "@components/generic/heading";
+import Block from "@components/features/content-blocks/block";
+import Heading from "@components/ui/heading";
 import type {
 	Ingredient,
 	InlineImage,
@@ -9,8 +9,7 @@ import type {
 	Unit,
 } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
-import "server-only";
-import IngredientAmount from "../ingredient-amount";
+import IngredientAmount from "../ingredients/ingredient-amount";
 import styles from "./step.module.css";
 
 type StepBlock = Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
@@ -21,21 +20,27 @@ interface Props {
 	units: Unit[];
 }
 
-export default function Step({ ingredients, step: { title, content }, units }: Props) {
+export default function StepItem({ ingredients, step: { title, content }, units }: Props) {
+	const headingTitle = title ?? "";
+
 	return (
 		<li className={styles.stepWrap}>
-			{ingredients && ingredients.length > 0 && (
+			{ingredients.length > 0 && (
 				<ul className={styles.ingredientsWrap}>
-					{ingredients.map(({ _key, amount, name, unit }) => (
-						<li key={_key}>
-							<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} /> &ndash; {name}
-						</li>
-					))}
+					{ingredients.map(({ _key, amount, name, unit }) => {
+						const ingredientName = name ?? "";
+						return (
+							<li key={_key}>
+								<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} /> &ndash;{" "}
+								{ingredientName}
+							</li>
+						);
+					})}
 				</ul>
 			)}
 			<div className={styles.directionsWrap}>
 				<Heading level={4} style={{ margin: 0 }}>
-					{title ?? ""}
+					{headingTitle}
 				</Heading>
 				{(content ?? []).map((block: StepBlock) => {
 					const { _key: key } = block;

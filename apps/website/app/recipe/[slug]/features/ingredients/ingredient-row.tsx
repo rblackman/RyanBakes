@@ -1,15 +1,14 @@
 import type { Ingredient as IngredientType, Unit } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
-import "server-only";
-import IngredientAmount from "../ingredient-amount";
-import styles from "./ingredient.module.css";
+import IngredientAmount from "./ingredient-amount";
+import styles from "./ingredient-row.module.css";
 
 interface Props {
 	ingredient: Keyed<IngredientType>;
 	units: Unit[];
 }
 
-export default function Ingredient({ ingredient, units }: Props) {
+export default function IngredientRow({ ingredient, units }: Props) {
 	const { name, amount, unit, notes } = ingredient;
 
 	return (

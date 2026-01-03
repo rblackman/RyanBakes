@@ -1,27 +1,23 @@
-import getRecipeBySlug from "queries/getRecipeBySlug";
 import { Fragment, type ReactNode } from "react";
-import "server-only";
-import type { Props } from "../../page";
-import Temp from "../temp";
-import Time from "../time";
-import styles from "./sub-title.module.css";
+import styles from "./recipe-meta.module.css";
+import Temp from "./temp";
+import Time from "./time";
 
-interface SubTitleProps extends Readonly<Omit<Props, "params">> {
-	params: { slug: string } | Promise<{ slug: string }>;
+interface Props {
+	preheat?: number;
+	bakeTime?: number;
+	totalTime?: number;
+	serves?: number;
 }
 
-export default async function SubTitle({ params }: SubTitleProps) {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	const { slug } = resolvedParams;
-	const { preheat, bakeTime, totalTime, serves } = await getRecipeBySlug(slug);
-
-	if (!(preheat || bakeTime || totalTime || serves)) {
+export default function RecipeMeta({ preheat, bakeTime, totalTime, serves }: Props) {
+	if (preheat === undefined && bakeTime === undefined && totalTime === undefined && serves === undefined) {
 		return null;
 	}
 
 	const elements: ReactNode[] = [];
 
-	if (totalTime) {
+	if (typeof totalTime === "number") {
 		elements.push(
 			<Fragment key="totalTime">
 				<dt>Total Time</dt>
@@ -32,7 +28,7 @@ export default async function SubTitle({ params }: SubTitleProps) {
 		);
 	}
 
-	if (bakeTime) {
+	if (typeof bakeTime === "number") {
 		elements.push(
 			<Fragment key="bakeTime">
 				<dt>Bake Time</dt>
@@ -43,7 +39,7 @@ export default async function SubTitle({ params }: SubTitleProps) {
 		);
 	}
 
-	if (preheat) {
+	if (typeof preheat === "number") {
 		elements.push(
 			<Fragment key="preheat">
 				<dt>Preheat</dt>
@@ -54,7 +50,7 @@ export default async function SubTitle({ params }: SubTitleProps) {
 		);
 	}
 
-	if (serves) {
+	if (typeof serves === "number") {
 		elements.push(
 			<Fragment key="serves">
 				<dt>Serves</dt>
@@ -65,7 +61,6 @@ export default async function SubTitle({ params }: SubTitleProps) {
 
 	return (
 		<div className={styles.subHeading}>
-			{" "}
 			<dl className={styles.dl}>{elements}</dl>
 		</div>
 	);
