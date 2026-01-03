@@ -11,12 +11,9 @@
 		"dev": "next dev",
 		"build": "next build",
 		"start": "next start",
-
 		"format": "pnpm -w exec biome format --write .",
 		"lint": "pnpm -w exec biome check .",
-
 		"typecheck": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
-
 		"prebuild": "pnpm --filter cms typegen && pnpm run validate:env",
 		"predev": "pnpm run validate:env",
 		"validate:env": "pnpm -w exec tsx --require dotenv/config apps/website/scripts/validate-env.ts dotenv_config_path=apps/website/.env"
@@ -24,12 +21,16 @@
 	"dependencies": {
 		"@portabletext/react": "^6.0.2",
 		"@ryan-bakes/sanity-types": "workspace:*",
+		"@sanity/client": "^7.13.2",
 		"clsx": "^2.1.1",
+		"groq": "^5.1.0",
 		"next": "^16.1.1",
+		"next-sanity": "^12.0.8",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
 		"react-icons": "^5.5.0",
 		"server-only": "^0.0.1",
+		"undici": "^7.16.0",
 		"zod": "^4.3.3"
 	},
 	"devDependencies": {

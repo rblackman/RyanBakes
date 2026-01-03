@@ -1,15 +1,13 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
 import Distinct from "helpers/distinct";
+import { groq } from "../lib/sanity";
 import "server-only";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity } from "./lib/fetchSanity";
+
+const allTagsQuery = groq`*[_type == "recipe"]{ tags }`;
 
 export default async function getAllTags(): Promise<string[]> {
-	const url = buildGroqQuery(`*[_type == "recipe"]{ tags }`);
-	const response = await nextFetch(url);
-	const { result } = (await response.json()) as Query<Pick<Recipe, "tags">>;
-
-	const tags = result.flatMap((r) => r.tags ?? []);
+	const recipes = await fetchSanity<Pick<Recipe, "tags">[]>(allTagsQuery, {}, { revalidate: 300, tags: ["recipe"] });
+	const tags = recipes.flatMap((recipe) => recipe.tags ?? []);
 	return Distinct(tags);
 }

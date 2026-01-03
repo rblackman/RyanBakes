@@ -1,11 +1,11 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
+import { groq } from "../lib/sanity";
 import "server-only";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity } from "./lib/fetchSanity";
 
-export default async function getRecipesByRecent(count: number = 10): Promise<Query<Recipe>> {
-	const url = buildGroqQuery(`*[ _type == 'recipe' ] | order(_createdAt desc) [0...${count}]`);
-	const response = await nextFetch(url);
-	return response.json();
+const recipesByRecentQuery = groq`*[_type == "recipe"] | order(_createdAt desc) [0...$count]{...}`;
+
+export default async function getRecipesByRecent(count: number = 10): Promise<Recipe[]> {
+	const normalizedCount = Math.max(count, 0);
+	return fetchSanity<Recipe[]>(recipesByRecentQuery, { count: normalizedCount }, { revalidate: 60, tags: ["recipe"] });
 }

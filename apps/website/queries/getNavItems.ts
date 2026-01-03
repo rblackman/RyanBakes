@@ -1,7 +1,6 @@
+import { groq } from "../lib/sanity";
 import "server-only";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity } from "./lib/fetchSanity";
 
 export interface NavItemQueryResult {
 	id: string;
@@ -12,9 +11,8 @@ export interface NavItemQueryResult {
 	};
 }
 
+const navItemsQuery = groq`*[_type == "navItem"]{ "id": _id, name, "pageInfo": page->{ "type": _type, slug } }`;
+
 export default async function getNavItems(): Promise<NavItemQueryResult[]> {
-	const url = buildGroqQuery(`*[ _type == 'navItem' ] { 'id': _id, name, 'pageInfo': page->{ 'type': _type, slug } }`);
-	const response = await nextFetch(url);
-	var { result } = (await response.json()) as Query<NavItemQueryResult>;
-	return result;
+	return fetchSanity<NavItemQueryResult[]>(navItemsQuery, {}, { revalidate: 300, tags: ["navItem"] });
 }

@@ -1,33 +1,24 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import throwError from "helpers/throwError";
+import { groq } from "../lib/sanity";
 import "server-only";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity } from "./lib/fetchSanity";
+
+const recipeBySlugQuery = groq`*[_type == "recipe" && slug.current == $slug][0]{...}`;
 
 export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
 	if (!slug || slug.length === 0) {
-		throwError("Must provide an slug");
+		throw new Error("Must provide a slug");
 	}
 
-	const url = buildGroqQuery(`*[ _type == 'recipe' && slug.current == '${slug}' ]`);
+	const recipe = await fetchSanity<Recipe | null>(
+		recipeBySlugQuery,
+		{ slug },
+		{ revalidate: 60, tags: ["recipe", `recipe:${slug}`] },
+	);
 
-	const response = await nextFetch(url);
-	const { status, statusText } = response;
-
-	if (status !== 200) {
-		throw new Error(`Got a ${status} response: ${statusText}`);
+	if (!recipe) {
+		throw new Error(`Could not find recipe with slug: ${slug}`);
 	}
 
-	const { result } = (await response.json()) as Query<Recipe>;
-
-	if (result.length === 0) {
-		throwError(`Could not find recipe with slug: ${slug}`);
-	}
-
-	if (result.length > 1) {
-		console.warn(`Got more than one recipe with slug ${slug}. Using the first.`, { slug, result });
-	}
-
-	return result[0];
+	return recipe;
 }

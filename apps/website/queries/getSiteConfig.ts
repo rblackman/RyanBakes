@@ -1,26 +1,22 @@
 import type { SiteConfig } from "@ryan-bakes/sanity-types";
+import { groq } from "../lib/sanity";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity } from "./lib/fetchSanity";
 
 const siteConfigKey = serverEnv.SITE_CONFIG_KEY;
+const siteConfigQuery = groq`*[_type == "siteConfig" && _id == $siteConfigKey][0]{...}`;
 
 export default async function getSiteConfig(): Promise<SiteConfig> {
-	const url = buildGroqQuery(`*[ _id == '${siteConfigKey}' ]`);
-	const response = await nextFetch(url);
-	const { result } = (await response.json()) as Query<SiteConfig>;
+	const siteConfig = await fetchSanity<SiteConfig | null>(
+		siteConfigQuery,
+		{ siteConfigKey },
+		{ revalidate: 300, tags: ["siteConfig", `siteConfig:${siteConfigKey}`] },
+	);
 
-	if (result.length === 0) {
+	if (!siteConfig) {
 		throw new Error(`Could not find a ${siteConfigKey}.`);
 	}
 
-	if (result.length > 1) {
-		console.warn(`Got more than one ${siteConfigKey}. Using the first.`, {
-			result,
-		});
-	}
-
-	return result[0];
+	return siteConfig;
 }
