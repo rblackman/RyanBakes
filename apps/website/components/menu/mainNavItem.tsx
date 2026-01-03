@@ -1,4 +1,4 @@
-import assertUnreachable from "helpers/assertUnreachable";
+import assertUnreachable from "@helpers/assertUnreachable";
 import Link from "next/link";
 import type { NavItemQueryResult } from "queries/getNavItems";
 import styles from "./mainNavItem.module.css";

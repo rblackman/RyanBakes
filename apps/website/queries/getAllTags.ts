@@ -1,7 +1,7 @@
+import Distinct from "@helpers/distinct";
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import Distinct from "helpers/distinct";
 import "server-only";
-import { fetchSanity, groq } from "../shared/lib/sanity";
+import { fetchSanity, groq } from "@shared/lib/sanity";
 
 const allTagsQuery = groq`*[_type == "recipe"]{ tags }`;
 

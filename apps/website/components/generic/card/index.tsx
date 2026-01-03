@@ -1,7 +1,7 @@
+import Heading from "@components/generic/heading";
+import Image from "@components/generic/image";
+import Tags from "@components/generic/tags";
 import type { ImageWithAlt } from "@ryan-bakes/sanity-types";
-import Heading from "components/generic/heading";
-import Image from "components/generic/image";
-import Tags from "components/generic/tags";
 import Link from "next/link";
 import "server-only";
 import styles from "./card.module.css";

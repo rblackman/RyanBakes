@@ -1,6 +1,6 @@
+import assertUnreachable from "@helpers/assertUnreachable";
 import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
-import assertUnreachable from "helpers/assertUnreachable";
 import "server-only";
 import ImageSectionComponent from "./block-types/image-section";
 import RecipePreviewComponent from "./block-types/recipe-preview";

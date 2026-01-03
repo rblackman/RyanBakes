@@ -1,4 +1,4 @@
-import Card from "components/generic/card";
+import Card from "@components/generic/card";
 import getRecipeById from "queries/getRecipeById";
 import "server-only";
 

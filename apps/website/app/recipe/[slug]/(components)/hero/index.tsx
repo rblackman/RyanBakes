@@ -1,5 +1,5 @@
-import Heading from "components/generic/heading";
-import createImageBuilder from "hooks/useImageBuilder";
+import Heading from "@components/generic/heading";
+import createImageBuilder from "@hooks/useImageBuilder";
 import getRecipeBySlug from "queries/getRecipeBySlug";
 import type { CSSProperties } from "react";
 import "server-only";

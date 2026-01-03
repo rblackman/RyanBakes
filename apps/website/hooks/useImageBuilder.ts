@@ -1,5 +1,5 @@
 import type { SanityImageAssetReference } from "@ryan-bakes/sanity-types";
-import { clientEnv } from "shared/config/env.client";
+import { clientEnv } from "@shared/config/env.client";
 
 const sanityKey = clientEnv.NEXT_PUBLIC_SANITY_KEY;
 const dataset = clientEnv.NEXT_PUBLIC_SANITY_DATASET;

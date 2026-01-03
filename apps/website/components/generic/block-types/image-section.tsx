@@ -1,6 +1,6 @@
+import throwError from "@helpers/throwError";
+import createImageBuilder from "@hooks/useImageBuilder";
 import type { InlineImage } from "@ryan-bakes/sanity-types";
-import throwError from "helpers/throwError";
-import createImageBuilder from "hooks/useImageBuilder";
 import Image from "next/image";
 import "server-only";
 

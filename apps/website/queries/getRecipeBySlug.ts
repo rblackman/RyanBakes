@@ -1,7 +1,7 @@
+import throwError from "@helpers/throwError";
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import throwError from "helpers/throwError";
 import "server-only";
-import { fetchSanity, groq } from "../shared/lib/sanity";
+import { fetchSanity, groq } from "@shared/lib/sanity";
 
 const recipeBySlugQuery = groq`*[_type == "recipe" && slug.current == $slug][0]{...}`;
 

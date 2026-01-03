@@ -1,4 +1,4 @@
-import Heading from "components/generic/heading";
+import Heading from "@components/generic/heading";
 import "server-only";
 import SecondaryFeaturedRecipe from "./secondary-featured-recipe";
 import styles from "./secondary-featured-recipes.module.css";

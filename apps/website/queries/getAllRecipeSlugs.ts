@@ -1,5 +1,5 @@
 import "server-only";
-import { fetchSanity, groq } from "../shared/lib/sanity";
+import { fetchSanity, groq } from "@shared/lib/sanity";
 
 const allRecipeSlugsQuery = groq`*[_type == "recipe"]{ "slug": slug.current }`;
 

@@ -1,3 +1,4 @@
+import Fraction from "@components/generic/fraction";
 import type {
 	PortableTextComponentProps,
 	PortableTextComponents,
@@ -6,7 +7,6 @@ import type {
 } from "@portabletext/react";
 import { PortableText as PortableTextComponent } from "@portabletext/react";
 import type { PortableTextBlock, TypedObject } from "@portabletext/types";
-import Fraction from "components/generic/fraction";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import "server-only";

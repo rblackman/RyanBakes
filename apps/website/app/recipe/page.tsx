@@ -1,6 +1,6 @@
-import FeaturedRecipe from "components/generic/featured-recipe";
-import Heading from "components/generic/heading";
-import PortableText from "components/generic/portableText";
+import FeaturedRecipe from "@components/generic/featured-recipe";
+import Heading from "@components/generic/heading";
+import PortableText from "@components/generic/portableText";
 import getRecipesPage from "queries/getRecipesPage";
 import "server-only";
 import SecondaryFeaturedRecipes from "./(components)/secondary-featured-recipes";
