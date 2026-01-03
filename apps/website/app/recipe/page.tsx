@@ -19,11 +19,16 @@ export async function generateMetadata(): Promise<Metadata> {
 		title,
 		description,
 		alternates: canonical ? { canonical } : undefined,
-		openGraph: {
-			title,
-			description,
-			url: canonical,
-		},
+		openGraph: canonical
+			? {
+					title,
+					description,
+					url: canonical,
+			  }
+			: {
+					title,
+					description,
+			  },
 		twitter: {
 			card: "summary_large_image",
 			title,
