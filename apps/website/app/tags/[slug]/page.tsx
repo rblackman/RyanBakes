@@ -9,7 +9,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
 
-	// convert slug to  title case for metadata
+	// convert slug to title case for metadata
 	// replace - with spaces
 	const title = slug
 		.split("-")
