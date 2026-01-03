@@ -1,4 +1,4 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import createImageBuilder from "@hooks/useImageBuilder";
 import type { InlineImage } from "@ryan-bakes/sanity-types";
 import Image from "next/image";

@@ -1,8 +1,8 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import type { SiteConfig } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { serverEnv } from "@shared/config/env.server";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const siteConfigKey = serverEnv.SITE_CONFIG_KEY;
 const siteConfigQuery = groq`*[_type == "siteConfig" && _id == $siteConfigKey][0]{...}`;

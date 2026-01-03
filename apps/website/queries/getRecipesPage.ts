@@ -1,8 +1,8 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import type { RecipesPage } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { serverEnv } from "@shared/config/env.server";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const recipesPageKey = serverEnv.RECIPES_PAGE_KEY;
 const recipesPageQuery = groq`*[_type == "recipesPage" && _id == $recipesPageKey][0]{...}`;

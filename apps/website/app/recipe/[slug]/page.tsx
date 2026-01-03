@@ -1,19 +1,18 @@
 import BakeModeToggle from "@components/ui/bake-mode-toggle";
 import Tags from "@components/ui/tags";
 import createImageBuilder from "@hooks/useImageBuilder";
+import getAllRecipeSlugs from "@queries/getAllRecipeSlugs";
+import getAllUnits from "@queries/getAllUnits";
+import getRecipeBySlug from "@queries/getRecipeBySlug";
 import type { Ingredient, Step } from "@ryan-bakes/sanity-types";
 import { clientEnv } from "@shared/config/env.client";
 import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
-import getAllRecipeSlugs from "queries/getAllRecipeSlugs";
-import getAllUnits from "queries/getAllUnits";
-import getRecipeBySlug from "queries/getRecipeBySlug";
-import getSiteConfig from "queries/getSiteConfig";
 import "server-only";
-import RecipeCommentary from "./features/commentary/recipe-commentary";
-import RecipeHero from "./features/hero/recipe-hero";
-import RecipeIngredients from "./features/ingredients/recipe-ingredients";
-import RecipeSteps from "./features/steps/recipe-steps";
+import RecipeCommentary from "./features/commentary";
+import RecipeHero from "./features/hero";
+import RecipeIngredients from "./features/ingredients";
+import RecipeSteps from "./features/steps";
 
 export type Props = {
 	params: { slug: string } | Promise<{ slug: string }>;
@@ -23,7 +22,6 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
 
-	const { title: siteTitle } = await getSiteConfig();
 	const recipe = await getRecipeBySlug(slug);
 
 	const recipeTitle = recipe.title ?? "";
@@ -57,7 +55,7 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 	}
 
 	return {
-		title: `${siteTitle ?? ""} | ${recipeTitle}`,
+		title: recipeTitle,
 		description,
 		keywords: tags,
 		openGraph: {

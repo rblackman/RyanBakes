@@ -4,10 +4,10 @@ import Temp from "./temp";
 import Time from "./time";
 
 interface Props {
-	preheat?: number;
-	bakeTime?: number;
-	totalTime?: number;
-	serves?: number;
+	preheat?: number | undefined;
+	bakeTime?: number | undefined;
+	totalTime?: number | undefined;
+	serves?: string | undefined;
 }
 
 export default function RecipeMeta({ preheat, bakeTime, totalTime, serves }: Props) {
@@ -50,7 +50,7 @@ export default function RecipeMeta({ preheat, bakeTime, totalTime, serves }: Pro
 		);
 	}
 
-	if (typeof serves === "number") {
+	if (typeof serves === "string") {
 		elements.push(
 			<Fragment key="serves">
 				<dt>Serves</dt>

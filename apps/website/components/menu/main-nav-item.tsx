@@ -1,7 +1,7 @@
-import assertUnreachable from "@helpers/assertUnreachable";
+import assertUnreachable from "@helpers/assert-unreachable";
+import type { NavItemQueryResult } from "@queries/getNavItems";
 import Link from "next/link";
-import type { NavItemQueryResult } from "queries/getNavItems";
-import styles from "./mainNavItem.module.css";
+import styles from "./main-nav-item.module.css";
 
 interface Props {
 	item: Omit<NavItemQueryResult, "id">;

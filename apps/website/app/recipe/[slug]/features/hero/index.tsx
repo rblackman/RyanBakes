@@ -2,7 +2,7 @@ import Heading from "@components/ui/heading";
 import createImageBuilder from "@hooks/useImageBuilder";
 import type { Recipe } from "@ryan-bakes/sanity-types";
 import type { CSSProperties } from "react";
-import RecipeMeta from "../meta/recipe-meta";
+import RecipeMeta from "../meta";
 import styles from "./hero.module.css";
 
 interface Props {

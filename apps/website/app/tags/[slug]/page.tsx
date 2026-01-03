@@ -1,14 +1,34 @@
 import Heading from "@components/ui/heading";
+import getAllTags from "@queries/getAllTags";
+import getRecipesByTag from "@queries/getRecipesByTag";
+import type { Metadata } from "next";
 import Link from "next/link";
-import getAllTags from "queries/getAllTags";
-import getRecipesByTag from "queries/getRecipesByTag";
 import "server-only";
 
-export type Props = {
-	params: { slug: string } | Promise<{ slug: string }>;
-};
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	const { slug } = resolvedParams;
 
-export default async function Tag({ params }: Readonly<Props>) {
+	// convert slug to  title case for metadata
+	// replace - with spaces
+	const title = slug
+		.split("-")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+
+	const description = `Recipes tagged with "${title}"`;
+
+	return {
+		title,
+		description,
+	};
+}
+
+export type Props = Readonly<{
+	params: { slug: string } | Promise<{ slug: string }>;
+}>;
+
+export default async function Tag({ params }: Props) {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
 

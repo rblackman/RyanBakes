@@ -1,4 +1,4 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import type { Page } from "@ryan-bakes/sanity-types";
 import "server-only";
 import getPageById from "./getPageById";

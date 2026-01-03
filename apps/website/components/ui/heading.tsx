@@ -1,4 +1,4 @@
-import assertUnreachable from "@helpers/assertUnreachable";
+import assertUnreachable from "@helpers/assert-unreachable";
 import clsx from "clsx";
 import { type CSSProperties, createElement, type ReactNode } from "react";
 import "server-only";

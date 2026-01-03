@@ -12,7 +12,7 @@
 		"build": "next build",
 		"start": "next start",
 		"format": "pnpm -w exec biome format --write .",
-		"lint": "pnpm -w exec biome check .",
+		"lint": "pnpm -w exec biome check --write .",
 		"typecheck": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
 		"prebuild": "pnpm --filter cms typegen && pnpm run validate:env",
 		"predev": "pnpm run validate:env",

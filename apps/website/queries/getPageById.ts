@@ -1,7 +1,7 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import type { Page } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const pageByIdQuery = groq`*[_type == "page" && _id == $id][0]{...}`;
 

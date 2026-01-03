@@ -1,4 +1,4 @@
-import assertUnreachable from "@helpers/assertUnreachable";
+import assertUnreachable from "@helpers/assert-unreachable";
 import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
 import "server-only";

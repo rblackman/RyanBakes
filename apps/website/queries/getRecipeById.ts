@@ -1,7 +1,7 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const recipeByIdQuery = groq`*[_type == "recipe" && _id == $id][0]{...}`;
 

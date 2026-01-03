@@ -1,7 +1,7 @@
-import { throwTypedError } from "@helpers/throwError";
+import { throwTypedError } from "@helpers/throw-error";
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const recipesByRecentQuery = groq`*[_type == "recipe"] | order(_createdAt desc) [0...$count]{...}`;
 

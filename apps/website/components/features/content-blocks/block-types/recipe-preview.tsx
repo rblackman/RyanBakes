@@ -1,8 +1,8 @@
 import FeaturedRecipe from "@components/features/recipe/featured-recipe";
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
+import getRecipeById from "@queries/getRecipeById";
 import type { RecipePreview } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
-import getRecipeById from "queries/getRecipeById";
 import "server-only";
 
 type Props = Readonly<{
