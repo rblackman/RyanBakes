@@ -1,4 +1,5 @@
 import type { SiteConfig } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
 import { fetchSanity, groq } from "../shared/lib/sanity";
@@ -14,7 +15,7 @@ export default async function getSiteConfig(): Promise<SiteConfig> {
 	);
 
 	if (!siteConfig) {
-		throw new Error(`Could not find a ${siteConfigKey}.`);
+		throwError(`Could not find a ${siteConfigKey}.`);
 	}
 
 	return siteConfig;

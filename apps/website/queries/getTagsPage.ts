@@ -1,4 +1,5 @@
 import type { TagsPage } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
 import { fetchSanity, groq } from "../shared/lib/sanity";
@@ -14,7 +15,7 @@ export default async function getTagsPage(): Promise<TagsPage> {
 	);
 
 	if (!tagsPage) {
-		throw new Error(`Could not find a ${tagsPageKey}.`);
+		throwError(`Could not find a ${tagsPageKey}.`);
 	}
 
 	return tagsPage;

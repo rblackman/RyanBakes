@@ -1,4 +1,5 @@
 import type { RecipesPage } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
 import { fetchSanity, groq } from "../shared/lib/sanity";
@@ -14,7 +15,7 @@ export default async function getRecipesPage(): Promise<RecipesPage> {
 	);
 
 	if (!recipesPage) {
-		throw new Error(`Could not find a ${recipesPageKey}.`);
+		throwError(`Could not find a ${recipesPageKey}.`);
 	}
 
 	return recipesPage;

@@ -1,12 +1,13 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
 import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const recipeBySlugQuery = groq`*[_type == "recipe" && slug.current == $slug][0]{...}`;
 
 export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
-	if (!slug || slug.length === 0) {
-		throw new Error("Must provide a slug");
+	if (!slug) {
+		throwError("Must provide a slug");
 	}
 
 	const recipe = await fetchSanity<Recipe | null>(
@@ -16,7 +17,7 @@ export default async function getRecipeBySlug(slug: string): Promise<Recipe> {
 	);
 
 	if (!recipe) {
-		throw new Error(`Could not find recipe with slug: ${slug}`);
+		throwError(`Could not find recipe with slug: ${slug}`);
 	}
 
 	return recipe;

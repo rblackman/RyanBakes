@@ -1,12 +1,13 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
 import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const recipeByIdQuery = groq`*[_type == "recipe" && _id == $id][0]{...}`;
 
 export default async function getRecipeById(id: string): Promise<Recipe> {
-	if (!id || id.length === 0) {
-		throw new Error("Must provide an id");
+	if (!id) {
+		throwError("Must provide an id");
 	}
 
 	const recipe = await fetchSanity<Recipe | null>(
@@ -16,7 +17,7 @@ export default async function getRecipeById(id: string): Promise<Recipe> {
 	);
 
 	if (!recipe) {
-		throw new Error(`Could not find recipe with id: ${id}`);
+		throwError(`Could not find recipe with id: ${id}`);
 	}
 
 	return recipe;
