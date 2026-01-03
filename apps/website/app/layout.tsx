@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next";
 import getSiteConfig from "queries/getSiteConfig";
 import type { ReactNode } from "react";
 import "server-only";
-import { clientEnv } from "shared/config/env.client";
+import { clientEnv } from "@shared/config/env.client";
 import "../styles/global.css";
 import "../styles/variables.css";
 
