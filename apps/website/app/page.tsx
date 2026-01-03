@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 	openGraph: {
 		title: homeTitle,
 		description: homeDescription,
-		url: homeCanonical,
+		...(homeCanonical ? { url: homeCanonical } : {}),
 	},
 	twitter: {
 		card: "summary_large_image",
