@@ -6,6 +6,17 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "server-only";
 
+type RouteParams = Readonly<{ slug: string }>;
+
+export type Props = Readonly<{
+	params: RouteParams | Promise<RouteParams>;
+}>;
+
+async function resolveParams(params: Props["params"]): Promise<RouteParams> {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	return resolvedParams;
+}
+
 function formatTagTitle(slug: string): string {
 	return slug
 		.split("-")
@@ -14,8 +25,7 @@ function formatTagTitle(slug: string): string {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	const { slug } = resolvedParams;
+	const { slug } = await resolveParams(params);
 
 	// convert slug to title case for metadata
 	// replace - with spaces
@@ -42,13 +52,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	};
 }
 
-export type Props = Readonly<{
-	params: { slug: string } | Promise<{ slug: string }>;
-}>;
-
 export default async function Tag({ params }: Props) {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	const { slug } = resolvedParams;
+	const { slug } = await resolveParams(params);
 	const tagTitle = formatTagTitle(slug);
 
 	const recipes = await getRecipesByTag(slug);
@@ -86,7 +91,7 @@ export default async function Tag({ params }: Props) {
 	);
 }
 
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<RouteParams[]> {
 	const tags = await getAllTags();
 	return tags.map((slug) => ({ slug }));
 }

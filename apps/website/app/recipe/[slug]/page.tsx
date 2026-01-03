@@ -16,13 +16,19 @@ import RecipeHero from "./features/hero";
 import RecipeIngredients from "./features/ingredients";
 import RecipeSteps from "./features/steps";
 
+type RouteParams = Readonly<{ slug: string }>;
+
 export type Props = Readonly<{
-	params: { slug: string } | Promise<{ slug: string }>;
+	params: RouteParams | Promise<RouteParams>;
 }>;
 
-export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
+async function resolveParams(params: Props["params"]): Promise<RouteParams> {
 	const resolvedParams = params instanceof Promise ? await params : params;
-	const { slug } = resolvedParams;
+	return resolvedParams;
+}
+
+export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
+	const { slug } = await resolveParams(params);
 
 	const recipe = await getRecipeBySlug(slug);
 
@@ -96,8 +102,7 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 }
 
 export default async function Page(props: Readonly<Props>) {
-	const resolvedParams = props.params instanceof Promise ? await props.params : props.params;
-	const { slug } = resolvedParams;
+	const { slug } = await resolveParams(props.params);
 
 	const [recipe, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
 	const tags = recipe.tags ?? [];
@@ -121,7 +126,7 @@ export default async function Page(props: Readonly<Props>) {
 	);
 }
 
-export async function generateStaticParams() {
-	const ids = await getAllRecipeSlugs();
-	return ids.map((slug) => ({ slug }));
+export async function generateStaticParams(): Promise<RouteParams[]> {
+	const slugs = await getAllRecipeSlugs();
+	return slugs.map((slug) => ({ slug }));
 }
