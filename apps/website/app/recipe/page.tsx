@@ -1,9 +1,9 @@
-import FeaturedRecipe from "app/(components)/featuredRecipe";
-import Heading from "app/(components)/heading";
-import PortableText from "app/(components)/portableText";
+import FeaturedRecipe from "components/generic/featured-recipe";
+import Heading from "components/generic/heading";
+import PortableText from "components/generic/portableText";
 import getRecipesPage from "queries/getRecipesPage";
 import "server-only";
-import SecondaryFeaturedRecipes from "./(components)/secondaryFeaturedRecipes";
+import SecondaryFeaturedRecipes from "./(components)/secondary-featured-recipes";
 
 export default async function Page() {
 	const recipesPage = await getRecipesPage();

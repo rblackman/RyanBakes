@@ -1,0 +1,96 @@
+.card {
+	--card-padding: 0.75rem;
+	width: clamp(12rem, 15rem, 20rem);
+	min-height: 17.5rem;
+	transition:
+		transform var(--animation-duration) ease-in-out,
+		margin-left var(--animation-duration) ease-in-out;
+	transition-delay: 0.1s;
+	background: var(--bg-subtle);
+	box-shadow: var(--card-shadow);
+	border-top-left-radius: 0.5rem;
+	border-bottom-left-radius: 0.5rem;
+	border-right: none;
+
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: min-content min-content min-content 1fr;
+	grid-template-areas: "pic" "name" "tags" "content";
+	gap: 0.5rem;
+}
+
+.card:first-child:hover {
+	transform: translate(-0.5rem, -1rem) rotate(3deg);
+}
+
+.card:not(:first-child):hover {
+	transform: translateY(-1rem) rotate(3deg);
+}
+
+.card:hover + .card {
+	margin-left: 0.1rem;
+}
+
+.card + .card {
+	margin-left: -5rem;
+}
+
+.card :is(h2, h3, h4) {
+	margin-top: 0;
+}
+
+.pic {
+	grid-area: pic;
+	width: 100%;
+}
+
+.name {
+	grid-area: name;
+	margin: 0 var(--card-padding);
+}
+
+.tags {
+	grid-area: tags;
+	padding: 0 var(--card-padding);
+}
+
+.content {
+	grid-area: content;
+	padding: 0 var(--card-padding) var(--card-padding) var(--card-padding);
+}
+
+.content p {
+	text-overflow: ellipsis;
+	display: flex;
+	display: -webkit-box;
+	-webkit-line-clamp: 4;
+	line-clamp: 4;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	max-height: 7.5rem;
+}
+
+.content p + p {
+	display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.recipeCard {
+		transition: none;
+	}
+
+	.recipeCard:first-child:hover,
+	.recipeCard:not(:first-child):hover {
+		transform: none;
+	}
+
+	.recipeCard:hover + .recipeCard {
+		margin-left: -5rem;
+	}
+}
+
+@media only screen and (max-width: 640px) {
+	.content p {
+		font-size: 0.8rem;
+	}
+}

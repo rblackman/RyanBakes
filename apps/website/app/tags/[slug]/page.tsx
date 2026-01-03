@@ -1,4 +1,4 @@
-import Heading from "app/(components)/heading";
+import Heading from "components/generic/heading";
 import Link from "next/link";
 import getAllTags from "queries/getAllTags";
 import getRecipesByTag from "queries/getRecipesByTag";
