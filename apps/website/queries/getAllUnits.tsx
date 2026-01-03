@@ -1,9 +1,9 @@
 import type { Unit } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const allUnitsQuery = groq`*[_type == "unit"] | order(name asc){...}`;
 
 export default async function getAllUnits(): Promise<Unit[]> {
-	return fetchSanity<Unit[]>(allUnitsQuery, {}, { revalidate: 3600, tags: ["unit"] });
+	return fetchSanity<Unit[]>(allUnitsQuery, {}, { revalidate: 7_200, tags: ["unit"] });
 }

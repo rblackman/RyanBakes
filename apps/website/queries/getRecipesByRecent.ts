@@ -9,5 +9,5 @@ export default async function getRecipesByRecent(count: number = 10): Promise<Re
 	if (count < 0) {
 		throwTypedError(RangeError, `count must be a non-negative integer, received: ${count}`);
 	}
-	return fetchSanity<Recipe[]>(recipesByRecentQuery, { count }, { revalidate: 60, tags: ["recipe"] });
+	return fetchSanity<Recipe[]>(recipesByRecentQuery, { count }, { revalidate: 3_600, tags: ["recipe"] });
 }

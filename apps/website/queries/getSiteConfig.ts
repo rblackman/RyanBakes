@@ -11,7 +11,7 @@ export default async function getSiteConfig(): Promise<SiteConfig> {
 	const siteConfig = await fetchSanity<SiteConfig | null>(
 		siteConfigQuery,
 		{ siteConfigKey },
-		{ revalidate: 300, tags: ["siteConfig", `siteConfig:${siteConfigKey}`] },
+		{ revalidate: 3_600, tags: ["siteConfig", `siteConfig:${siteConfigKey}`] },
 	);
 
 	if (!siteConfig) {

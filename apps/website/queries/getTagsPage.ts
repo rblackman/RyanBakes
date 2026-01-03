@@ -11,7 +11,7 @@ export default async function getTagsPage(): Promise<TagsPage> {
 	const tagsPage = await fetchSanity<TagsPage | null>(
 		tagsPageQuery,
 		{ tagsPageKey },
-		{ revalidate: 300, tags: ["tagsPage", `page:${tagsPageKey}`] },
+		{ revalidate: 3_600, tags: ["tagsPage", `page:${tagsPageKey}`] },
 	);
 
 	if (!tagsPage) {

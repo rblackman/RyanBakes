@@ -11,7 +11,7 @@ export default async function getRecipesPage(): Promise<RecipesPage> {
 	const recipesPage = await fetchSanity<RecipesPage | null>(
 		recipesPageQuery,
 		{ recipesPageKey },
-		{ revalidate: 300, tags: ["recipesPage", `page:${recipesPageKey}`] },
+		{ revalidate: 3_600, tags: ["recipesPage", `page:${recipesPageKey}`] },
 	);
 
 	if (!recipesPage) {

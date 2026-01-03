@@ -2,6 +2,7 @@ import BakersPercentage from "@components/features/bakers-percentage";
 import BakeModeToggle from "@components/ui/bake-mode-toggle";
 import Tags from "@components/ui/tags";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
+import resolveParams from "@helpers/resolve-params";
 import createImageBuilder from "@hooks/useImageBuilder";
 import getAllRecipeSlugs from "@queries/getAllRecipeSlugs";
 import getAllUnits from "@queries/getAllUnits";
@@ -21,11 +22,6 @@ type RouteParams = Readonly<{ slug: string }>;
 export type Props = Readonly<{
 	params: RouteParams | Promise<RouteParams>;
 }>;
-
-async function resolveParams(params: Props["params"]): Promise<RouteParams> {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	return resolvedParams;
-}
 
 export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
 	const { slug } = await resolveParams(params);
@@ -101,8 +97,8 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 	};
 }
 
-export default async function Page(props: Readonly<Props>) {
-	const { slug } = await resolveParams(props.params);
+export default async function Page({ params }: Readonly<Props>) {
+	const { slug } = await resolveParams(params);
 
 	const [recipe, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
 	const tags = recipe.tags ?? [];
