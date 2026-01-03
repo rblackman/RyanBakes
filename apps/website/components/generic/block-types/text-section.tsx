@@ -1,6 +1,6 @@
+import PortableText from "@components/generic/portableText";
 import type { TextSection } from "@ryan-bakes/sanity-types";
 import "server-only";
-import PortableText from "../portableText";
 
 export interface Props {
 	value: TextSection;

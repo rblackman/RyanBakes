@@ -1,6 +1,6 @@
+import Tag from "@components/generic/tag";
 import clsx from "clsx";
 import "server-only";
-import Tag from "../tag";
 import styles from "./tags.module.css";
 
 interface Props {

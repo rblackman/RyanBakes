@@ -1,6 +1,6 @@
+import Block from "@components/generic/block";
 import getHomepage from "queries/getHomepage";
 import "server-only";
-import Block from "../components/generic/block";
 
 export default async function Page() {
 	const { content } = await getHomepage();
