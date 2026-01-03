@@ -1,0 +1,26 @@
+.percentageTableWrap {
+	overflow-x: auto;
+}
+
+.percentageTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.percentageTable_thead {
+	font-weight: bold;
+}
+
+.percentageTable_thead th {
+	text-align: left;
+	padding: 0.25rem 1rem 0.125rem 1rem;
+	border-bottom: 0.1rem solid var(--secondary-dark);
+}
+
+.percentageTable_tbody tr:nth-of-type(even) {
+	background: var(--bg-alt);
+}
+
+.percentageTable_tbody td {
+	padding: 0.125rem 1rem;
+}
