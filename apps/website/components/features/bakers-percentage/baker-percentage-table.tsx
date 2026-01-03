@@ -44,7 +44,7 @@ function ingredientCompare(a: BakerPercentageEntry, b: BakerPercentageEntry): nu
 export default function BakersPercentageTable({ heading, headingLevel = 3, ingredients }: Props) {
 	const totalFlourWeight = calculateTotalFlourWeight(ingredients);
 	const totalHydration = calculateTotalHydration(ingredients, totalFlourWeight);
-	const sorted = ingredients.sort(ingredientCompare);
+	const sorted = [...ingredients].sort(ingredientCompare);
 
 	return (
 		<>
