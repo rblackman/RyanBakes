@@ -44,10 +44,6 @@ export default defineType({
 						return true;
 					}
 
-					if (!GRAMS_UNIT_ID) {
-						return "Missing SANITY_STUDIO_GRAMS_UNIT_ID (should be the _id of the grams unit document).";
-					}
-
 					const ref = (value as { _ref?: string } | undefined)?._ref;
 					if (!ref) {
 						return "Unit reference is required.";
