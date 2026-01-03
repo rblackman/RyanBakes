@@ -61,10 +61,10 @@ export default function BakersPercentageTable({ heading, headingLevel = 3, ingre
 						</tr>
 					</thead>
 					<tbody className={styles.percentageTable_tbody}>
-						{sorted.map(({ name, grams }) => {
+						{sorted.map(({ name, grams, key }) => {
 							const bakersPercentage = totalFlourWeight > 0 ? (grams / totalFlourWeight) * 100 : 0;
 							return (
-								<tr key={name}>
+								<tr key={key}>
 									<td>{name}</td>
 									<td>{grams.toFixed(0)}</td>
 									<td>{bakersPercentage.toFixed(1)}%</td>
