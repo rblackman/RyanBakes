@@ -14,7 +14,7 @@ type Props = Readonly<{
 	large?: boolean;
 }>;
 
-export default async function FeaturedRecipe({ id, priority = false, large = false }: Readonly<Props>) {
+export default async function FeaturedRecipe({ id, priority = false, large = false }: Props) {
 	const recipe = await getRecipeById(id);
 	const title = recipe.title ?? "";
 	const picture = recipe.picture;
