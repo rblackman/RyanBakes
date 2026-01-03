@@ -88,6 +88,14 @@ export default defineType({
 			validation: (Rule) => Rule.unique().required(),
 		}),
 		defineField({
+			name: "showBakerPercentage",
+			title: "Show Baker's Percentage",
+			type: "boolean",
+			description: "Whether to show the baker's percentage table for this recipe.",
+			initialValue: false,
+			validation: (Rule) => Rule.required(),
+		}),
+		defineField({
 			name: "openGraphImage",
 			title: "Open Graph Image",
 			type: "imageWithAlt",

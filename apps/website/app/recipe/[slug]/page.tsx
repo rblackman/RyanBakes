@@ -1,3 +1,4 @@
+import BakersPercentage from "@components/features/bakers-percentage";
 import BakeModeToggle from "@components/ui/bake-mode-toggle";
 import Tags from "@components/ui/tags";
 import createImageBuilder from "@hooks/useImageBuilder";
@@ -91,6 +92,7 @@ export default async function Page(props: Readonly<Props>) {
 
 	const [recipe, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
 	const tags = recipe.tags ?? [];
+	const showBakerPercentage = recipe.showBakerPercentage ?? false;
 	const ingredients: Array<Keyed<Ingredient>> = recipe.ingredients ?? [];
 	const steps: Array<Keyed<Step>> = recipe.steps ?? [];
 	const commentary = recipe.commentary ?? [];
@@ -103,6 +105,7 @@ export default async function Page(props: Readonly<Props>) {
 				<RecipeCommentary commentary={commentary} />
 				<BakeModeToggle />
 				<RecipeIngredients ingredients={ingredients} units={units} />
+				{showBakerPercentage && <BakersPercentage ingredients={ingredients} />}
 				<RecipeSteps ingredients={ingredients} steps={steps} units={units} />
 			</div>
 		</main>
