@@ -105,6 +105,7 @@ When generating code:
 - Prefer explicit narrowing over assertions
 - Do not reintroduce removed libraries
 - Assume strict TypeScript settings
+- In the `./apps/website/` project, when throwing errors, use `throwError` or `throwTypedError` located in helpers.
 
 If unsure:
 - Ask for clarification
