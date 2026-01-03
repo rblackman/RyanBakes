@@ -70,7 +70,7 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 			: undefined,
 		openGraph: {
 			type: "article",
-			url,
+			...(url ? { url } : {}),
 			title: recipeTitle,
 			description: ogDescription,
 			images: ogImage
