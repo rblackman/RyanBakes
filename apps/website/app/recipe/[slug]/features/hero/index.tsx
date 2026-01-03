@@ -1,5 +1,5 @@
 import Heading from "@components/ui/heading";
-import createImageBuilder from "@hooks/useImageBuilder";
+import createImageBuilder, { type ImageBuilder } from "@hooks/useImageBuilder";
 import type { Recipe } from "@ryan-bakes/sanity-types";
 import type { CSSProperties } from "react";
 import RecipeMeta from "../meta";
@@ -8,6 +8,16 @@ import styles from "./hero.module.css";
 type Props = Readonly<{
 	recipe: Recipe;
 }>;
+
+export function generateBaseBgUrl(imageBuilder: ImageBuilder): string {
+	const baseUrl = imageBuilder.buildUrlWithOptions({
+		crop: "focalpoint",
+		quality: 55,
+		width: 2000,
+		aspectRatio: 7 / 2,
+	});
+	return baseUrl;
+}
 
 export default function RecipeHero({ recipe }: Props) {
 	const title = recipe.title ?? "";
@@ -34,12 +44,7 @@ export default function RecipeHero({ recipe }: Props) {
 
 	const imageBuilder = createImageBuilder(asset);
 
-	const baseUrl = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 2000,
-		aspectRatio: 7 / 2,
-	});
+	const baseUrl = generateBaseBgUrl(imageBuilder);
 	const baseUrl2x = imageBuilder.buildUrlWithOptions({
 		crop: "focalpoint",
 		quality: 55,
@@ -47,6 +52,16 @@ export default function RecipeHero({ recipe }: Props) {
 		aspectRatio: 7 / 2,
 		dpr: 2,
 	});
+
+	const lqip = imageBuilder.buildUrlWithOptions({
+		crop: "focalpoint",
+		quality: 30,
+		width: 200,
+		aspectRatio: 7 / 2,
+		blur: 50,
+	});
+	console.log("LQIP URL:", lqip);
+
 	const desktop = imageBuilder.buildUrlWithOptions({
 		crop: "focalpoint",
 		quality: 55,
@@ -78,6 +93,7 @@ export default function RecipeHero({ recipe }: Props) {
 	});
 
 	const containerStyle = {
+		"--bgUrl-lqip": `url('${lqip}')`,
 		"--bgUrl": `-webkit-image-set(url('${baseUrl}') 1x, url('${baseUrl2x}') 2x)`,
 		"--bgUrl-desk": `-webkit-image-set(url('${desktop}') 1x, url('${desktop2x}') 2x)`,
 		"--bgUrl-tablet": `-webkit-image-set(url('${tablet}') 1x, url('${tablet2x}') 2x)`,
