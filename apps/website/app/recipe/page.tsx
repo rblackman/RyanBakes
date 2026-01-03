@@ -20,8 +20,8 @@ export default async function Page() {
 	const intro = recipesPage.intro ?? [];
 	const featuredId = recipesPage.featuredRecipe?._ref;
 	const secondaryIds: string[] = (recipesPage.secondaryFeatured ?? [])
-		.map((recipe: { _ref?: string | undefined } | null | undefined): string | undefined => recipe?._ref)
-		.filter((id: string | undefined): id is string => Boolean(id));
+		.map((recipe) => recipe?._ref)
+		.filter((id): id is string => Boolean(id));
 
 	const recipeIds: string[] = [...new Set([...(featuredId ? [featuredId] : []), ...secondaryIds])];
 	const recipesById = new Map<string, Recipe>();
