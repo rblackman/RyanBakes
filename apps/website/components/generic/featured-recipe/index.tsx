@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Link from "next/link";
 import getRecipeById from "queries/getRecipeById";
 import "server-only";
@@ -7,12 +8,13 @@ import PortableText from "../portableText";
 import Tags from "../tags";
 import styles from "./featured-recipe.module.css";
 
-interface Props {
+type Props = Readonly<{
 	id: string;
 	priority?: boolean;
-}
+	large?: boolean;
+}>;
 
-export default async function FeaturedRecipe({ id, priority = false }: Readonly<Props>) {
+export default async function FeaturedRecipe({ id, priority = false, large = false }: Readonly<Props>) {
 	const recipe = await getRecipeById(id);
 	const title = recipe.title ?? "";
 	const picture = recipe.picture;
@@ -20,8 +22,13 @@ export default async function FeaturedRecipe({ id, priority = false }: Readonly<
 	const tags = recipe.tags ?? [];
 	const slug = recipe.slug?.current ?? "";
 
+	const recipeClass = clsx(styles.featuredRecipe, {
+		[styles.large]: large,
+		[styles.noLarge]: !large,
+	});
+
 	return (
-		<div className={styles.featuredRecipe}>
+		<div className={recipeClass}>
 			{picture && (
 				<Image
 					image={picture}

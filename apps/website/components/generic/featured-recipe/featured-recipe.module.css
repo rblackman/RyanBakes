@@ -1,16 +1,35 @@
 .featuredRecipe {
 	--featured-padding: 0.75rem;
+	padding: 0 var(--featured-padding) 0 0;
+
 	background: var(--bg-subtle);
 	box-shadow: var(--card-shadow);
+
 	max-width: 60rem;
-	padding: 0 var(--featured-padding) 0 0;
+
 	display: grid;
+	overflow: hidden;
+}
+
+.featuredRecipe + .featuredRecipe {
+	margin-top: 1.5rem;
+}
+
+.featuredRecipe.large {
+	--featured-padding: 0.75rem;
+	grid-template-areas: "img title" "img tags" "img blurb";
 	grid-template-columns: max-content 1fr;
 	grid-template-rows: min-content min-content 1fr;
-	grid-template-areas: "img title" "img tags" "img blurb";
 	gap: var(--featured-padding);
 	max-height: 350px;
-	overflow: hidden;
+}
+
+.featuredRecipe.noLarge {
+	--featured-padding: 0.25rem;
+	grid-template-areas: "img title" " img tags";
+	grid-template-columns: 4.5rem 1fr;
+	grid-template-rows: min-content min-content;
+	gap:  var(--featured-padding) 0.75rem;
 }
 
 .img {
@@ -26,8 +45,16 @@
 	margin: var(--featured-padding) 0 0 0;
 }
 
+.noLarge .heading:is(h1, h2, h3) {
+	font-size: 1.2em;
+}
+
 .blurb {
 	grid-area: blurb;
+}
+
+.noLarge .blurb {
+	display: none;
 }
 
 .blurb p {
