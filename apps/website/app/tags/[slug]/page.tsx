@@ -12,16 +12,15 @@ export type Props = Readonly<{
 }>;
 
 async function resolveParams(params: Props["params"]): Promise<RouteParams> {
+	const resolvedParams = params instanceof Promise ? await params : params;
+	return resolvedParams;
+}
+
 function formatTagTitle(slug: string): string {
 	return slug
 		.split("-")
 		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
 		.join(" ");
-}
-
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	return resolvedParams;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
