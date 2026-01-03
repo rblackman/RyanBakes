@@ -1,11 +1,9 @@
 import "server-only";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity, groq } from "../shared/lib/sanity";
+
+const allRecipeSlugsQuery = groq`*[_type == "recipe"]{ "slug": slug.current }`;
 
 export default async function getAllRecipeSlugs(): Promise<string[]> {
-	const url = buildGroqQuery(`*[ _type == 'recipe' ] { 'slug': slug.current }`);
-	const response = await nextFetch(url);
-	var { result } = (await response.json()) as Query<{ slug: string }>;
-	return result.map(({ slug }) => slug);
+	const result = await fetchSanity<{ slug?: string }[]>(allRecipeSlugsQuery, {}, { revalidate: 300, tags: ["recipe"] });
+	return result.flatMap(({ slug }) => (slug ? [slug] : []));
 }

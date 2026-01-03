@@ -12,7 +12,7 @@ export default async function Tag({ params }: Readonly<Props>) {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	const { slug } = resolvedParams;
 
-	const { result: recipes } = await getRecipesByTag(slug);
+	const recipes = await getRecipesByTag(slug);
 
 	return (
 		<>

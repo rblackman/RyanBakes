@@ -7,5 +7,8 @@
 		".": {
 			"types": "./sanity.types.ts"
 		}
+	},
+	"dependencies": {
+		"@sanity/client": "^7.13.2"
 	}
 }

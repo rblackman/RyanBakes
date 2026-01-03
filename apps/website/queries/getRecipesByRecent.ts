@@ -1,11 +1,13 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
+import { throwTypedError } from "helpers/throwError";
 import "server-only";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
-export default async function getRecipesByRecent(count: number = 10): Promise<Query<Recipe>> {
-	const url = buildGroqQuery(`*[ _type == 'recipe' ] | order(_createdAt desc) [0...${count}]`);
-	const response = await nextFetch(url);
-	return response.json();
+const recipesByRecentQuery = groq`*[_type == "recipe"] | order(_createdAt desc) [0...$count]{...}`;
+
+export default async function getRecipesByRecent(count: number = 10): Promise<Recipe[]> {
+	if (count < 0) {
+		throwTypedError(RangeError, `count must be a non-negative integer, received: ${count}`);
+	}
+	return fetchSanity<Recipe[]>(recipesByRecentQuery, { count }, { revalidate: 60, tags: ["recipe"] });
 }

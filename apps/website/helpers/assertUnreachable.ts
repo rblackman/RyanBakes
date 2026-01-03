@@ -1,3 +1,5 @@
+import throwError from "./throwError";
+
 export default function assertUnreachable(_x: never): never {
-	throw new Error("Didn't expect to get here");
+	throwError("Didn't expect to get here");
 }

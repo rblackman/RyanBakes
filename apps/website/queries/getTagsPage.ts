@@ -1,26 +1,22 @@
 import type { TagsPage } from "@ryan-bakes/sanity-types";
+import throwError from "helpers/throwError";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
-import type Query from "types/query";
-import buildGroqQuery from "./lib/buildGroqQuery";
-import nextFetch from "./lib/nextFetch";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const tagsPageKey = serverEnv.TAGS_PAGE_KEY;
+const tagsPageQuery = groq`*[_type == "tagsPage" && _id == $tagsPageKey][0]{...}`;
 
 export default async function getTagsPage(): Promise<TagsPage> {
-	const url = buildGroqQuery(`*[ _id == '${tagsPageKey}' ]`);
-	const response = await nextFetch(url);
-	const { result } = (await response.json()) as Query<TagsPage>;
+	const tagsPage = await fetchSanity<TagsPage | null>(
+		tagsPageQuery,
+		{ tagsPageKey },
+		{ revalidate: 300, tags: ["tagsPage", `page:${tagsPageKey}`] },
+	);
 
-	if (result.length === 0) {
-		throw new Error(`Could not find a ${tagsPageKey}.`);
+	if (!tagsPage) {
+		throwError(`Could not find a ${tagsPageKey}.`);
 	}
 
-	if (result.length > 1) {
-		console.warn(`Got more than one ${tagsPageKey}. Using the first.`, {
-			result,
-		});
-	}
-
-	return result[0];
+	return tagsPage;
 }
