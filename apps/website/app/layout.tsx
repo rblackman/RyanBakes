@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
 		metadataBase,
 		openGraph: {
 			type: "website",
-			url: metadataBase,
+			...(metadataBase && { url: metadataBase }),
 			siteName: defaultTitle,
 			title: defaultTitle,
 			description: defaultDescription,
