@@ -12,6 +12,14 @@ export type Props = Readonly<{
 }>;
 
 async function resolveParams(params: Props["params"]): Promise<RouteParams> {
+function formatTagTitle(slug: string): string {
+	return slug
+		.split("-")
+		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+		.join(" ");
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const resolvedParams = params instanceof Promise ? await params : params;
 	return resolvedParams;
 }
@@ -21,10 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 	// convert slug to title case for metadata
 	// replace - with spaces
-	const title = slug
-		.split("-")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ");
+	const title = formatTagTitle(slug);
 
 	const description = `Recipes tagged with "${title}"`;
 
@@ -36,33 +41,40 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Tag({ params }: Props) {
 	const { slug } = await resolveParams(params);
+	const tagTitle = formatTagTitle(slug);
 
 	const recipes = await getRecipesByTag(slug);
 
 	return (
-		<>
-			<Heading level={3}>Tag: {slug}</Heading>
+		<main>
+			<div className="content">
+				<Heading level={2}>Tag: {tagTitle}</Heading>
 
-			<Heading level={4} sr>
-				Recipes
-			</Heading>
+				<Heading level={3} sr>
+					Recipes tagged with {tagTitle}
+				</Heading>
 
-			<ul>
-				{recipes.map(({ _id: id, title, slug: recipeSlug }) => {
-					const recipeSlugValue = recipeSlug?.current;
+				{recipes.length > 0 ? (
+					<ul>
+						{recipes.map(({ _id: id, title, slug: recipeSlug }) => {
+							const recipeSlugValue = recipeSlug?.current;
 
-					if (!recipeSlugValue) {
-						return null;
-					}
+							if (!recipeSlugValue) {
+								return null;
+							}
 
-					return (
-						<li key={id}>
-							<Link href={`/recipe/${recipeSlugValue}`}>{title ?? "Untitled"}</Link>
-						</li>
-					);
-				})}
-			</ul>
-		</>
+							return (
+								<li key={id}>
+									<Link href={`/recipe/${recipeSlugValue}`}>{title ?? "Untitled"}</Link>
+								</li>
+							);
+						})}
+					</ul>
+				) : (
+					<p>No recipes available for this tag yet.</p>
+				)}
+			</div>
+		</main>
 	);
 }
 
