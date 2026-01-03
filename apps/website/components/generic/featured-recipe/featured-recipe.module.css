@@ -29,7 +29,7 @@
 	grid-template-areas: "img title" " img tags";
 	grid-template-columns: 4.5rem 1fr;
 	grid-template-rows: min-content min-content;
-	gap:  var(--featured-padding) 0.75rem;
+	gap: var(--featured-padding) 0.75rem;
 }
 
 .img {
