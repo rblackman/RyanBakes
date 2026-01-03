@@ -39,6 +39,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Write website .env (CI)
+        uses: ./.github/actions/write-website-env
+        with:
+          next_public_base_url: ${{ vars.NEXT_PUBLIC_BASE_URL }}
+          next_public_sanity_dataset: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
+          next_public_sanity_key: ${{ vars.NEXT_PUBLIC_SANITY_KEY }}
+          recipes_page_key: ${{ vars.RECIPES_PAGE_KEY }}
+          site_config_key: ${{ vars.SITE_CONFIG_KEY }}
+          tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
+          sanity_studio_grams_unit_id: ${{ vars.SANITY_STUDIO_GRAMS_UNIT_ID }}
+
       - name: Verify
         run: pnpm run ci:verify
 
