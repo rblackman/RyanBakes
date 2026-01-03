@@ -22,15 +22,18 @@ export default function BakersPercentage({ ingredients }: Props) {
 			name: name ?? throwError("Ingredient name is missing."),
 			bakers: bakers ?? throwError("Bakers data is missing."),
 		}))
-		.map(({ name, bakers: { grams, isFlour, countsTowardHydration, hydrationFactor } }) => ({
-			name,
-			grams: grams ?? throwError(`Grams missing for ingredient: ${name}`),
-			isFlour: isFlour ?? false,
-			countsTowardHydration: countsTowardHydration ?? false,
-			hydrationFactor: hydrationFactor ?? 1,
-			key: `${name}|${isFlour ? "1" : "0"}|${countsTowardHydration ? "1" : "0"}|${hydrationFactor ?? 1}`,
-		}));
+		.map(({ name, bakers: { grams, isFlour, countsTowardHydration, hydrationFactor } }) => {
+			const effectiveHydrationFactor = hydrationFactor ?? 1;
 
+			return {
+				name,
+				grams: grams ?? throwError(`Grams missing for ingredient: ${name}`),
+				isFlour: isFlour ?? false,
+				countsTowardHydration: countsTowardHydration ?? false,
+				hydrationFactor: effectiveHydrationFactor,
+				key: `${name}|${isFlour ? "1" : "0"}|${countsTowardHydration ? "1" : "0"}|${effectiveHydrationFactor}`,
+			};
+		});
 	const mergedBakerPercentages: BakerPercentageEntry[] = Object.values(
 		ingredientsWithBakersPercentage.reduce<Record<string, BakerPercentageEntry>>((acc, curr) => {
 			const { key, grams } = curr;
