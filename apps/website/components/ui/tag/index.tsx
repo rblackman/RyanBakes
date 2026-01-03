@@ -11,7 +11,7 @@ export default function Tag({ tag }: Props) {
 	return (
 		<li key={tag} className={styles.tagListItem}>
 			<Link className={styles.tagLink} href={`/tags/${tag.replace(" ", "-")}`}>
-				<BiPurchaseTagAlt className={styles.tagLink_Svg} />
+				<BiPurchaseTagAlt aria-hidden="true" focusable="false" className={styles.tagLink_Svg} />
 				<span className={styles.tagLink_Tag}> {tag}</span>
 			</Link>
 		</li>
