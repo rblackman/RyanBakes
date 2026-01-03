@@ -8,9 +8,11 @@ type Props = Readonly<{
 }>;
 
 export default function Tag({ tag }: Props) {
+	const encodedTag = encodeURIComponent(tag);
+
 	return (
 		<li key={tag} className={styles.tagListItem}>
-			<Link className={styles.tagLink} href={`/tags/${tag.replace(" ", "-")}`}>
+			<Link className={styles.tagLink} href={`/tags/${encodedTag}`}>
 				<BiPurchaseTagAlt className={styles.tagLink_Svg} />
 				<span className={styles.tagLink_Tag}> {tag}</span>
 			</Link>
