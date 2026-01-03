@@ -1,9 +1,15 @@
 {
-	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
+		"baseUrl": ".",
 		"jsx": "react-jsx",
+		"paths": {
+			"@helpers/*": ["helpers/*"],
+			"@schema/*": ["schemas/*"],
+			"@t/*": ["types/*"]
+		},
 		"types": ["node"]
 	},
-	"include": ["**/*.ts", "**/*.tsx"],
-	"exclude": ["node_modules", "dist", "build"]
+	"exclude": ["node_modules", "dist", "build"],
+	"extends": "../../tsconfig.base.json",
+	"include": ["**/*.ts", "**/*.tsx"]
 }

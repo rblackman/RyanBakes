@@ -1,5 +1,5 @@
+import useTime from "@hooks/useTime";
 import "server-only";
-import useTime from "../../../../hooks/useTime";
 
 interface Props {
 	totalMinutes: number;

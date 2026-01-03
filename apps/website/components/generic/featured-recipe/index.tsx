@@ -1,11 +1,11 @@
+import Heading from "@components/generic/heading";
+import Image from "@components/generic/image";
+import PortableText from "@components/generic/portableText";
+import Tags from "@components/generic/tags";
 import clsx from "clsx";
 import Link from "next/link";
 import getRecipeById from "queries/getRecipeById";
 import "server-only";
-import Heading from "../heading";
-import Image from "../image";
-import PortableText from "../portableText";
-import Tags from "../tags";
 import styles from "./featured-recipe.module.css";
 
 type Props = Readonly<{

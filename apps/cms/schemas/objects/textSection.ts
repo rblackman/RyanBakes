@@ -1,6 +1,6 @@
+import blockToString from "@helpers/blockToString";
 import { FcTemplate } from "react-icons/fc";
 import { defineField, defineType } from "sanity";
-import blockToString from "../../helpers/blockToString";
 
 export default defineType({
 	name: "textSection",

@@ -1,6 +1,6 @@
+import { blocksToString } from "@helpers/blockToString";
 import { FcCheckmark } from "react-icons/fc";
 import { defineArrayMember, defineField, defineType } from "sanity";
-import { blocksToString } from "../../helpers/blockToString";
 
 export default defineType({
 	name: "step",
