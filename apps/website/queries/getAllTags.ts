@@ -7,6 +7,10 @@ const allTagsQuery = groq`*[_type == "recipe"]{ tags }`;
 
 export default async function getAllTags(): Promise<string[]> {
 	const recipes = await fetchSanity<Pick<Recipe, "tags">[]>(allTagsQuery, {}, { revalidate: 300, tags: ["recipe"] });
-	const tags = recipes.flatMap((recipe) => recipe.tags ?? []);
+	const tags = recipes
+		.flatMap((recipe) => recipe.tags ?? [])
+		.map((tag) => tag?.trim())
+		.filter((tag): tag is string => Boolean(tag));
+
 	return Distinct(tags);
 }
