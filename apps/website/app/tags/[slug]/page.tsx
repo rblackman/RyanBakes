@@ -1,4 +1,5 @@
 import Heading from "@components/ui/heading";
+import buildCanonicalUrl from "@helpers/build-canonical-url";
 import getAllTags from "@queries/getAllTags";
 import getRecipesByTag from "@queries/getRecipesByTag";
 import type { Metadata } from "next";
@@ -31,10 +32,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const title = formatTagTitle(slug);
 
 	const description = `Recipes tagged with "${title}"`;
+	const canonical = buildCanonicalUrl(`/tags/${slug}`);
 
 	return {
 		title,
 		description,
+		alternates: canonical ? { canonical } : undefined,
+		keywords: [slug],
+		openGraph: {
+			title,
+			description,
+			...(canonical ? { url: canonical } : {}),
+		},
+		twitter: {
+			card: "summary_large_image",
+			title,
+			description,
+		},
 	};
 }
 

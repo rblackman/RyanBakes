@@ -1,13 +1,34 @@
 import Heading from "@components/ui/heading";
 import Tags from "@components/ui/tags";
+import buildCanonicalUrl from "@helpers/build-canonical-url";
 import getAllTags from "@queries/getAllTags";
+import getTagsPage from "@queries/getTagsPage";
 import type { Metadata } from "next";
 import "server-only";
 
-export const metadata: Metadata = {
-	title: "Tags",
-	description: "Browse all tags.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+	const tagsPage = await getTagsPage();
+	const title = tagsPage.title ?? "Tags";
+	const featuredTag = tagsPage.featuredTag;
+	const description = featuredTag ? `Browse recipes tagged with ${featuredTag} and more.` : "Browse all tags.";
+	const canonical = buildCanonicalUrl("/tags");
+
+	return {
+		title,
+		description,
+		alternates: canonical ? { canonical } : undefined,
+		openGraph: {
+			title,
+			description,
+			...(canonical ? { url: canonical } : {}),
+		},
+		twitter: {
+			card: "summary_large_image",
+			title,
+			description,
+		},
+	};
+}
 
 export default async function Page() {
 	const tags = await getAllTags();
