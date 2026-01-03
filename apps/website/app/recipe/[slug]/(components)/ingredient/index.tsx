@@ -1,9 +1,8 @@
 import type { Ingredient as IngredientType, Unit } from "@ryan-bakes/sanity-types";
+import type Keyed from "@t/keyed";
 import "server-only";
 import IngredientAmount from "../ingredient-amount";
 import styles from "./ingredient.module.css";
-
-type Keyed<T> = T & { _key: string };
 
 interface Props {
 	ingredient: Keyed<IngredientType>;

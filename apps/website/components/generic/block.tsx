@@ -1,10 +1,10 @@
 import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
+import type Keyed from "@t/keyed";
 import assertUnreachable from "helpers/assertUnreachable";
 import "server-only";
-import ImageSectionComponent from "./block-types/imageSection";
-import TextSectionComponent from "./block-types/textSection";
-
-type Keyed<T> = T & { _key: string };
+import ImageSectionComponent from "./block-types/image-section";
+import RecipePreviewComponent from "./block-types/recipe-preview";
+import TextSectionComponent from "./block-types/text-section";
 
 interface Props {
 	content: Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
@@ -19,7 +19,7 @@ export default function Block({ content }: Props) {
 			return <TextSectionComponent value={content} />;
 		}
 		case "recipePreview": {
-			return <p>RECIPE PREVIEW</p>;
+			return <RecipePreviewComponent value={content} />;
 		}
 		default: {
 			return assertUnreachable(content);
