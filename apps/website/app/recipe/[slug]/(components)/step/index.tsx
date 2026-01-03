@@ -6,13 +6,12 @@ import type {
 	TextSection,
 	Unit,
 } from "@ryan-bakes/sanity-types";
+import type Keyed from "@t/keyed";
 import Block from "components/generic/block";
 import Heading from "components/generic/heading";
 import "server-only";
 import IngredientAmount from "../ingredient-amount";
 import styles from "./step.module.css";
-
-type Keyed<T> = T & { _key: string };
 
 type StepBlock = Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
 

@@ -24,7 +24,7 @@ export default async function Page() {
 					<PortableText value={intro} />
 				</div>
 
-				{featuredId && <FeaturedRecipe id={featuredId} priority />}
+				{featuredId && <FeaturedRecipe id={featuredId} priority large />}
 
 				{secondaryIds.length > 0 && <SecondaryFeaturedRecipes ids={secondaryIds} />}
 			</div>
