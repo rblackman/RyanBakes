@@ -13,7 +13,7 @@ export default function RecipeCommentary({ commentary }: Readonly<Props>) {
 
 	return (
 		<div className={styles.introWrap}>
-			<PortableText value={commentary ?? []} />
+			<PortableText value={commentary} />
 		</div>
 	);
 }
