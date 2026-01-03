@@ -15,6 +15,11 @@ function calculateTotalFlourWeight(ingredients: BakerPercentageEntry[]): number 
 }
 
 function calculateTotalHydration(ingredients: BakerPercentageEntry[], totalFlourWeight: number): number {
+	if (totalFlourWeight === 0) {
+		// don't divide by zero
+		return 0;
+	}
+
 	return (
 		(ingredients.reduce((sum, ingredient) => {
 			if (ingredient.countsTowardHydration) {
@@ -53,11 +58,12 @@ export default function BakersPercentageTable({ heading, headingLevel = 3, ingre
 			</Heading>
 			<div className={styles.percentageTableWrap}>
 				<table className={styles.percentageTable}>
+					<caption className="sr">Baker's Percentage Table</caption>
 					<thead className={styles.percentageTable_thead}>
 						<tr>
-							<th>Ingredient</th>
-							<th>Grams</th>
-							<th>Baker's %</th>
+							<th scope="col">Ingredient</th>
+							<th scope="col">Grams</th>
+							<th scope="col">Baker's %</th>
 						</tr>
 					</thead>
 					<tbody className={styles.percentageTable_tbody}>
