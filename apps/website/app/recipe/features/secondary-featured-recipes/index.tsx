@@ -19,7 +19,11 @@ export default function SecondaryFeaturedRecipes({ recipes }: Props) {
 			</Heading>
 			<div className={styles.secondaryGrid}>
 				{recipes.map(({ recipe, index }) => (
-					<SecondaryFeaturedRecipe key={recipe._id ? `${recipe._id}-${index}` : `idx-${index}`} recipe={recipe} index={index} />
+					<SecondaryFeaturedRecipe
+						key={recipe._id ? `${recipe._id}-${index}` : `idx-${index}`}
+						recipe={recipe}
+						index={index}
+					/>
 				))}
 			</div>
 		</>
