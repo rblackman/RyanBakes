@@ -1,9 +1,9 @@
-import MainNav from "@components/menu/mainNav";
+import MainNav from "@components/menu";
+import getSiteConfig from "@queries/getSiteConfig";
+import { clientEnv } from "@shared/config/env.client";
 import type { Metadata, Viewport } from "next";
-import getSiteConfig from "queries/getSiteConfig";
 import type { ReactNode } from "react";
 import "server-only";
-import { clientEnv } from "@shared/config/env.client";
 import "../styles/global.css";
 import "../styles/variables.css";
 
@@ -17,8 +17,12 @@ export async function generateMetadata(): Promise<Metadata> {
 	const { title } = await getSiteConfig();
 	const baseUrl = clientEnv.NEXT_PUBLIC_BASE_URL;
 
+	const defaultTitle = title ?? "Ryan Bakes";
 	return {
-		title,
+		title: {
+			template: `${defaultTitle} | %s`,
+			default: defaultTitle,
+		},
 		metadataBase: baseUrl ? new URL(baseUrl) : undefined,
 	};
 }

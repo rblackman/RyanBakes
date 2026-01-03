@@ -1,8 +1,8 @@
-import throwError from "@helpers/throwError";
+import throwError from "@helpers/throw-error";
 import type { TagsPage } from "@ryan-bakes/sanity-types";
-import "server-only";
 import { serverEnv } from "@shared/config/env.server";
 import { fetchSanity, groq } from "@shared/lib/sanity";
+import "server-only";
 
 const tagsPageKey = serverEnv.TAGS_PAGE_KEY;
 const tagsPageQuery = groq`*[_type == "tagsPage" && _id == $tagsPageKey][0]{...}`;
