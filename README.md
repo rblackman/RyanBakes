@@ -189,6 +189,7 @@ Required (example):
 NEXT_PUBLIC_BASE_URL=
 NEXT_PUBLIC_SANITY_KEY=
 NEXT_PUBLIC_SANITY_DATASET=
+SANITY_STUDIO_GRAMS_UNIT_ID=
 ```
 
 ### CI Variables
@@ -196,7 +197,8 @@ NEXT_PUBLIC_SANITY_DATASET=
 CI uses GitHub **repository variables** (not secrets) for build-time configuration.
 
 These values are non-sensitive identifiers (dataset names, document keys, etc.)
-and are written to `apps/website/.env` during CI.
+and are written to `apps/website/.env` during CI. `SANITY_STUDIO_GRAMS_UNIT_ID`
+is also exported for schema extraction in the CMS workflow (baker math validation).
 
 Sensitive credentials (e.g., deploy tokens) are stored as GitHub Secrets.
 
