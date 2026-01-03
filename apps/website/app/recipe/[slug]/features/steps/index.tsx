@@ -1,6 +1,7 @@
 import Heading from "@components/ui/heading";
 import type { Ingredient, Step as SanityStep, Unit } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
+import { useCallback } from "react";
 import StepItem from "./step-item";
 import styles from "./steps.module.css";
 
@@ -11,19 +12,22 @@ interface Props {
 }
 
 export default function RecipeSteps({ ingredients, steps, units }: Props) {
+	const getIngredientsForIndex = useCallback(
+		(index: number) => {
+			if (ingredients.length === 0) {
+				return [];
+			}
+
+			return ingredients.filter(({ usedInSteps }) => {
+				const usedSteps = usedInSteps ?? [];
+				return usedSteps.indexOf(index + 1) > -1;
+			});
+		},
+		[ingredients],
+	);
+
 	if (steps.length === 0) {
 		return null;
-	}
-
-	function getIngredientsForIndex(index: number): Array<Keyed<Ingredient>> {
-		if (ingredients.length === 0) {
-			return [];
-		}
-
-		return ingredients.filter(({ usedInSteps }) => {
-			const usedSteps = usedInSteps ?? [];
-			return usedSteps.indexOf(index + 1) > -1;
-		});
 	}
 
 	return (
