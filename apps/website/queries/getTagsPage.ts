@@ -1,8 +1,7 @@
 import type { TagsPage } from "@ryan-bakes/sanity-types";
-import { groq } from "../lib/sanity";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
-import { fetchSanity } from "./lib/fetchSanity";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const tagsPageKey = serverEnv.TAGS_PAGE_KEY;
 const tagsPageQuery = groq`*[_type == "tagsPage" && _id == $tagsPageKey][0]{...}`;

@@ -1,7 +1,6 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import { groq } from "../lib/sanity";
 import "server-only";
-import { fetchSanity } from "./lib/fetchSanity";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const recipeBySlugQuery = groq`*[_type == "recipe" && slug.current == $slug][0]{...}`;
 

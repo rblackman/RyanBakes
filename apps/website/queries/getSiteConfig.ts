@@ -1,8 +1,7 @@
 import type { SiteConfig } from "@ryan-bakes/sanity-types";
-import { groq } from "../lib/sanity";
 import "server-only";
 import { serverEnv } from "shared/config/env.server";
-import { fetchSanity } from "./lib/fetchSanity";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const siteConfigKey = serverEnv.SITE_CONFIG_KEY;
 const siteConfigQuery = groq`*[_type == "siteConfig" && _id == $siteConfigKey][0]{...}`;

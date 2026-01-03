@@ -1,6 +1,5 @@
-import { groq } from "../lib/sanity";
 import "server-only";
-import { fetchSanity } from "./lib/fetchSanity";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 export interface NavItemQueryResult {
 	id: string;

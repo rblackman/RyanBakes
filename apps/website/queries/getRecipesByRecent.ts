@@ -1,7 +1,6 @@
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import { groq } from "../lib/sanity";
 import "server-only";
-import { fetchSanity } from "./lib/fetchSanity";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const recipesByRecentQuery = groq`*[_type == "recipe"] | order(_createdAt desc) [0...$count]{...}`;
 

@@ -1,7 +1,6 @@
 import type { Page } from "@ryan-bakes/sanity-types";
-import { groq } from "../lib/sanity";
 import "server-only";
-import { fetchSanity } from "./lib/fetchSanity";
+import { fetchSanity, groq } from "../shared/lib/sanity";
 
 const pageByIdQuery = groq`*[_type == "page" && _id == $id][0]{...}`;
 
