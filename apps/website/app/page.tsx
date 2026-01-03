@@ -1,13 +1,29 @@
 import Block from "@components/features/content-blocks/block";
+import buildCanonicalUrl from "@helpers/build-canonical-url";
 import getHomepage from "@queries/getHomepage";
 import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
 import "server-only";
 
+const homeCanonical = buildCanonicalUrl("/");
+const homeTitle = "Home";
+const homeDescription = "Browse Ryan Bakes recipes and baking tips.";
+
 export const metadata: Metadata = {
-	title: "Home",
-	description: "Browse Ryan Bakes recipes and baking tips.",
+	title: homeTitle,
+	description: homeDescription,
+	alternates: homeCanonical ? { canonical: homeCanonical } : undefined,
+	openGraph: {
+		title: homeTitle,
+		description: homeDescription,
+		url: homeCanonical,
+	},
+	twitter: {
+		card: "summary_large_image",
+		title: homeTitle,
+		description: homeDescription,
+	},
 };
 
 export default async function Page() {

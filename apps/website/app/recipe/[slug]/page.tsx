@@ -1,6 +1,7 @@
 import BakersPercentage from "@components/features/bakers-percentage";
 import BakeModeToggle from "@components/ui/bake-mode-toggle";
 import Tags from "@components/ui/tags";
+import buildCanonicalUrl from "@helpers/build-canonical-url";
 import createImageBuilder from "@hooks/useImageBuilder";
 import getAllRecipeSlugs from "@queries/getAllRecipeSlugs";
 import getAllUnits from "@queries/getAllUnits";
@@ -25,16 +26,17 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 
 	const recipe = await getRecipeBySlug(slug);
 
-	const recipeTitle = recipe.title ?? "";
+	const recipeTitle = recipe.title ?? "Recipe";
 	const description = recipe.description ?? "";
+	const ogDescription = recipe.ogDescription ?? description;
 	const tags = recipe.tags ?? [];
 	const created = recipe._createdAt;
 	const updated = recipe._updatedAt;
+	const disallowRobots = recipe.disallowRobots ?? false;
 
-	const baseUrl: string = clientEnv.NEXT_PUBLIC_BASE_URL;
-	const url = baseUrl ? new URL(`/recipe/${slug}`, baseUrl).toString() : `/recipe/${slug}`;
+	const url = buildCanonicalUrl(`/recipe/${slug}`, clientEnv.NEXT_PUBLIC_BASE_URL);
 
-	const openGraphImage = recipe.openGraphImage;
+	const openGraphImage = recipe.openGraphImage ?? recipe.picture;
 
 	let ogImage: string | undefined;
 	let twitterImage: string | undefined;
@@ -58,12 +60,19 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 	return {
 		title: recipeTitle,
 		description,
+		alternates: url ? { canonical: url } : undefined,
 		keywords: tags,
+		robots: disallowRobots
+			? {
+					index: false,
+					follow: false,
+				}
+			: undefined,
 		openGraph: {
 			type: "article",
 			url,
 			title: recipeTitle,
-			description,
+			description: ogDescription,
 			images: ogImage
 				? [
 						{
@@ -80,7 +89,7 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 		twitter: {
 			card: "summary_large_image",
 			title: recipeTitle,
-			description,
+			description: ogDescription,
 			images: twitterImage ? [{ url: twitterImage, alt: ogAlt }] : [],
 		},
 	};

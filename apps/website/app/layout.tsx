@@ -14,16 +14,32 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-	const { title } = await getSiteConfig();
-	const baseUrl = clientEnv.NEXT_PUBLIC_BASE_URL;
+	const { title, url } = await getSiteConfig();
+	const baseUrl = url ?? clientEnv.NEXT_PUBLIC_BASE_URL;
 
 	const defaultTitle = title ?? "Ryan Bakes";
+	const defaultDescription = "Browse Ryan Bakes recipes and baking tips.";
+	const metadataBase = baseUrl ? new URL(baseUrl) : undefined;
+
 	return {
 		title: {
 			template: `${defaultTitle} | %s`,
 			default: defaultTitle,
 		},
-		metadataBase: baseUrl ? new URL(baseUrl) : undefined,
+		description: defaultDescription,
+		metadataBase,
+		openGraph: {
+			type: "website",
+			url: metadataBase,
+			siteName: defaultTitle,
+			title: defaultTitle,
+			description: defaultDescription,
+		},
+		twitter: {
+			card: "summary_large_image",
+			title: defaultTitle,
+			description: defaultDescription,
+		},
 	};
 }
 
