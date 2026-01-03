@@ -1,3 +1,5 @@
+import Block from "@components/generic/block";
+import Heading from "@components/generic/heading";
 import type {
 	Ingredient,
 	InlineImage,
@@ -7,8 +9,6 @@ import type {
 	Unit,
 } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
-import Block from "components/generic/block";
-import Heading from "components/generic/heading";
 import "server-only";
 import IngredientAmount from "../ingredient-amount";
 import styles from "./step.module.css";

@@ -1,7 +1,7 @@
 "use client";
+import createImageBuilder from "@hooks/useImageBuilder";
 import type { ImageWithAlt } from "@ryan-bakes/sanity-types";
 import clsx from "clsx";
-import createImageBuilder from "hooks/useImageBuilder";
 import NextImage, { type ImageLoaderProps } from "next/image";
 import styles from "./image.module.css";
 

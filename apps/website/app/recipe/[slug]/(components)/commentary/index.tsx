@@ -1,4 +1,4 @@
-import PortableText from "components/generic/portableText";
+import PortableText from "@components/generic/portableText";
 import getRecipeBySlug from "queries/getRecipeBySlug";
 import "server-only";
 import type { Props } from "../../page";

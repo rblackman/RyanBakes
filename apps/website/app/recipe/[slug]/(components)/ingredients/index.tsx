@@ -1,4 +1,4 @@
-import Heading from "components/generic/heading";
+import Heading from "@components/generic/heading";
 import getAllUnits from "queries/getAllUnits";
 import getRecipeBySlug from "queries/getRecipeBySlug";
 import "server-only";

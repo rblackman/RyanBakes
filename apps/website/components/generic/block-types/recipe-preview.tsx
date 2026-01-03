@@ -1,7 +1,7 @@
 import FeaturedRecipe from "@components/generic/featured-recipe";
+import throwError from "@helpers/throwError";
 import type { RecipePreview } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
-import throwError from "helpers/throwError";
 import "server-only";
 
 type Props = Readonly<{

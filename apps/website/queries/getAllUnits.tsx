@@ -1,6 +1,6 @@
 import type { Unit } from "@ryan-bakes/sanity-types";
 import "server-only";
-import { fetchSanity, groq } from "../shared/lib/sanity";
+import { fetchSanity, groq } from "@shared/lib/sanity";
 
 const allUnitsQuery = groq`*[_type == "unit"] | order(name asc){...}`;
 
