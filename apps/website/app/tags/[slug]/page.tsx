@@ -1,5 +1,6 @@
 import Heading from "@components/ui/heading";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
+import resolveParams from "@helpers/resolve-params";
 import getAllTags from "@queries/getAllTags";
 import getRecipesByTag from "@queries/getRecipesByTag";
 import type { Metadata } from "next";
@@ -11,11 +12,6 @@ type RouteParams = Readonly<{ slug: string }>;
 export type Props = Readonly<{
 	params: RouteParams | Promise<RouteParams>;
 }>;
-
-async function resolveParams(params: Props["params"]): Promise<RouteParams> {
-	const resolvedParams = params instanceof Promise ? await params : params;
-	return resolvedParams;
-}
 
 function formatTagTitle(slug: string): string {
 	return slug
