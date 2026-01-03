@@ -1,12 +1,6 @@
 {
 	"compilerOptions": {
-		"baseUrl": ".",
 		"jsx": "react-jsx",
-		"paths": {
-			"@helpers/*": ["helpers/*"],
-			"@schema/*": ["schemas/*"],
-			"@t/*": ["types/*"]
-		},
 		"types": ["node"]
 	},
 	"exclude": ["node_modules", "dist", "build"],
