@@ -3,9 +3,9 @@ import Link from "next/link";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import styles from "./tag.module.css";
 
-interface Props {
+type Props = Readonly<{
 	tag: string;
-}
+}>;
 
 export default function Tag({ tag }: Props) {
 	return (

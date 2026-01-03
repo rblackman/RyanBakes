@@ -3,11 +3,11 @@ import clsx from "clsx";
 import "server-only";
 import styles from "./tags.module.css";
 
-interface Props {
+type Props = Readonly<{
 	tags: string[];
 	noMargin?: boolean;
 	small?: boolean;
-}
+}>;
 
 export default function Tags({ tags, noMargin = false, small = false }: Props) {
 	const sorted = [...tags].sort();

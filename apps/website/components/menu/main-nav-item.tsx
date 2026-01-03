@@ -3,9 +3,9 @@ import type { NavItemQueryResult } from "@queries/getNavItems";
 import Link from "next/link";
 import styles from "./main-nav-item.module.css";
 
-interface Props {
+type Props = Readonly<{
 	item: Omit<NavItemQueryResult, "id">;
-}
+}>;
 
 export default function MainNavItem({
 	item: {

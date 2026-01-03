@@ -3,9 +3,9 @@ import type { Recipe } from "@ryan-bakes/sanity-types";
 import SecondaryFeaturedRecipe from "./secondary-featured-recipe";
 import styles from "./secondary-featured-recipes.module.css";
 
-interface Props {
+type Props = Readonly<{
 	recipes: Array<{ recipe: Recipe; index: number }>;
-}
+}>;
 
 export default function SecondaryFeaturedRecipes({ recipes }: Props) {
 	if (recipes.length === 0) {

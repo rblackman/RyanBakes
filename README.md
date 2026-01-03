@@ -124,6 +124,12 @@ pnpm --filter website dev
 pnpm --filter website build
 ```
 
+### Website Conventions
+
+- App Router pages define `metadata` or `generateMetadata` to ensure titles and descriptions are present for every route.
+- Component props favor `type` aliases wrapped in `Readonly<>` instead of `interface` to keep contracts immutable and consistent.
+- Optional Sanity fields remain optional in UI code; guard and provide fallbacks rather than asserting.
+
 ---
 
 ---

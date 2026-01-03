@@ -3,10 +3,10 @@ import type Keyed from "@t/keyed";
 import IngredientAmount from "./ingredient-amount";
 import styles from "./ingredient-row.module.css";
 
-interface Props {
+type Props = Readonly<{
 	ingredient: Keyed<IngredientType>;
 	units: Unit[];
-}
+}>;
 
 export default function IngredientRow({ ingredient, units }: Props) {
 	const { name, amount, unit, notes } = ingredient;

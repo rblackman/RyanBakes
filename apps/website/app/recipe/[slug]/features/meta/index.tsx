@@ -3,12 +3,12 @@ import styles from "./recipe-meta.module.css";
 import Temp from "./temp";
 import Time from "./time";
 
-interface Props {
+type Props = Readonly<{
 	preheat?: number | undefined;
 	bakeTime?: number | undefined;
 	totalTime?: number | undefined;
 	serves?: string | undefined;
-}
+}>;
 
 export default function RecipeMeta({ preheat, bakeTime, totalTime, serves }: Props) {
 	if (preheat === undefined && bakeTime === undefined && totalTime === undefined && serves === undefined) {

@@ -14,9 +14,9 @@ import RecipeHero from "./features/hero";
 import RecipeIngredients from "./features/ingredients";
 import RecipeSteps from "./features/steps";
 
-export type Props = {
+export type Props = Readonly<{
 	params: { slug: string } | Promise<{ slug: string }>;
-};
+}>;
 
 export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
 	const resolvedParams = params instanceof Promise ? await params : params;

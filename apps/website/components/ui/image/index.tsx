@@ -5,7 +5,7 @@ import clsx from "clsx";
 import NextImage, { type ImageLoaderProps } from "next/image";
 import styles from "./image.module.css";
 
-interface OptionalBaseProps {
+type OptionalBaseProps = Readonly<{
 	quality: number;
 	blur: number;
 	crop: "top,left" | "top,right" | "bottom,left" | "bottom,right" | "center" | "focalpoint" | "entropy";
@@ -14,20 +14,26 @@ interface OptionalBaseProps {
 	responsive?: boolean;
 	priority?: boolean;
 	alt?: string;
-}
+}>;
 
-interface BaseProps extends Partial<OptionalBaseProps> {
-	image: ImageWithAlt;
-	width: number;
-}
+type BaseProps = Readonly<
+	Partial<OptionalBaseProps> & {
+		image: ImageWithAlt;
+		width: number;
+	}
+>;
 
-interface FixedWidthProps extends BaseProps {
-	height: number;
-}
+type FixedWidthProps = Readonly<
+	BaseProps & {
+		height: number;
+	}
+>;
 
-interface AspectRatioProps extends BaseProps {
-	aspectRatio: number;
-}
+type AspectRatioProps = Readonly<
+	BaseProps & {
+		aspectRatio: number;
+	}
+>;
 
 type Props = FixedWidthProps | AspectRatioProps;
 

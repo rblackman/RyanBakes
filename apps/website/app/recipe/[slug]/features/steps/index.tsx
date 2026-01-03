@@ -5,11 +5,11 @@ import { useCallback } from "react";
 import StepItem from "./step-item";
 import styles from "./steps.module.css";
 
-interface Props {
+type Props = Readonly<{
 	ingredients: Array<Keyed<Ingredient>>;
 	steps: Array<Keyed<SanityStep>>;
 	units: Unit[];
-}
+}>;
 
 export default function RecipeSteps({ ingredients, steps, units }: Props) {
 	const getIngredientsForIndex = useCallback(

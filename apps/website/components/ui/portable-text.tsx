@@ -12,10 +12,10 @@ import type { ReactNode } from "react";
 import "server-only";
 import Heading from "./heading";
 
-interface ExternalLinkProps {
+type ExternalLinkProps = Readonly<{
 	_type: string;
 	href: string;
-}
+}>;
 
 function UnknownMark({ children, markType }: { children: ReactNode; markType: string }) {
 	console.warn("Unknown Mark", { children, markType });

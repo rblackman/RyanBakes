@@ -14,11 +14,11 @@ import styles from "./step.module.css";
 
 type StepBlock = Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
 
-interface Props {
+type Props = Readonly<{
 	ingredients: Array<Keyed<Ingredient>>;
 	step: Keyed<SanityStep>;
 	units: Unit[];
-}
+}>;
 
 export default function StepItem({ ingredients, step: { title, content }, units }: Props) {
 	const headingTitle = title ?? "";

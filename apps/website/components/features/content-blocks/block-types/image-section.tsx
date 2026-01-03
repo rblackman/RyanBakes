@@ -4,9 +4,9 @@ import type { InlineImage } from "@ryan-bakes/sanity-types";
 import Image from "next/image";
 import "server-only";
 
-export interface Props {
+export type Props = Readonly<{
 	value: InlineImage;
-}
+}>;
 
 export default function ImageSection({ value: { asset, alt, emptyAlt } }: Props) {
 	if (!asset) {
@@ -32,8 +32,6 @@ export default function ImageSection({ value: { asset, alt, emptyAlt } }: Props)
 		}
 		throwError("Image is missing alt text");
 	})();
-
-	//const float = position === 'Block' ? 'none' : position.toLowerCase();
 
 	return (
 		<Image
