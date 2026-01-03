@@ -24,11 +24,11 @@ export async function generateMetadata(): Promise<Metadata> {
 					title,
 					description,
 					url: canonical,
-			  }
+				}
 			: {
 					title,
 					description,
-			  },
+				},
 		twitter: {
 			card: "summary_large_image",
 			title,
