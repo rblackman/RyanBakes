@@ -189,7 +189,7 @@ Required (example):
 NEXT_PUBLIC_BASE_URL=
 NEXT_PUBLIC_SANITY_KEY=
 NEXT_PUBLIC_SANITY_DATASET=
-SANITY_STUDIO_GRAMS_UNIT_ID=
+SANITY_REVALIDATE_SECRET=
 ```
 
 ### CI Variables
@@ -197,8 +197,12 @@ SANITY_STUDIO_GRAMS_UNIT_ID=
 CI uses GitHub **repository variables** (not secrets) for build-time configuration.
 
 These values are non-sensitive identifiers (dataset names, document keys, etc.)
-and are written to `apps/website/.env` during CI. `SANITY_STUDIO_GRAMS_UNIT_ID`
-is also exported for schema extraction in the CMS workflow (baker math validation).
+and are written to `apps/website/.env` during CI.
+
+The `SANITY_REVALIDATE_SECRET` is provided via a secret or repo variable and must
+match the secret configured on the Sanity webhook that posts to
+`/api/revalidate`; webhook requests are validated using the
+`sanity-webhook-signature` header.
 
 Sensitive credentials (e.g., deploy tokens) are stored as GitHub Secrets.
 

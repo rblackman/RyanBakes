@@ -48,7 +48,7 @@ jobs:
           recipes_page_key: ${{ vars.RECIPES_PAGE_KEY }}
           site_config_key: ${{ vars.SITE_CONFIG_KEY }}
           tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
-          sanity_studio_grams_unit_id: ${{ vars.SANITY_STUDIO_GRAMS_UNIT_ID }}
+          sanity_revalidate_secret: ${{ secrets.SANITY_REVALIDATE_SECRET }}
 
       # Keep the canonical ordering: extract -> typegen -> build -> deploy
       - name: Typegen (schema extract + sanity typegen)

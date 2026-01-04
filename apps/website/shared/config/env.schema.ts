@@ -10,4 +10,5 @@ export const ServerEnvSchema = z.object({
 	RECIPES_PAGE_KEY: z.string().min(1),
 	TAGS_PAGE_KEY: z.string().min(1),
 	SITE_CONFIG_KEY: z.string().min(1),
+	SANITY_REVALIDATE_SECRET: z.string().min(1),
 });
