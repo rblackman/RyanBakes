@@ -9,20 +9,44 @@ type SanityWebhookPayload = {
 	tags?: unknown;
 };
 
-const secret = serverEnv.SANITY_REVALIDATE_SECRET;
 const revalidationProfile = "max";
 
+// Some setups still send X-Sanity-Signature.
+const LEGACY_SIGNATURE_HEADER_NAME = "x-sanity-signature";
+
 export async function POST(req: Request) {
-	const signature = req.headers.get(SIGNATURE_HEADER_NAME);
+	const secret = serverEnv.SANITY_REVALIDATE_SECRET;
+
+	if (!secret || secret.trim().length === 0) {
+		console.error("[revalidate] Missing SANITY_REVALIDATE_SECRET in server env");
+		return new Response("Server misconfigured", { status: 500 });
+	}
+
 	const bodyText = await req.text();
 
+	const signature = req.headers.get(SIGNATURE_HEADER_NAME) ?? req.headers.get(LEGACY_SIGNATURE_HEADER_NAME);
+
 	if (!signature) {
+		// Safe logging: no secret, no signature value.
+		console.warn("[revalidate] Missing signature header", {
+			expectedHeader: SIGNATURE_HEADER_NAME,
+			legacyHeader: LEGACY_SIGNATURE_HEADER_NAME,
+			hasAnySanityHeader: Array.from(req.headers.keys()).some(
+				(h) => h.startsWith("sanity-") || h.startsWith("x-sanity"),
+			),
+		});
+
 		return new Response("Missing signature", { status: 401 });
 	}
 
-	const signatureIsValid = await isValidSignature(bodyText, signature, secret);
+	const signatureIsValid = await isValidSignature(bodyText, signature, secret.trim());
 
 	if (!signatureIsValid) {
+		console.warn("[revalidate] Invalid signature", {
+			headerUsed: req.headers.has(SIGNATURE_HEADER_NAME) ? SIGNATURE_HEADER_NAME : LEGACY_SIGNATURE_HEADER_NAME,
+			bodyLength: bodyText.length,
+		});
+
 		return new Response("Invalid signature", { status: 401 });
 	}
 
