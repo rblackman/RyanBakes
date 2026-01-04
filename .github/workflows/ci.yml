@@ -49,6 +49,7 @@ jobs:
           site_config_key: ${{ vars.SITE_CONFIG_KEY }}
           tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
           sanity_studio_grams_unit_id: ${{ vars.SANITY_STUDIO_GRAMS_UNIT_ID }}
+          sanity_revalidate_secret: ${{ secrets.SANITY_REVALIDATE_SECRET || vars.SANITY_REVALIDATE_SECRET }}
 
       - name: Verify
         run: pnpm run ci:verify
@@ -89,6 +90,7 @@ jobs:
           site_config_key: ${{ vars.SITE_CONFIG_KEY }}
           tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
           sanity_studio_grams_unit_id: ${{ vars.SANITY_STUDIO_GRAMS_UNIT_ID }}
+          sanity_revalidate_secret: ${{ secrets.SANITY_REVALIDATE_SECRET || vars.SANITY_REVALIDATE_SECRET }}
 
       - name: Build all workspaces
         run: pnpm run build

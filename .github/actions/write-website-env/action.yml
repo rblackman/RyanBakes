@@ -22,6 +22,9 @@ inputs:
   sanity_studio_grams_unit_id:
     description: "SANITY_STUDIO_GRAMS_UNIT_ID"
     required: true
+  sanity_revalidate_secret:
+    description: "SANITY_REVALIDATE_SECRET"
+    required: true
 
 runs:
   using: "composite"
@@ -36,6 +39,7 @@ runs:
         test -n "${{ inputs.site_config_key }}" || (echo "Missing input site_config_key" && exit 1)
         test -n "${{ inputs.tags_page_key }}" || (echo "Missing input tags_page_key" && exit 1)
         test -n "${{ inputs.sanity_studio_grams_unit_id }}" || (echo "Missing input sanity_studio_grams_unit_id" && exit 1)
+        test -n "${{ inputs.sanity_revalidate_secret }}" || (echo "Missing input sanity_revalidate_secret" && exit 1)
 
     - name: Write apps/website/.env
       shell: bash
@@ -48,6 +52,7 @@ runs:
         SITE_CONFIG_KEY=${{ inputs.site_config_key }}
         TAGS_PAGE_KEY=${{ inputs.tags_page_key }}
         SANITY_STUDIO_GRAMS_UNIT_ID=${{ inputs.sanity_studio_grams_unit_id }}
+        SANITY_REVALIDATE_SECRET=${{ inputs.sanity_revalidate_secret }}
         EOF
 
     - name: Export shared env vars
