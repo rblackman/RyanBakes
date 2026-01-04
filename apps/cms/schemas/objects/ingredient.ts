@@ -2,16 +2,6 @@ import { FcCheckmark } from "react-icons/fc";
 import { defineArrayMember, defineField, defineType } from "sanity";
 import AutoFillGramsInput from "../components/autofill-grams-input";
 
-const GRAMS_UNIT_ID =
-	(process.env.SANITY_STUDIO_GRAMS_UNIT_ID as string) ??
-	(() => {
-		throw new Error("Missing SANITY_STUDIO_GRAMS_UNIT_ID");
-	})();
-
-type IngredientForValidation = {
-	bakers?: { includeInBakersMath?: boolean };
-};
-
 export default defineType({
 	name: "ingredient",
 	title: "Ingredient",
@@ -35,26 +25,7 @@ export default defineType({
 			title: "Unit",
 			type: "reference",
 			to: [{ type: "unit" }],
-			validation: (Rule) =>
-				Rule.required().custom((value, context) => {
-					const parent = context.parent as IngredientForValidation;
-					const include = parent?.bakers?.includeInBakersMath === true;
-
-					if (!include) {
-						return true;
-					}
-
-					const ref = (value as { _ref?: string } | undefined)?._ref;
-					if (!ref) {
-						return "Unit reference is required.";
-					}
-
-					if (ref !== GRAMS_UNIT_ID) {
-						return "Unit must be grams when included in baker math.";
-					}
-
-					return true;
-				}),
+			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "notes",
