@@ -15,7 +15,7 @@ export default async function getAllTags(): Promise<string[]> {
 	const recipes = data as Array<Pick<Recipe, "tags">>;
 	const tags = recipes
 		.flatMap((recipe) => recipe.tags ?? [])
-		.map((tag): string | undefined => tag?.trim())
+		.map((tag) => tag?.trim())
 		.filter((tag): tag is string => Boolean(tag));
 
 	return Distinct(tags);
