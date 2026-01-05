@@ -8,15 +8,9 @@ const sanityClient = createClient({
 	apiVersion: "2025-01-01",
 	useCdn: true,
 	perspective: "published",
-	stega: false,
+	stega: {
+		studioUrl: clientEnv.NEXT_PUBLIC_SANITY_STUDIO_URL,
+	},
 });
 
-function fetchSanity<T>(
-	query: string,
-	params: Record<string, unknown> = {},
-	{ revalidate = 60, tags = [] }: { revalidate?: number; tags?: string[] } = {},
-) {
-	return sanityClient.fetch<T>(query, params, { next: { revalidate, tags } });
-}
-
-export { fetchSanity, groq, sanityClient };
+export { groq, sanityClient };
