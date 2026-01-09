@@ -1,7 +1,11 @@
 import MainNav from "@components/menu";
+import DisableDraftMode from "@components/ui/disable-draft-mode";
 import getSiteConfig from "@queries/getSiteConfig";
 import { clientEnv } from "@shared/config/env.client";
+import { SanityLive } from "@shared/lib/live";
 import type { Metadata, Viewport } from "next";
+import { draftMode } from "next/headers";
+import { VisualEditing } from "next-sanity/visual-editing";
 import type { ReactNode } from "react";
 import "server-only";
 import "../styles/global.css";
@@ -45,12 +49,20 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
 	const { lang } = await getSiteConfig();
+	const { isEnabled } = await draftMode();
 
 	return (
 		<html lang={lang}>
 			<body>
 				<MainNav />
 				{children}
+				<SanityLive />
+				{isEnabled ? (
+					<>
+						<VisualEditing />
+						<DisableDraftMode />
+					</>
+				) : null}
 			</body>
 		</html>
 	);
