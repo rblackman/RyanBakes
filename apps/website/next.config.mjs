@@ -12,6 +12,15 @@ const nextConfig = {
 	images: {
 		remotePatterns: [{ protocol: "https", hostname: "cdn.sanity.io" }],
 	},
+	async redirects() {
+		return [
+			{
+				source: "/studio",
+				destination: process.env.NEXT_PUBLIC_SANITY_STUDIO_URL,
+				permanent: false,
+			},
+		];
+	},
 };
 
 export default nextConfig;
