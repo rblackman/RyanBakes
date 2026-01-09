@@ -17,14 +17,14 @@
 	},
 	"dependencies": {
 		"@sanity/dashboard": "^5.0.1",
-		"@sanity/vision": "^5.1.0",
+		"@sanity/vision": "^5.2.0",
 		"react": "^19.2.3",
 		"react-dom": "^19.2.3",
 		"react-icons": "^5.5.0",
-		"sanity": "^5.1.0",
-		"styled-components": "^6.1.19"
+		"sanity": "^5.2.0",
+		"styled-components": "^6.2.0"
 	},
 	"devDependencies": {
-		"@sanity/cli": "^5.1.0"
+		"@sanity/cli": "^5.2.0"
 	}
 }
