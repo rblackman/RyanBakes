@@ -20,9 +20,9 @@
 		"url": "https://github.com/rblackman/RyanBakes"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.10",
-		"@commitlint/cli": "^20.2.0",
-		"@commitlint/config-conventional": "^20.2.0",
+		"@biomejs/biome": "2.3.11",
+		"@commitlint/cli": "^20.3.1",
+		"@commitlint/config-conventional": "^20.3.1",
 		"@types/node": "^25.0.3",
 		"@types/react": "^19.2.7",
 		"@types/react-dom": "^19.2.3",
@@ -34,28 +34,20 @@
 	"scripts": {
 		"preinstall": "corepack enable",
 		"prepare": "husky",
-
 		"ci:verify": "pnpm run typegen && pnpm -w exec biome check . && pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit && pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit",
-
 		"dev:website": "pnpm --filter website dev",
 		"dev:cms": "pnpm --filter cms dev",
 		"dev:all": "pnpm -r --parallel --filter cms --filter website dev",
-
 		"build": "pnpm -r --filter=!ryan-bakes build",
 		"build:website": "pnpm --filter website build",
 		"build:cms": "pnpm --filter cms build",
-
 		"start": "pnpm --filter website start",
-
 		"format": "pnpm -r --filter=!ryan-bakes format",
 		"lint": "pnpm -r --filter=!ryan-bakes lint",
-
 		"typecheck": "pnpm -r --filter=!ryan-bakes typecheck",
 		"typecheck:website": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
 		"typecheck:cms": "pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit",
-
 		"validate:env": "pnpm --filter website validate:env",
-
 		"typegen": "pnpm --filter cms run schema:extract && pnpm --filter cms run typegen",
 		"deploy:cms": "pnpm --filter cms run deploy"
 	}
