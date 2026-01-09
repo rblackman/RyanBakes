@@ -1,8 +1,8 @@
 import Heading from "@components/ui/heading";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
 import resolveParams from "@helpers/resolve-params";
-import getAllTags from "@queries/getAllTags";
-import getRecipesByTag from "@queries/getRecipesByTag";
+import getRecipesByTag from "@queries/live/getRecipesByTag";
+import getAllTags from "@queries/static/getAllTags";
 import type { Metadata } from "next";
 import Link from "next/link";
 import "server-only";

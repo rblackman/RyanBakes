@@ -1,6 +1,6 @@
 import Block from "@components/features/content-blocks/block";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
-import getHomepage from "@queries/getHomepage";
+import getHomepage from "@queries/live/getHomepage";
 import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
