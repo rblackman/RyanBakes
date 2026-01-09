@@ -8,7 +8,12 @@ import { schemaTypes } from "./schemas";
 import { deskStructure } from "./structure";
 
 const dataset = process.env.SANITY_STUDIO_DATASET ?? "production";
-const previewOrigin = process.env.SANITY_STUDIO_PREVIEW_ORIGIN;
+
+const previewOrigin = process.env.NODE_ENV === "development" ? "http://localhost:3000" : "https://ryan-bakes.com";
+
+const vercelPreviewOrigin = process.env.SANITY_STUDIO_VERCEL_PREVIEW_URL
+	? `https://${process.env.SANITY_STUDIO_VERCEL_PREVIEW_URL}`
+	: null;
 
 export default defineConfig({
 	name: "default",
@@ -21,12 +26,15 @@ export default defineConfig({
 		visionTool(),
 		presentationTool({
 			previewUrl: {
-				...(previewOrigin ? { initial: previewOrigin } : {}),
-				preview: "/",
+				initial: previewOrigin,
 				previewMode: {
-					enable: "/api/draft-mode/enable",
+					enable: `${previewOrigin}/api/draft-mode/enable`,
+					disable: `${previewOrigin}/api/draft-mode/disable`,
 				},
 			},
+			allowOrigins: ["http://localhost:3000", "https://ryan-bakes.com", vercelPreviewOrigin].filter(
+				Boolean,
+			) as string[],
 		}),
 		dashboardTool({
 			widgets: [projectInfoWidget(), projectUsersWidget()],
