@@ -1,9 +1,7 @@
 import { flag } from "flags/next";
 
-export const darkModeOverride = flag({
+export const darkModeOverride = flag<boolean>({
 	key: "dark-mode-override",
-	description: "Enable dark mode override",
-	decide() {
-		return false;
-	},
+	decide: () => false,
+	description: "Override to enable dark mode for all users",
 });
