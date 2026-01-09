@@ -1,8 +1,9 @@
 import MainNav from "@components/menu";
 import DisableDraftMode from "@components/ui/disable-draft-mode";
-import getSiteConfig from "@queries/getSiteConfig";
+import getSiteConfig from "@queries/live/getSiteConfig";
 import { clientEnv } from "@shared/config/env.client";
 import { SanityLive } from "@shared/lib/live";
+import { VercelToolbar } from "@vercel/toolbar/next";
 import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -50,6 +51,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function RootLayout({ children }: { children: ReactNode }) {
 	const { lang } = await getSiteConfig();
 	const { isEnabled } = await draftMode();
+	const shouldInjectToolbar = process.env.NODE_ENV === "development" || isEnabled;
 
 	return (
 		<html lang={lang}>
@@ -63,6 +65,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 						<DisableDraftMode />
 					</>
 				) : null}
+				{shouldInjectToolbar && <VercelToolbar />}
 			</body>
 		</html>
 	);

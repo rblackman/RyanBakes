@@ -1,6 +1,6 @@
 import resolveParams from "@helpers/resolve-params";
 import createImageBuilder from "@hooks/useImageBuilder";
-import getRecipeBySlug from "@queries/getRecipeBySlug";
+import getRecipeBySlug from "@queries/live/getRecipeBySlug";
 import "server-only";
 import { generateBaseBgUrl } from "./features/hero";
 

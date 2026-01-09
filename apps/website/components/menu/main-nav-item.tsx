@@ -1,5 +1,5 @@
 import assertUnreachable from "@helpers/assert-unreachable";
-import type { NavItemQueryResult } from "@queries/getNavItems";
+import type { NavItemQueryResult } from "@queries/live/getNavItems";
 import Link from "next/link";
 import styles from "./main-nav-item.module.css";
 

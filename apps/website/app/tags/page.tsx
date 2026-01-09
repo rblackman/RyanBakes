@@ -1,8 +1,8 @@
 import Heading from "@components/ui/heading";
 import Tags from "@components/ui/tags";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
-import getAllTags from "@queries/getAllTags";
-import getTagsPage from "@queries/getTagsPage";
+import getTagsPage from "@queries/live/getTagsPage";
+import getAllTags from "@queries/static/getAllTags";
 import type { Metadata } from "next";
 import "server-only";
 

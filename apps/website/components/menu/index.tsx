@@ -1,5 +1,5 @@
-import getNavItems from "@queries/getNavItems";
-import getSiteConfig from "@queries/getSiteConfig";
+import getNavItems from "@queries/live/getNavItems";
+import getSiteConfig from "@queries/live/getSiteConfig";
 import Link from "next/link";
 import "server-only";
 import styles from "./main-nav.module.css";
