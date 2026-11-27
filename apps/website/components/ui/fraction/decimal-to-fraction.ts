@@ -30,6 +30,10 @@ export function decimalToFraction(decimal: string): string {
 	const remainder = value - whole;
 
 	if (remainder <= tolerance) {
+		// Never show a nonzero amount as "0"; leave tiny amounts like "0.005" as entered.
+		if (whole === 0 && value > 0) {
+			return decimal;
+		}
 		return String(whole);
 	}
 
@@ -59,4 +63,22 @@ export function decimalToFraction(decimal: string): string {
  */
 export function normalizeAmountToFractions(amount: string): string {
 	return amount.replace(decimalPattern, (match) => decimalToFraction(match));
+}
+
+// A single fraction token such as "1/4" or "3/4".
+const fractionPattern = /(\d+\/\d+)/;
+
+export type AmountPart = Readonly<{ key: string; text: string }>;
+
+/**
+ * Normalizes decimals to fractions, then splits the amount into display parts so each fraction stands alone.
+ * "1 1/2" -> ["1", "1/2"], "0.5-0.75" -> ["1/2", "-", "3/4"], "1 - 2" -> ["1", "-", "2"].
+ */
+export function splitAmountParts(amount: string): AmountPart[] {
+	const texts = normalizeAmountToFractions(amount)
+		.split(" ")
+		.flatMap((word) => word.split(fractionPattern))
+		.filter((text) => text.length > 0);
+
+	return texts.map((text, position) => ({ key: `${position}-${text}`, text }));
 }
