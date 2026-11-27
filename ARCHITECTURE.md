@@ -1,276 +1,180 @@
-# Architecture Overview
+# Architecture
 
-This document describes the architecture of the **RyanBakes** monorepo, including data flow, build orchestration, and the design decisions that connect Sanity CMS, generated types, and the Next.js website.
-
----
-
-## High-Level Architecture
-
-```
-RyanBakes-Website/
-├─ apps/
-│  ├─ cms/                 # Sanity Studio (v5)
-│  └─ website/             # Next.js App Router site
-├─ packages/
-│  └─ sanity-types/        # Generated Sanity TypeGen output
-├─ shared/                 # Shared runtime utilities (env, config)
-└─ tooling/
-```
+How the pieces of RyanBakes fit together: where content comes from, how it gets typed, fetched,
+cached and rendered, and how edits in the Studio reach the live site.
 
 Core principle:
 
-> **Sanity is the source of truth → types are generated → the website consumes types defensively**
+> Sanity is the source of truth. Types are generated from it. The website consumes them defensively.
 
 ---
 
-## Data Flow
+## Repository layout
 
-### 1. Schema Definition (CMS)
+```text
+.
+├── apps/
+│   ├── cms/                    Sanity Studio
+│   │   ├── schemas/
+│   │   │   ├── documents/      recipe, unit, page, siteConfig, recipesPage, tagsPage, navItem
+│   │   │   ├── objects/        ingredient, step, portableText, images, links, ...
+│   │   │   ├── components/     custom Studio inputs
+│   │   │   └── index.ts        registers every type
+│   │   ├── structure.ts        desk layout (Settings, Recipes, Pages)
+│   │   ├── sanity.config.ts    plugins: structure, vision, presentation, dashboard
+│   │   └── sanity.cli.ts       project ID, dataset, TypeGen config
+│   └── website/                Next.js App Router site
+│       ├── app/                routes; route-only components live in app/<route>/features/
+│       ├── components/
+│       │   ├── ui/             small reusable pieces (image, fraction, tag, portable-text, ...)
+│       │   ├── features/       larger shared sections (content blocks, baker's percentage, ...)
+│       │   └── menu/           main navigation
+│       ├── queries/
+│       │   ├── live/           GROQ through sanityFetch: cache-tagged, draft-aware
+│       │   └── static/         GROQ through the plain client: slug and tag lists
+│       ├── shared/
+│       │   ├── config/         Zod env schema, validated client and server env
+│       │   └── lib/            Sanity client and defineLive setup
+│       ├── helpers/            pure functions (throwError, canonical URLs, ...)
+│       ├── hooks/              small utilities (createImageBuilder lives here)
+│       ├── styles/             global.css and variables.css
+│       ├── types/              hand-written types that are not Sanity's (Keyed, ...)
+│       ├── scripts/            validate-env.ts
+│       └── flags.ts            Vercel feature flags
+├── packages/
+│   └── sanity-types/           generated sanity.types.ts (gitignored)
+├── docs/                       content model and deployment guides
+└── .agents/ .claude/ .copilot/ vendored AI agent skills (see AGENTS.md)
+```
 
-- All schemas live in `apps/cms/schemas`
-- Uses Sanity v5 APIs (`defineType`, `defineField`, `defineArrayMember`)
-- Validation rules live **only** in schema files
-- Required-ness is enforced at the schema level, not assumed in the website
-
-Examples:
-- `recipe`
-- `unit`
-- `ingredient`
-- `portableText`
-- `imageWithAlt`
+The website imports through path aliases defined in `apps/website/tsconfig.json`: `@apps/*`,
+`@components/*`, `@helpers/*`, `@hooks/*`, `@queries/*`, `@shared/*` and `@t/*` (for `types/`).
 
 ---
 
-### 2. Schema Extraction
+## Content flow
 
-Sanity CLI extracts a *runtime schema snapshot*:
-
-```bash
-sanity schema extract --path ./schema.json
+```text
+apps/cms/schemas  ──sanity schema extract──▶  apps/cms/schema.json
+                                                      │
+                                         sanity typegen generate
+                                                      ▼
+                               packages/sanity-types/sanity.types.ts
+                                                      │
+                        import type { Recipe } from "@ryan-bakes/sanity-types"
+                                                      ▼
+            apps/website/queries ──GROQ──▶ Sanity Content Lake ──▶ server components ──▶ HTML
 ```
 
-Notes:
-- `schema.json` is **generated**
-- `schema.json` is not committed.
-- It is never manually edited
+1. **Schema.** Content types live in `apps/cms/schemas` and use `defineType`, `defineField` and
+   `defineArrayMember`. Validation lives only there. See [`docs/content-model.md`](./docs/content-model.md).
+2. **Types.** `pnpm typegen` extracts the schema and runs Sanity TypeGen. The output is generated,
+   gitignored and never edited by hand. The website build runs it in `prebuild`.
+3. **Queries.** Every GROQ query lives in `apps/website/queries`, one exported function per file.
+   Components never build GROQ.
+4. **Rendering.** Pages are server components. Only a few leaf components are client components
+   (`image`, `tag`, `bake-mode-toggle`, `disable-draft-mode`). No Sanity client runs in the browser.
+
+### Two kinds of queries
+
+| Folder            | Fetches with                                    | Used for                                                       |
+| ----------------- | ----------------------------------------------- | -------------------------------------------------------------- |
+| `queries/live/`   | `sanityFetch` from `defineLive` (`next-sanity`) | Page content. Cache-tagged, live-updating, draft-aware         |
+| `queries/static/` | `sanityClient.fetch`                            | Lists for `generateStaticParams` and tag counts, at build time |
+
+The client (`shared/lib/sanity.ts`) uses the CDN, the `published` perspective, a pinned
+`apiVersion`, and stega encoding pointed at the Studio URL so the Presentation tool can map rendered
+text back to fields.
+
+### Routes
+
+| Route                       | Source                                                                     |
+| --------------------------- | -------------------------------------------------------------------------- |
+| `/`                         | The `page` referenced by `siteConfig.homepage`, rendered as content blocks |
+| `/recipe`                   | `recipesPage` singleton: featured recipe and secondary featured recipes    |
+| `/recipe/[slug]`            | One `recipe`; prebuilt for every slug via `generateStaticParams`           |
+| `/tags`                     | Every distinct tag with its recipe count                                   |
+| `/tags/[slug]`              | Recipes with that tag; prebuilt for every tag                              |
+| `/studio`                   | Redirect to `NEXT_PUBLIC_SANITY_STUDIO_URL`                                |
+| `/api/revalidate`           | Sanity webhook target (below)                                              |
+| `/api/draft-mode/enable`    | Turns on draft mode for the Presentation tool                              |
+| `/api/draft-mode/disable`   | Turns it off                                                               |
+| `/.well-known/vercel/flags` | Flags discovery endpoint for the Vercel toolbar                            |
+
+The root layout loads `siteConfig` for the page title template and `<html lang>`, renders the main
+navigation, and mounts `<SanityLive />`.
 
 ---
 
-### 3. Type Generation
+## Caching and revalidation
 
-Sanity TypeGen consumes `schema.json`:
+Live queries tag their results. When a document is published, a Sanity webhook POSTs it to
+`/api/revalidate`. The route checks the `sanity-webhook-signature` header against
+`SANITY_REVALIDATE_SECRET`, maps the document to tags, and calls `revalidateTag` for each one:
 
-```bash
-sanity typegen generate
-```
+| Published `_type` | Tags revalidated                                                                  |
+| ----------------- | --------------------------------------------------------------------------------- |
+| `recipe`          | `recipe`, `recipesPage`, `tagsPage`, `recipe:<id>`, `recipe:<slug>`, `tag:<tag>`  |
+| `page`            | `page`, `page:<id>`                                                               |
+| `recipesPage`     | `recipesPage`, `page:<id>`                                                        |
+| `tagsPage`        | `tagsPage`, `page:<id>`                                                           |
+| `siteConfig`      | `siteConfig`, `siteConfig:<id>`                                                   |
+| `navItem`         | `navItem`                                                                         |
+| `unit`            | `unit`                                                                            |
 
-Output:
-```
-packages/sanity-types/sanity.types.ts
-```
+The webhook projection must include `_id`, `_type`, `slug` and `tags`. When you add a query, give it
+tags that this map already revalidates, or extend the map in the same change.
 
-Rules:
-- This file is **fully generated**
-- No hand edits
-- Consumers must adapt to optional fields
-
----
-
-### 4. Type Consumption (Website)
-
-The Next.js app imports types from:
-
-```ts
-import type { Recipe, Unit, ImageWithAlt } from "@ryan-bakes/sanity-types";
-```
-
-Key constraints:
-- All fields may be `undefined`
-- References may be missing
-- Arrays may be empty or undefined
-
-The UI must:
-- Guard every access
-- Provide sensible fallbacks
-- Never assume presence
+`queries/static/` results carry no tags, so they only change on the next build.
 
 ---
 
-## Website Architecture
+## Draft mode and visual editing
 
-### App Router
-
-- Uses Next.js App Router
-- All data fetching happens in **server components**
-- No Sanity client usage in the browser
-
-Structure:
-```
-app/
-├─ (components)/           # Shared server components
-├─ recipe/
-│  ├─ [slug]/
-│  │  ├─ page.tsx
-│  │  └─ (components)/
-│  └─ page.tsx
-└─ tags/
-```
-
----
-
-### Queries Layer
-
-Located in:
-```
-apps/website/queries/
-```
-
-Responsibilities:
-- Own all GROQ queries
-- Shape query results
-- Minimize data sent to components
-
-Rules:
-- Query return types are explicit
-- Components do not construct GROQ
-- Queries may return partial documents
-
----
-
-### Components
-
-Components are **pure renderers**:
-
-- No fetching
-- No schema assumptions
-- Handle `undefined` gracefully
-
-Patterns:
-- `value ?? ""`
-- `array ?? []`
-- Early returns when required data is missing
-
----
-
-## Portable Text Strategy
-
-- Portable Text types are generated
-- Rendering handled via a wrapper component
-- Custom marks (fraction, links) are explicitly mapped
-
-Design goal:
-> **Rendering never throws due to malformed content**
+The Studio's Presentation tool loads the website in an iframe and calls `/api/draft-mode/enable`,
+which uses `SANITY_VIEWER_TOKEN` to read drafts. While draft mode is on, the layout renders
+`<VisualEditing />` (click-to-edit overlays) and a button to leave draft mode, and the Vercel
+toolbar is shown. The Studio allows `http://localhost:3000`, `https://ryan-bakes.com` and an optional
+Vercel preview host (`SANITY_STUDIO_VERCEL_PREVIEW_URL`).
 
 ---
 
 ## Images
 
-### ImageWithAlt Pattern
-
-- Images are optional everywhere
-- Asset references may be missing
-- `createImageBuilder` handles low-level URL construction
-
-Rules:
-- No image access without existence checks
-- Hero, featured, and OG images all guard asset presence
+Sanity images are stored as `imageWithAlt` or `inlineImage`. `createImageBuilder`
+(`hooks/useImageBuilder.ts`; it is a plain function despite the file name) turns an asset reference
+into a `cdn.sanity.io` URL with width, height, crop, quality and WebP format. `next.config.mjs` allows
+`cdn.sanity.io` as a remote image host. Every caller checks that `asset` exists first.
 
 ---
 
-## Ingredients & Units
+## Environment
 
-### Units
-
-- Units are documents
-- Ingredients reference units
-- Resolution happens at render time
-
-Behavior:
-- Missing unit → render amount only
-- Missing display config → defaults applied
+`shared/config/env.schema.ts` defines two Zod schemas: client (`NEXT_PUBLIC_*`) and server.
+`env.client.ts` and `env.server.ts` parse `process.env` when imported, and `scripts/validate-env.ts`
+runs both before `dev` and `build`. A missing or malformed value stops the process. The full list is
+in the README.
 
 ---
 
-## Environment Configuration
+## Styling
 
-- Validation is handled with Zod
-- `validate-env.ts` runs during build
-- Required vars:
-  - `NEXT_PUBLIC_SANITY_KEY`
-  - `NEXT_PUBLIC_SANITY_DATASET`
-  - `NEXT_PUBLIC_BASE_URL`
-
-Website builds assume:
-> **Environment is valid or build should fail**
+Global styles and design tokens are in `styles/global.css` and `styles/variables.css`. Components use
+CSS Modules next to the component (`foo.module.css`). There is no CSS framework.
 
 ---
 
-## Build Orchestration
+## Design principles
 
-### TypeGen Dependency Chain
+1. **Schema is truth.** Fix the schema, not the consumer.
+2. **Generated types are authoritative.** Never hand-write or mirror a Sanity type.
+3. **The UI is defensive.** Every optional field is guarded or has a fallback.
+4. **Builds fail loudly.** Invalid env, schema drift or type errors stop the build.
+5. **Generated code is never edited.**
 
-```
-Sanity Schemas
-   ↓
-schema.json
-   ↓
-sanity-types
-   ↓
-Next.js build
-```
+### Common failure modes
 
-### Root Commands
-
-- `typegen` runs only in `apps/cms`
-- Website `prebuild` may invoke typegen (deployment-safe)
-- Full builds run from repo root
-
----
-
-## Linting & Type Safety
-
-- Biome handles formatting and linting
-- TypeScript is strict
-- `exactOptionalPropertyTypes` is enabled
-
-Implications:
-- Optional means *optional*
-- Props must accept `undefined` explicitly
-- No implicit narrowing
-
----
-
-## Design Principles (Non-Negotiable)
-
-1. **Schema is truth**
-2. **Generated types are authoritative**
-3. **UI is defensive**
-4. **No silent assumptions**
-5. **Builds fail loudly**
-6. **Generated code is never edited**
-7. **If TypeScript complains, it is probably right**
-
----
-
-## Common Failure Modes
-
-- Forgetting optional checks on references
-- Assuming `slug.current` exists
-- Passing `undefined` into PortableText
-- Treating generated types as exact mirrors of content reality
-
-These are expected—and the architecture is designed to surface them early.
-
----
-
-## Summary
-
-This architecture intentionally trades convenience for correctness.
-
-The result:
-- Fewer runtime crashes
-- Predictable builds
-- Clear ownership boundaries
-- Confidence when refactoring schemas
-
-If something feels “annoyingly strict,” that is by design.
+- Reading `slug.current`, `asset` or a reference without checking it exists
+- Passing `undefined` into Portable Text
+- Adding a query whose cache tags the webhook never revalidates
+- Changing the schema without running `pnpm typegen`, or without redeploying the Studio
