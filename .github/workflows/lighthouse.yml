@@ -1,0 +1,142 @@
+name: Lighthouse
+
+# Builds the website with this PR's code, serves it with `next start` on the
+# runner, and audits the home page, one recipe page and /tags with Lighthouse
+# CI, on mobile and desktop settings. Scores land in the job summary and the
+# HTML reports in the "lighthouse-reports" artifact.
+#
+# It audits a local production build instead of the Vercel preview because
+# previews sit behind Vercel Authentication. Budgets live in lighthouserc.json.
+# Not a required check yet.
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  LHCI_VERSION: "0.16.1"
+  # Audited when it exists, otherwise the first prebuilt recipe page.
+  PREFERRED_RECIPE: "/recipe/whipped-vanilla-honey-butter"
+
+jobs:
+  lighthouse:
+    name: Lighthouse (performance + accessibility)
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    # Fork PRs don't get this repo's secrets, so the site can't be built there.
+    if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node + pnpm
+        uses: ./.github/actions/setup
+
+      - name: Restore Next.js build cache
+        uses: actions/cache@v6
+        with:
+          path: apps/website/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/website/**/*.ts', 'apps/website/**/*.tsx', 'apps/website/**/*.css', 'apps/website/next.config.mjs') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
+
+      - name: Write website .env (CI)
+        uses: ./.github/actions/write-website-env
+        with:
+          next_public_base_url: ${{ vars.NEXT_PUBLIC_BASE_URL }}
+          next_public_sanity_dataset: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
+          next_public_sanity_key: ${{ vars.NEXT_PUBLIC_SANITY_KEY }}
+          recipes_page_key: ${{ vars.RECIPES_PAGE_KEY }}
+          site_config_key: ${{ vars.SITE_CONFIG_KEY }}
+          tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
+          sanity_revalidate_secret: ${{ secrets.SANITY_REVALIDATE_SECRET }}
+          next_public_sanity_studio_url: ${{ vars.NEXT_PUBLIC_SANITY_STUDIO_URL }}
+          sanity_viewer_token: ${{ secrets.SANITY_VIEWER_TOKEN }}
+
+      # The website's prebuild runs typegen and validates the env first.
+      - name: Build website
+        run: pnpm run build:website
+
+      - name: Pick pages to audit
+        id: pages
+        run: |
+          set -euo pipefail
+          recipe="$(node -e '
+            const routes = Object.keys(require("./apps/website/.next/prerender-manifest.json").routes);
+            const recipes = routes.filter((route) => /^\/recipe\/[^/]+$/.test(route)).sort();
+            const preferred = process.env.PREFERRED_RECIPE;
+            console.log(recipes.includes(preferred) ? preferred : (recipes[0] ?? ""));
+          ')"
+          urls="http://localhost:3000/ http://localhost:3000/tags"
+          if [ -n "$recipe" ]; then
+            urls="$urls http://localhost:3000${recipe}"
+          fi
+          echo "Auditing: $urls"
+          echo "urls=$urls" >> "$GITHUB_OUTPUT"
+
+      - name: Install Lighthouse CI
+        run: npm install --global "@lhci/cli@${LHCI_VERSION}"
+
+      - name: Audit (mobile)
+        env:
+          URLS: ${{ steps.pages.outputs.urls }}
+        run: |
+          set -euo pipefail
+          read -ra pages <<< "$URLS"
+          args=()
+          for page in "${pages[@]}"; do
+            args+=("--url=${page}")
+          done
+          lhci collect --config=lighthouserc.json "${args[@]}"
+          lhci upload --config=lighthouserc.json --outputDir=.lighthouseci/reports/mobile
+          node .github/scripts/lighthouse-summary.mjs .lighthouseci/reports/mobile "Mobile"
+
+      - name: Check budgets (mobile)
+        id: assert-mobile
+        continue-on-error: true
+        run: lhci assert --config=lighthouserc.json
+
+      - name: Audit (desktop)
+        env:
+          URLS: ${{ steps.pages.outputs.urls }}
+        run: |
+          set -euo pipefail
+          read -ra pages <<< "$URLS"
+          args=()
+          for page in "${pages[@]}"; do
+            args+=("--url=${page}")
+          done
+          lhci collect --config=lighthouserc.json --settings.preset=desktop "${args[@]}"
+          lhci upload --config=lighthouserc.json --outputDir=.lighthouseci/reports/desktop
+          node .github/scripts/lighthouse-summary.mjs .lighthouseci/reports/desktop "Desktop"
+
+      - name: Check budgets (desktop)
+        id: assert-desktop
+        continue-on-error: true
+        run: lhci assert --config=lighthouserc.json
+
+      - name: Upload reports
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v5
+        with:
+          name: lighthouse-reports
+          path: .lighthouseci/reports
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Fail if a budget was missed
+        if: ${{ steps.assert-mobile.outcome == 'failure' || steps.assert-desktop.outcome == 'failure' }}
+        run: |
+          echo "::error title=Lighthouse budget missed::See the 'Check budgets' steps and the job summary for which page and category fell short."
+          exit 1
