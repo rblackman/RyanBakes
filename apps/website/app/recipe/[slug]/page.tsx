@@ -1,16 +1,21 @@
 import BakersPercentage from "@components/features/bakers-percentage";
 import BakeModeToggle from "@components/ui/bake-mode-toggle";
+import JsonLd from "@components/ui/json-ld";
 import Tags from "@components/ui/tags";
-import buildCanonicalUrl from "@helpers/build-canonical-url";
+import buildPageMetadata, { type SocialImage } from "@helpers/page-metadata";
 import resolveParams from "@helpers/resolve-params";
+import buildBreadcrumbJsonLd from "@helpers/structured-data/breadcrumbs";
+import buildRecipeJsonLd from "@helpers/structured-data/recipe";
+import type { JsonLd as JsonLdData } from "@helpers/structured-data/types";
 import getAllUnits from "@queries/live/getAllUnits";
 import getRecipeBySlug from "@queries/live/getRecipeBySlug";
 import getAllRecipeSlugs from "@queries/static/getAllRecipeSlugs";
 import type { Ingredient, Step } from "@ryan-bakes/sanity-types";
-import { clientEnv } from "@shared/config/env.client";
 import { socialImageUrl } from "@shared/lib/image";
+import getSiteInfo from "@shared/lib/site-info";
 import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
+import { stegaClean } from "next-sanity";
 import "server-only";
 import RecipeCommentary from "./features/commentary";
 import RecipeHero from "./features/hero";
@@ -25,81 +30,67 @@ export type Props = Readonly<{
 
 export async function generateMetadata({ params }: Readonly<Props>): Promise<Metadata> {
 	const { slug } = await resolveParams(params);
+	const [recipe, site] = await Promise.all([getRecipeBySlug(slug), getSiteInfo()]);
 
-	const recipe = await getRecipeBySlug(slug);
+	const title = stegaClean(recipe.title)?.trim() || "Recipe";
+	const description = stegaClean(recipe.description)?.trim();
+	// The sharing description and image are optional and fall back to the main description and picture.
+	const sharingDescription = stegaClean(recipe.ogDescription)?.trim();
+	const sharingImage = recipe.openGraphImage?.asset ? recipe.openGraphImage : recipe.picture;
+	const tags = stegaClean(recipe.tags ?? []);
 
-	const recipeTitle = recipe.title ?? "Recipe";
-	const description = recipe.description ?? "";
-	const ogDescription = recipe.ogDescription ?? description;
-	const tags = recipe.tags ?? [];
-	const created = recipe._createdAt;
-	const updated = recipe._updatedAt;
-	const disallowRobots = recipe.disallowRobots ?? false;
+	let ogImage: SocialImage | undefined;
+	let twitterImage: SocialImage | undefined;
 
-	const url = buildCanonicalUrl(`/recipe/${slug}`, clientEnv.NEXT_PUBLIC_BASE_URL);
-
-	const openGraphImage = recipe.openGraphImage ?? recipe.picture;
-
-	let ogImage: string | undefined;
-	let twitterImage: string | undefined;
-	let ogAlt: string | undefined;
-
-	if (openGraphImage?.asset) {
-		ogImage = socialImageUrl(openGraphImage, 1200, 630);
-		twitterImage = socialImageUrl(openGraphImage, 1200, 600);
-		ogAlt = openGraphImage.alt ?? undefined;
+	if (sharingImage?.asset) {
+		const alt = sharingImage.emptyAlt ? undefined : stegaClean(sharingImage.alt)?.trim() || undefined;
+		ogImage = { url: socialImageUrl(sharingImage, 1200, 630), width: 1200, height: 630, alt };
+		twitterImage = { url: socialImageUrl(sharingImage, 1200, 600), width: 1200, height: 600, alt };
 	}
 
-	return {
-		title: recipeTitle,
+	return buildPageMetadata({
+		site,
+		title,
 		description,
-		alternates: url ? { canonical: url } : undefined,
+		socialDescription: sharingDescription,
+		path: `/recipe/${slug}`,
+		type: "article",
+		ogImage,
+		twitterImage,
+		noIndex: recipe.disallowRobots === true,
 		keywords: tags,
-		robots: disallowRobots
-			? {
-					index: false,
-					follow: false,
-				}
-			: undefined,
-		openGraph: {
-			type: "article",
-			...(url ? { url } : {}),
-			title: recipeTitle,
-			description: ogDescription,
-			images: ogImage
-				? [
-						{
-							url: ogImage,
-							alt: ogAlt,
-							width: 1200,
-							height: 630,
-						},
-					]
-				: [],
-			publishedTime: created,
-			modifiedTime: updated,
-		},
-		twitter: {
-			card: "summary_large_image",
-			title: recipeTitle,
-			description: ogDescription,
-			images: twitterImage ? [{ url: twitterImage, alt: ogAlt }] : [],
-		},
-	};
+		article: { publishedTime: recipe._createdAt, modifiedTime: recipe._updatedAt, tags },
+	});
 }
 
 export default async function Page({ params }: Readonly<Props>) {
 	const { slug } = await resolveParams(params);
 
-	const [recipe, units] = await Promise.all([getRecipeBySlug(slug), getAllUnits()]);
+	const [recipe, units, site] = await Promise.all([getRecipeBySlug(slug), getAllUnits(), getSiteInfo()]);
 	const tags = recipe.tags ?? [];
 	const showBakerPercentage = recipe.showBakerPercentage ?? false;
 	const ingredients: Array<Keyed<Ingredient>> = recipe.ingredients ?? [];
 	const steps: Array<Keyed<Step>> = recipe.steps ?? [];
 	const commentary = recipe.commentary ?? [];
 
+	const url = new URL(`/recipe/${slug}`, site.baseUrl).toString();
+	const recipeJsonLd = buildRecipeJsonLd({
+		recipe,
+		units,
+		url,
+		author: { "@type": "Person", name: site.authorName, url: site.baseUrl },
+		imageUrl: socialImageUrl,
+	});
+	const breadcrumbs = buildBreadcrumbJsonLd([
+		{ name: "Home", url: site.baseUrl },
+		{ name: "Recipes", url: new URL("/recipe", site.baseUrl).toString() },
+		{ name: stegaClean(recipe.title) ?? "", url },
+	]);
+	const structuredData = [recipeJsonLd, breadcrumbs].flatMap((item): JsonLdData[] => (item ? [item] : []));
+
 	return (
 		<>
+			{structuredData.length > 0 && <JsonLd data={structuredData} />}
 			<RecipeHero recipe={recipe} />
 			<div className="content">
 				<Tags tags={tags} />

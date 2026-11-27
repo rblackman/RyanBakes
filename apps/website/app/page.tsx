@@ -1,10 +1,13 @@
 import Block from "@components/features/content-blocks/block";
-import buildCanonicalUrl from "@helpers/build-canonical-url";
+import JsonLd from "@components/ui/json-ld";
+import buildPageMetadata from "@helpers/page-metadata";
+import buildWebSiteJsonLd from "@helpers/structured-data/website";
 import getHomepage from "@queries/live/getHomepage";
 import getSiteConfig from "@queries/live/getSiteConfig";
 import getTagSummaries from "@queries/live/getTagSummaries";
 import type { InlineImage, RecipePreview, TextSection } from "@ryan-bakes/sanity-types";
 import { defaultSiteDescription, defaultTagline } from "@shared/config/site-defaults";
+import getSiteInfo from "@shared/lib/site-info";
 import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
 import { stegaClean } from "next-sanity";
@@ -12,35 +15,25 @@ import "server-only";
 import BrowseByTag from "./features/browse-by-tag";
 import HomeHero from "./features/home-hero";
 
-const homeCanonical = buildCanonicalUrl("/");
-const homeTitle = "Home";
-
 export async function generateMetadata(): Promise<Metadata> {
-	const { description } = await getSiteConfig();
-	const homeDescription = stegaClean(description)?.trim() || defaultSiteDescription;
+	const site = await getSiteInfo();
 
-	return {
-		title: homeTitle,
-		description: homeDescription,
-		alternates: homeCanonical ? { canonical: homeCanonical } : undefined,
-		openGraph: {
-			title: homeTitle,
-			description: homeDescription,
-			...(homeCanonical ? { url: homeCanonical } : {}),
-		},
-		twitter: {
-			card: "summary_large_image",
-			title: homeTitle,
-			description: homeDescription,
-		},
-	};
+	// The home page leads with the site name, then the tagline: "Ryan Bakes | Recipes from Ryan's kitchen".
+	return buildPageMetadata({
+		site,
+		title: `${site.title} | ${site.tagline}`,
+		absoluteTitle: true,
+		description: site.description,
+		path: "/",
+	});
 }
 
 export default async function Page() {
-	const [{ content }, siteConfig, tagSummaries] = await Promise.all([
+	const [{ content }, siteConfig, tagSummaries, site] = await Promise.all([
 		getHomepage(),
 		getSiteConfig(),
 		getTagSummaries(),
+		getSiteInfo(),
 	]);
 	const blocks: Array<Keyed<InlineImage | TextSection | RecipePreview>> = content ?? [];
 	// The first large recipe preview's photo is near the top and often the largest thing in view on
@@ -53,8 +46,16 @@ export default async function Page() {
 	const tagline = rawTagline && stegaClean(rawTagline).trim() ? rawTagline : defaultTagline;
 	const description = rawDescription && stegaClean(rawDescription).trim() ? rawDescription : defaultSiteDescription;
 
+	const webSiteJsonLd = buildWebSiteJsonLd({
+		name: site.title,
+		url: site.baseUrl,
+		description: site.description,
+		lang: site.lang,
+	});
+
 	return (
 		<div className="content">
+			<JsonLd data={webSiteJsonLd} />
 			<HomeHero tagline={tagline} description={description} />
 
 			{blocks.map((block) => (

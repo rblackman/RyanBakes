@@ -16,15 +16,17 @@ type StepBlock = Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
 
 type Props = Readonly<{
 	ingredients: Array<Keyed<Ingredient>>;
+	/** 1-based position. Gives the step an anchor (#step-1) that the recipe's structured data links to. */
+	number: number;
 	step: Keyed<SanityStep>;
 	units: Unit[];
 }>;
 
-export default function StepItem({ ingredients, step: { title, content }, units }: Props) {
+export default function StepItem({ ingredients, number, step: { title, content }, units }: Props) {
 	const headingTitle = title ?? "";
 
 	return (
-		<li className={styles.stepWrap}>
+		<li className={styles.stepWrap} id={`step-${number}`}>
 			{ingredients.length > 0 && (
 				<ul className={styles.ingredientsWrap}>
 					{ingredients.map(({ _key, amount, name, unit }) => {

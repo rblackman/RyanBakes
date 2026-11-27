@@ -12,7 +12,7 @@ export default defineType({
 			name: "title",
 			title: "Site Title",
 			type: "string",
-			description: "Shown in the header on every page and at the start of browser tab titles.",
+			description: "Shown in the header on every page and at the end of browser tab and search result titles.",
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
@@ -36,7 +36,8 @@ export default defineType({
 			name: "url",
 			title: "URL",
 			type: "url",
-			description: "The main site URL, e.g. https://ryan-bakes.com. Used to build canonical URLs.",
+			description:
+				"The main site URL, e.g. https://ryan-bakes.com. The website builds canonical URLs from its NEXT_PUBLIC_BASE_URL setting, so keep the two the same.",
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
