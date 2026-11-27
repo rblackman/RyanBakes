@@ -10,8 +10,13 @@ onlyBuiltDependencies:
   - sharp
   - unrs-resolver
 
-# @vercel/frameworks (pulled in by @sanity/cli 8) pins smol-toml 1.5.2, which has
-# known DoS advisories (GHSA-7w5x-hrqm-74c2 and others, fixed in 1.9.0). Remove once
-# @vercel/frameworks ships a patched pin.
+# @vercel/frameworks (pulled in by @sanity/cli 8) pins smol-toml 1.5.2 and js-yaml 3.13.1,
+# both with high-severity advisories (smol-toml GHSA-7w5x-hrqm-74c2, fixed in 1.9.0; js-yaml
+# GHSA-52cp-r559-cp3m and others, fixed in 3.15.2). Same-major bumps; remove once
+# @vercel/frameworks ships patched pins.
+# next-devtools-mcp 0.4 pins @modelcontextprotocol/sdk 1.25.2 (several high advisories, fixed in
+# 1.32.0); same-major bump, remove once it ships a newer pin.
 overrides:
-  smol-toml: ^1.9.1
+  "@vercel/frameworks>smol-toml": ^1.9.1
+  "@vercel/frameworks>js-yaml": ^3.15.2
+  "next-devtools-mcp>@modelcontextprotocol/sdk": ^1.32.2

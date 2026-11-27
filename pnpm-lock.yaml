@@ -5,7 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
-  smol-toml: ^1.9.1
+  '@vercel/frameworks>smol-toml': ^1.9.1
+  '@vercel/frameworks>js-yaml': ^3.15.2
+  next-devtools-mcp>@modelcontextprotocol/sdk: ^1.32.2
 
 importers:
 
@@ -132,7 +134,7 @@ importers:
         version: 18.0.10
       next-devtools-mcp:
         specifier: ^0.4.0
-        version: 0.4.0(hono@4.13.23)
+        version: 0.4.0
 
   packages/sanity-types:
     dependencies:
@@ -1849,8 +1851,8 @@ packages:
   '@marijn/find-cluster-break@1.0.4':
     resolution: {integrity: sha512-Wy0V7+SGUjnF9/TkiM1hKVDPj7jKXduPNboMVtHTA8dySMURWqfg/JZ9E2Sq8JgSJmkl7k7Qe9FLeMSrSraWmQ==}
 
-  '@modelcontextprotocol/sdk@1.25.2':
-    resolution: {integrity: sha512-LZFeo4F9M5qOhC/Uc1aQSrBHxMrvxett+9KLHt7OhcExtoiRN9DKgbZffMP/nxjutWDQpfMDfP3nkHI4X9ijww==}
+  '@modelcontextprotocol/sdk@1.32.2':
+    resolution: {integrity: sha512-SWsVtH/0vULSQStoZ6xxH2K09Li8fXYTMC64ZeogCdpZ3XSi1eCPOByV1OpuJxuI3OcmHhosDWYyii07tpPsLw==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -4307,8 +4309,8 @@ packages:
   exif-component@1.0.1:
     resolution: {integrity: sha512-FXnmK9yJYTa3V3G7DE9BRjUJ0pwXMICAxfbsAuKPTuSlFzMZhQbcvvwx0I8ofNJHxz3tfjze+whxcGpfklAWOQ==}
 
-  express-rate-limit@7.5.1:
-    resolution: {integrity: sha512-7iN8iPMDzOMHPUYllBEsQdWVB6fPDMPqwjBaFrgr4Jgr/+okjvzAy+UHlYYL/Vs0OsOrMkwS6PJDkFlJwoxUnw==}
+  express-rate-limit@8.7.5:
+    resolution: {integrity: sha512-wi+v38cx2EqD0JnhE/e74o5tFqKWUOAPFJIgyEiqJ8v2MNpoOAA3kI2hXYOI+YM+HE5yqbdAlVxm2GqOIeYOgA==}
     engines: {node: '>= 16'}
     peerDependencies:
       express: '>= 4.11'
@@ -4706,6 +4708,10 @@ packages:
   interestfor@1.0.14:
     resolution: {integrity: sha512-EVSz6IH9dmbicI+wt51ve5Sylq3aKAFF2ex8c1uM+2J6jf4L4PqWNNcCDu2IogZy1makQWZx/f6kY455JpmxTQ==}
 
+  ip-address@10.7.6:
+    resolution: {integrity: sha512-00LYkM6byILa9eQIx6qoaXCM40xTLd56AZ4vyaPW3YTyb49VZYPo5xsiAq4tuQ54GH4R7gVdYScJ1B7B77PuTg==}
+    engines: {node: '>= 12'}
+
   ipaddr.js@1.9.1:
     resolution: {integrity: sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==}
     engines: {node: '>= 0.10'}
@@ -4878,8 +4884,8 @@ packages:
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
-  js-yaml@3.13.1:
-    resolution: {integrity: sha512-YfbcO7jXDdyj0DGxYVSlSeQNHbD7XPWvrVWeVUujrQEoZzWJIRrCPoyk6kL6IAjAG2IolMK4T0hNUe0HOUs5Jw==}
+  js-yaml@3.15.2:
+    resolution: {integrity: sha512-6EuL879VkRA+1Cz578mKMiKvjPNEuk6+r1JaFzoSWejZmtf7xWbIyw1e3KkxlkzTIt9Taw6JBhEppG7utc1P+w==}
     hasBin: true
 
   js-yaml@4.3.2:
@@ -8537,7 +8543,7 @@ snapshots:
 
   '@marijn/find-cluster-break@1.0.4': {}
 
-  '@modelcontextprotocol/sdk@1.25.2(hono@4.13.23)(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.32.2(zod@3.25.76)':
     dependencies:
       '@hono/node-server': 1.19.19(hono@4.13.23)
       ajv: 8.20.0
@@ -8548,7 +8554,8 @@ snapshots:
       eventsource: 3.0.7
       eventsource-parser: 3.1.1
       express: 5.3.0
-      express-rate-limit: 7.5.1(express@5.3.0)
+      express-rate-limit: 8.7.5(express@5.3.0)
+      hono: 4.13.23
       jose: 6.2.18
       json-schema-typed: 8.0.2
       pkce-challenge: 5.0.2
@@ -8556,7 +8563,6 @@ snapshots:
       zod: 3.25.76
       zod-to-json-schema: 3.25.2(zod@3.25.76)
     transitivePeerDependencies:
-      - hono
       - supports-color
 
   '@module-federation/dts-plugin@2.9.3(typescript@7.0.2)':
@@ -10843,7 +10849,7 @@ snapshots:
   '@vercel/frameworks@3.29.0':
     dependencies:
       '@vercel/error-utils': 2.2.0
-      js-yaml: 3.13.1
+      js-yaml: 3.15.2
       smol-toml: 1.9.1
 
   '@vercel/microfrontends@2.4.2(next@16.4.6(@opentelemetry/api@1.10.0)(@types/node@26.6.11)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(vite@8.4.0(@types/node@26.6.11)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.23.15)(yaml@2.9.1))':
@@ -11704,9 +11710,13 @@ snapshots:
 
   exif-component@1.0.1: {}
 
-  express-rate-limit@7.5.1(express@5.3.0):
+  express-rate-limit@8.7.5(express@5.3.0):
     dependencies:
+      debug: 4.4.3(supports-color@8.1.1)
       express: 5.3.0
+      ip-address: 10.7.6
+    transitivePeerDependencies:
+      - supports-color
 
   express@5.3.0:
     dependencies:
@@ -12153,6 +12163,8 @@ snapshots:
 
   interestfor@1.0.14: {}
 
+  ip-address@10.7.6: {}
+
   ipaddr.js@1.9.1: {}
 
   ipaddr.js@2.5.0: {}
@@ -12273,7 +12285,7 @@ snapshots:
 
   js-tokens@4.0.0: {}
 
-  js-yaml@3.13.1:
+  js-yaml@3.15.2:
     dependencies:
       argparse: 1.0.10
       esprima: 4.0.1
@@ -12610,16 +12622,15 @@ snapshots:
     dependencies:
       content-type: 2.1.0
 
-  next-devtools-mcp@0.4.0(hono@4.13.23):
+  next-devtools-mcp@0.4.0:
     dependencies:
-      '@modelcontextprotocol/sdk': 1.25.2(hono@4.13.23)(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.32.2(zod@3.25.76)
       find-process: 2.0.0
       pid-port: 2.0.0
       undici: 7.30.2
       zod: 3.25.76
     transitivePeerDependencies:
       - '@cfworker/json-schema'
-      - hono
       - supports-color
 
   next-sanity@13.5.1(@sanity/client@8.17.0)(@types/react@19.3.3)(next@16.4.6(@opentelemetry/api@1.10.0)(@types/node@26.6.11)(babel-plugin-react-compiler@1.0.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(sanity@6.25.0(@noble/hashes@2.4.0)(@types/node@26.6.11)(@types/react-dom@19.3.0(@types/react@19.3.3))(@types/react@19.3.3)(babel-plugin-react-compiler@1.0.0)(esbuild@0.28.2)(jiti@2.7.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)(styled-components@6.7.0(css-to-react-native@3.2.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(tsx@4.23.15)(typescript@7.0.2))(styled-components@6.7.0(css-to-react-native@3.2.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(typescript@7.0.2):
