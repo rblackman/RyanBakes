@@ -10,7 +10,7 @@ type Props = Readonly<{
 export default function HomeHero({ tagline, description }: Props) {
 	return (
 		<section className={styles.hero} aria-labelledby="home-tagline">
-			<Heading level={2} id="home-tagline" className={styles.tagline}>
+			<Heading level={1} id="home-tagline" className={styles.tagline}>
 				{tagline}
 			</Heading>
 			<p className={styles.description}>{description}</p>

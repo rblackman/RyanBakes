@@ -7,16 +7,16 @@
 	min-width: 100%;
 	overflow: hidden;
 	background-color: var(--primary);
-	background-position: center;
-	background-size: cover;
-	background-repeat: no-repeat;
-	background-attachment: fixed;
-	background-image: var(--bgUrl);
 	display: grid;
 	place-content: end start;
 }
 
+.heroImage {
+	object-fit: cover;
+}
+
 .headingWrap {
+	position: relative;
 	background: rgba(var(--primary_r), var(--primary_g), var(--primary_b), 0.85);
 	color: var(--primary-contrast);
 	padding: 1rem 4rem;
@@ -29,7 +29,6 @@
 	.heroContainer {
 		--hero-aspectRatio_W: 8;
 		--hero-aspectRatio_H: 3;
-		background-image: var(--bgUrl-desk);
 	}
 }
 
@@ -37,8 +36,6 @@
 	.heroContainer {
 		--hero-aspectRatio_W: 1;
 		--hero-aspectRatio_H: 1;
-		background-image: var(--bgUrl-tablet);
-		background-attachment: scroll;
 	}
 }
 
@@ -46,7 +43,6 @@
 	.heroContainer {
 		--hero-aspectRatio_W: 3;
 		--hero-aspectRatio_H: 4;
-		background-image: var(--bgUrl-mobile);
 	}
 
 	.headingWrap {

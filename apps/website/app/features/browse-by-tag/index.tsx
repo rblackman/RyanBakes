@@ -19,7 +19,7 @@ export default function BrowseByTag({ summaries }: Props) {
 
 	return (
 		<section className={styles.browse} aria-labelledby="browse-heading">
-			<Heading level={3} id="browse-heading">
+			<Heading level={2} id="browse-heading">
 				Find a recipe
 			</Heading>
 

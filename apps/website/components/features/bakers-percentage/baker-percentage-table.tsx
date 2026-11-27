@@ -46,7 +46,7 @@ function ingredientCompare(a: BakerPercentageEntry, b: BakerPercentageEntry): nu
 	return a.name.localeCompare(b.name);
 }
 
-export default function BakersPercentageTable({ heading, headingLevel = 3, ingredients }: Props) {
+export default function BakersPercentageTable({ heading, headingLevel = 2, ingredients }: Props) {
 	const totalFlourWeight = calculateTotalFlourWeight(ingredients);
 	const totalHydration = calculateTotalHydration(ingredients, totalFlourWeight);
 	const sorted = [...ingredients].sort(ingredientCompare);

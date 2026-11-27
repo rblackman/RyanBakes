@@ -34,9 +34,9 @@ Core principle:
 │       │   └── static/         GROQ through the plain client: slug and tag lists
 │       ├── shared/
 │       │   ├── config/         Zod env schema, validated client and server env
-│       │   └── lib/            Sanity client and defineLive setup
+│       │   └── lib/            Sanity client, defineLive setup and image URL helpers
 │       ├── helpers/            pure functions (throwError, canonical URLs, ...)
-│       ├── hooks/              small utilities (createImageBuilder lives here)
+│       ├── hooks/              small client-side React hooks
 │       ├── styles/             global.css and variables.css
 │       ├── types/              hand-written types that are not Sanity's (Keyed, ...)
 │       ├── scripts/            validate-env.ts
@@ -73,7 +73,8 @@ apps/cms/schemas  ──sanity schema extract──▶  apps/cms/schema.json
 3. **Queries.** Every GROQ query lives in `apps/website/queries`, one exported function per file.
    Components never build GROQ.
 4. **Rendering.** Pages are server components. Only a few leaf components are client components
-   (`image`, `tag`, `bake-mode-toggle`, `disable-draft-mode`). No Sanity client runs in the browser.
+   (`bake-mode-toggle`, `disable-draft-mode`). The `Image` component is a server component that
+   renders `next-sanity`'s image component. No Sanity client runs in the browser.
 
 ### Two kinds of queries
 
@@ -101,8 +102,10 @@ text back to fields.
 | `/api/draft-mode/disable`   | Turns it off                                                               |
 | `/.well-known/vercel/flags` | Flags discovery endpoint for the Vercel toolbar                            |
 
-The root layout loads `siteConfig` for the page title template and `<html lang>`, renders the main
-navigation, and mounts `<SanityLive />`.
+The root layout loads `siteConfig` for the page title template and `<html lang>`, renders a skip
+link and the main navigation, wraps every page in the one `<main id="main-content">` landmark, and
+mounts `<SanityLive />`. Pages don't render their own `<main>`. Each page has exactly one `<h1>`, its
+title; the site name in the navigation is a paragraph.
 
 ---
 
@@ -141,10 +144,19 @@ Vercel preview host (`SANITY_STUDIO_VERCEL_PREVIEW_URL`).
 
 ## Images
 
-Sanity images are stored as `imageWithAlt` or `inlineImage`. `createImageBuilder`
-(`hooks/useImageBuilder.ts`; it is a plain function despite the file name) turns an asset reference
-into a `cdn.sanity.io` URL with width, height, crop, quality and WebP format. `next.config.mjs` allows
-`cdn.sanity.io` as a remote image host. Every caller checks that `asset` exists first.
+Sanity images are stored as `imageWithAlt` or `inlineImage`. Render them with the `Image` component
+in `components/ui/image`. It wraps `Image` from `next-sanity/image`, which builds a `srcset` on the
+Sanity image CDN (`cdn.sanity.io`) with `auto=format` (AVIF or WebP when the browser supports it) and
+applies the crop and hotspot set in the Studio. Images never go through Vercel's image optimizer.
+
+- Pass the display `width` and the `aspectRatio`; the CDN crops to that ratio around the hotspot.
+- Pass `sizes` when the rendered width differs from `width`, and `preload` only on the image that is
+  likely the page's largest contentful paint (the recipe hero and the featured recipe).
+- Alt text comes from the image's `alt` field, or is empty when `emptyAlt` is set.
+
+For a plain URL, such as an Open Graph image, use `urlForImage` or `socialImageUrl` from
+`shared/lib/image.ts`. They use `@sanity/image-url`, so the parameters are the CDN's real ones (`w`,
+`h`, `fit`, `fm`, `q`). Every caller checks that `asset` exists first.
 
 ---
 

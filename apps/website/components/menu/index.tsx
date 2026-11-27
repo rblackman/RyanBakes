@@ -12,11 +12,12 @@ export default async function MainNav() {
 	return (
 		<div className={styles.headerWrap}>
 			<header className={styles.header}>
-				<h1 className={styles.siteName}>
+				{/* Not a heading: each page's own title is its h1. */}
+				<p className={styles.siteName}>
 					<Link href="/">{title}</Link>
-				</h1>
+				</p>
 
-				<nav className={styles.nav}>
+				<nav className={styles.nav} aria-label="Main">
 					<ul className={styles.navList}>
 						{mainNav.map(({ id, ...item }) => (
 							<li key={id} className={styles.navListItem}>

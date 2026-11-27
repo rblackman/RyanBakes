@@ -39,7 +39,7 @@ export default function StepItem({ ingredients, step: { title, content }, units 
 				</ul>
 			)}
 			<div className={styles.directionsWrap}>
-				<Heading level={4} style={{ margin: 0 }}>
+				<Heading level={3} style={{ margin: 0 }}>
 					{headingTitle}
 				</Heading>
 				{(content ?? []).map((block: StepBlock) => {

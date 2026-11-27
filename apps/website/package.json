@@ -21,6 +21,7 @@
 		"@portabletext/react": "^8.0.2",
 		"@ryan-bakes/sanity-types": "workspace:*",
 		"@sanity/client": "^8.17.0",
+		"@sanity/image-url": "^2.2.0",
 		"@sanity/webhook": "^4.0.4",
 		"clsx": "^2.1.1",
 		"flags": "^4.5.3",

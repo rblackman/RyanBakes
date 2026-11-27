@@ -3,12 +3,12 @@ import BakeModeToggle from "@components/ui/bake-mode-toggle";
 import Tags from "@components/ui/tags";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
 import resolveParams from "@helpers/resolve-params";
-import createImageBuilder from "@hooks/useImageBuilder";
 import getAllUnits from "@queries/live/getAllUnits";
 import getRecipeBySlug from "@queries/live/getRecipeBySlug";
 import getAllRecipeSlugs from "@queries/static/getAllRecipeSlugs";
 import type { Ingredient, Step } from "@ryan-bakes/sanity-types";
 import { clientEnv } from "@shared/config/env.client";
+import { socialImageUrl } from "@shared/lib/image";
 import type Keyed from "@t/keyed";
 import type { Metadata } from "next";
 import "server-only";
@@ -45,17 +45,8 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 	let ogAlt: string | undefined;
 
 	if (openGraphImage?.asset) {
-		const builder = createImageBuilder(openGraphImage.asset);
-		ogImage = builder.buildUrlWithOptions({
-			width: 1200,
-			height: 627,
-			quality: 60,
-		});
-		twitterImage = builder.buildUrlWithOptions({
-			width: 4096,
-			height: 2048,
-			quality: 60,
-		});
+		ogImage = socialImageUrl(openGraphImage, 1200, 630);
+		twitterImage = socialImageUrl(openGraphImage, 1200, 600);
 		ogAlt = openGraphImage.alt ?? undefined;
 	}
 
@@ -81,7 +72,7 @@ export async function generateMetadata({ params }: Readonly<Props>): Promise<Met
 							url: ogImage,
 							alt: ogAlt,
 							width: 1200,
-							height: 627,
+							height: 630,
 						},
 					]
 				: [],
@@ -108,7 +99,7 @@ export default async function Page({ params }: Readonly<Props>) {
 	const commentary = recipe.commentary ?? [];
 
 	return (
-		<main>
+		<>
 			<RecipeHero recipe={recipe} />
 			<div className="content">
 				<Tags tags={tags} />
@@ -118,7 +109,7 @@ export default async function Page({ params }: Readonly<Props>) {
 				{showBakerPercentage && <BakersPercentage ingredients={ingredients} />}
 				<RecipeSteps ingredients={ingredients} steps={steps} units={units} />
 			</div>
-		</main>
+		</>
 	);
 }
 

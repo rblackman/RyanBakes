@@ -1,4 +1,3 @@
-"use client";
 import Link from "next/link";
 import { BiPurchaseTagAlt } from "react-icons/bi";
 import styles from "./tag.module.css";

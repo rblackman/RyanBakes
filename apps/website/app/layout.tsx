@@ -16,7 +16,7 @@ import "../styles/global.css";
 import "../styles/variables.css";
 
 export const viewport: Viewport = {
-	themeColor: "#0d19a3",
+	themeColor: "#0c2d57",
 	width: "device-width",
 	initialScale: 1,
 };
@@ -52,15 +52,21 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-	const { lang } = await getSiteConfig();
+	const { lang: rawLang } = await getSiteConfig();
+	const lang = stegaClean(rawLang)?.trim() || "en";
 	const { isEnabled } = await draftMode();
 	const shouldInjectToolbar = process.env.NODE_ENV === "development" || isEnabled;
 
 	return (
 		<html lang={lang}>
 			<body>
+				<a className="skipLink" href="#main-content">
+					Skip to main content
+				</a>
 				<MainNav />
-				{children}
+				<main id="main-content" tabIndex={-1}>
+					{children}
+				</main>
 				<SanityLive action={handleLiveEvent} />
 				{isEnabled ? (
 					<>

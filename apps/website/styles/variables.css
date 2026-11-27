@@ -57,7 +57,8 @@
 	--bp_mobile: 768px;
 
 	--animation-duration: 0.2s;
-	--focus-outline-color: var(--secondary);
+	/* Dark enough for 3:1 against the light backgrounds (WCAG 2.2). Dark areas such as the header override it. */
+	--focus-outline-color: var(--secondary-dark);
 	--focus-outline-offset: 0.2rem;
 	--focus-outline-width: 0.15rem;
 }

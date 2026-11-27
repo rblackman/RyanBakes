@@ -4,7 +4,7 @@ import { type CSSProperties, createElement, type ReactNode } from "react";
 import "server-only";
 
 type Props = Readonly<{
-	level: 2 | 3 | 4;
+	level: 1 | 2 | 3 | 4;
 	children: ReactNode;
 	style?: CSSProperties | undefined;
 	sr?: boolean;
@@ -13,9 +13,12 @@ type Props = Readonly<{
 }>;
 
 export default function Heading({ level, children, sr, style: inlineStyles, className: providedClass, id }: Props) {
-	let heading: "h2" | "h3" | "h4";
+	let heading: "h1" | "h2" | "h3" | "h4";
 
 	switch (level) {
+		case 1:
+			heading = "h1";
+			break;
 		case 2:
 			heading = "h2";
 			break;
@@ -39,8 +42,3 @@ export default function Heading({ level, children, sr, style: inlineStyles, clas
 
 	return createElement(heading, props, children);
 }
-
-Heading.defaultProps = {
-	sr: false,
-	style: undefined,
-};

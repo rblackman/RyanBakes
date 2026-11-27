@@ -63,17 +63,15 @@ export default async function Tag({ params }: Props) {
 		.map((recipe, index): { recipe: Recipe; index: number } => ({ recipe, index }));
 
 	return (
-		<main>
-			<div className="content">
-				<Heading level={2}>Tag: {formatTagName(tag)}</Heading>
-				<p className={styles.summary}>
-					{formatRecipeCount(recipes.length)} · <Link href="/tags">All tags</Link>
-				</p>
+		<div className="content">
+			<Heading level={1}>Tag: {formatTagName(tag)}</Heading>
+			<p className={styles.summary}>
+				{formatRecipeCount(recipes.length)} · <Link href="/tags">All tags</Link>
+			</p>
 
-				<FeaturedRecipe recipe={featuredRecipe} priority large />
-				{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
-			</div>
-		</main>
+			<FeaturedRecipe recipe={featuredRecipe} priority large />
+			{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
+		</div>
 	);
 }
 
