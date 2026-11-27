@@ -22,13 +22,14 @@ export default defineType({
 				source: "title",
 				maxLength: 96,
 			},
-			description: "Page slug",
+			description: "The URL path for this page, e.g. about for /about.",
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "content",
 			title: "Content",
 			type: "array",
+			description: "Text, images and recipe cards, shown in this order.",
 			of: [
 				defineArrayMember({ type: "inlineImage" }),
 				defineArrayMember({ type: "textSection" }),

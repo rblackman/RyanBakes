@@ -15,6 +15,8 @@
 	--neutral-900: #1f2a36;
 
 	--text: var(--neutral-900);
+	/* Secondary text; at least 4.5:1 on --bg and --bg-alt (--neutral-600 is not) */
+	--text-muted: #556270;
 	--bg: var(--neutral-50);
 	--bg-alt: var(--neutral-100);
 	--bg-subtle: linear-gradient(90deg, #eef1f4, #f7f8fa);

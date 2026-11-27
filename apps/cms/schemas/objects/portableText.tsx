@@ -1,4 +1,5 @@
 import { defineArrayMember, defineType } from "sanity";
+import { warnOnPlaceholderText } from "../../helpers/validation";
 
 export default defineType({
 	name: "portableText",
@@ -24,5 +25,5 @@ export default defineType({
 			},
 		}),
 	],
-	validation: (Rule) => Rule.required(),
+	validation: (Rule) => [Rule.required(), Rule.custom(warnOnPlaceholderText).warning()],
 });
