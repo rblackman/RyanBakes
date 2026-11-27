@@ -11,18 +11,21 @@
 	display: inline-flex;
 	align-items: baseline;
 	gap: 0.5rem;
-	padding: 0.4rem 0.9rem;
+	padding: 0.4rem 0.95rem;
 	color: var(--text);
-	background: var(--secondary-light);
-	border: 1px solid transparent;
+	background: var(--surface);
+	border: 1px solid var(--border);
 	border-radius: 999px;
-	font-size: 0.85rem;
+	font-size: var(--font-size-sm);
 	text-decoration: none;
-	transition: border-color var(--animation-duration) ease-in-out;
+	transition:
+		border-color var(--animation-duration) ease-in-out,
+		background-color var(--animation-duration) ease-in-out;
 }
 
 .tagLink:hover,
 .tagLink:focus-visible {
+	background: var(--secondary-light);
 	border-color: var(--secondary-dark);
 }
 

@@ -1,4 +1,5 @@
 .introWrap {
 	margin-bottom: var(--space-5);
-	font-size: 1.1rem;
+	font-size: 1.05rem;
+	line-height: 1.65;
 }

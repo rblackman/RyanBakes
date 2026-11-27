@@ -141,9 +141,11 @@ The website uses Zod 4. Write the current API, not Zod 3 habits:
   `components/ui` (small) or `components/features` (sections).
 - Styles are CSS Modules next to the component (`name.module.css`) using tokens from
   `styles/variables.css`: the spacing scale (`--space-1` to `--space-7`), the type scale
-  (`--font-size-*`), `--surface`, `--border`, `--radius` and the card shadows. Prefer a token to a
-  one-off value. Data tables use the shared `@components/ui/table/table.module.css`.
-- Keep text contrast at 4.5:1 or better (`--text-muted` for secondary text, not `--neutral-600`) and
+  (`--font-size-*`), `--font-serif` and `--font-sans`, `--surface`, `--border`, `--radius` and the
+  card shadows. Prefer a token to a one-off value. Fonts load only through `next/font` in
+  `app/layout.tsx`; don't add a font `<link>` or `@import`. Data tables use the shared `@components/ui/table/table.module.css`.
+- Keep text contrast at 4.5:1 or better (`--text-muted` for secondary text, not `--neutral-600`;
+  `--secondary-dark` for accent text, not `--secondary`) and
   keep visible focus rings (`--focus-outline-*`). The Lighthouse check fails below 100 accessibility.
 
 ### Sanity Studio

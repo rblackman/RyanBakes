@@ -7,18 +7,30 @@
 	--featured-padding: var(--space-4);
 	position: relative;
 	display: grid;
-	max-width: 60rem;
+	/* Full width of the column, so it lines up exactly with the card grid below it. */
 	overflow: hidden;
 	background: var(--surface);
 	border: 1px solid var(--border);
 	border-radius: var(--radius);
 	box-shadow: var(--card-shadow);
-	transition: box-shadow var(--animation-duration) ease-in-out;
+	transition:
+		box-shadow 0.3s var(--ease-out),
+		border-color 0.3s var(--ease-out);
 }
 
 .featuredRecipe:hover,
 .featuredRecipe:focus-within {
+	border-color: var(--border-strong);
 	box-shadow: var(--card-shadow-hover);
+}
+
+.img img {
+	transition: transform 0.6s var(--ease-out);
+}
+
+.featuredRecipe:hover .img img,
+.featuredRecipe:focus-within .img img {
+	transform: scale(1.03);
 }
 
 .featuredRecipe + .featuredRecipe {
@@ -26,11 +38,12 @@
 }
 
 .featuredRecipe.large {
+	--featured-padding: var(--space-6);
 	grid-template-areas: "img title" "img tags" "img blurb";
 	grid-template-columns: minmax(0, 17.5rem) 1fr;
 	grid-template-rows: min-content min-content 1fr;
-	column-gap: var(--space-5);
-	row-gap: var(--space-2);
+	column-gap: var(--space-6);
+	row-gap: var(--space-3);
 }
 
 .featuredRecipe.noLarge {
@@ -52,10 +65,9 @@
 .featuredRecipe .heading {
 	grid-area: title;
 	margin: var(--featured-padding) var(--featured-padding) 0 0;
-	text-transform: none;
-	letter-spacing: normal;
 	font-size: var(--font-size-xl);
-	font-weight: 700;
+	font-weight: 500;
+	letter-spacing: -0.015em;
 }
 
 .heading a {
@@ -106,6 +118,7 @@
 .blurb {
 	grid-area: blurb;
 	padding-bottom: var(--featured-padding);
+	color: var(--text-muted);
 }
 
 .noLarge .blurb {
@@ -130,9 +143,11 @@
 /* On phones the large layout stacks: the square picture on top, then the text. */
 @media only screen and (max-width: 640px) {
 	.featuredRecipe.large {
+		--featured-padding: var(--space-4);
 		grid-template-areas: "img" "title" "tags" "blurb";
 		grid-template-columns: 1fr;
 		grid-template-rows: auto;
+		row-gap: var(--space-2);
 	}
 
 	.large :is(.heading, .tags, .blurb) {
@@ -142,5 +157,12 @@
 	.featuredRecipe.large .heading {
 		margin-top: var(--space-2);
 		font-size: var(--font-size-lg);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.featuredRecipe:hover .img img,
+	.featuredRecipe:focus-within .img img {
+		transform: none;
 	}
 }

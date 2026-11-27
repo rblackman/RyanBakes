@@ -1,6 +1,7 @@
 /*
  * Shared look for data tables (ingredients, baker's percentages). Import this module and use
  * .wrap around a <table className={table.table}>; mark number columns with .num.
+ * Rows are striped to help keep your place while measuring.
  */
 .wrap {
 	max-width: 40rem;
@@ -17,14 +18,14 @@
 }
 
 .table th {
-	padding: var(--space-2) var(--space-4);
+	padding: var(--space-3) var(--space-4) var(--space-2);
 	text-align: left;
 	font-size: var(--font-size-xs);
 	font-weight: 600;
-	letter-spacing: 0.06em;
+	letter-spacing: 0.08em;
 	text-transform: uppercase;
 	color: var(--text-muted);
-	border-bottom: 0.1rem solid var(--secondary-dark);
+	border-bottom: 1px solid var(--border-strong);
 }
 
 .table td {
@@ -32,13 +33,16 @@
 	vertical-align: top;
 }
 
-.table tbody tr + tr td {
-	border-top: 1px solid var(--border);
+.table tbody tr {
+	transition: background-color var(--animation-duration) ease-in-out;
 }
 
-/* Helps keep your place in the list while measuring. */
+.table tbody tr:nth-child(even) {
+	background: var(--surface-stripe);
+}
+
 .table tbody tr:hover {
-	background: var(--bg-alt);
+	background: var(--secondary-light);
 }
 
 .table :is(th, td).num {

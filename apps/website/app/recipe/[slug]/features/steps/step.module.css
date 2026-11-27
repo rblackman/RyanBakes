@@ -1,36 +1,60 @@
 /*
  * One step: the ingredients it uses on the left, the directions on the right. On narrow screens
- * the ingredients sit under the step title. Steps are numbered with a CSS counter.
+ * the ingredients sit under the step title. Steps are numbered with a CSS counter, and every
+ * other step sits on a soft band so it's easy to keep your place.
  */
 .stepWrap {
 	counter-increment: step;
 	display: grid;
-	grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+	grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
 	grid-template-areas: "ing step";
 	gap: var(--space-6);
 	align-items: start;
-	padding: var(--space-5) 0;
-	border-bottom: 1px solid var(--border);
+	padding: var(--space-5) var(--space-5);
+	border-radius: var(--radius);
 }
 
+.stepWrap:nth-child(even) {
+	background: var(--bg-alt);
+}
+
+/*
+ * Amounts and names line up in two columns across the list. Each item is its own grid row on
+ * the list's columns (subgrid), so the list keeps its list semantics.
+ */
 .ingredientsWrap {
 	grid-area: ing;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-1);
+	display: grid;
+	grid-template-columns: max-content minmax(0, 1fr);
+	column-gap: var(--space-3);
+	row-gap: var(--space-1);
+	align-content: start;
 	margin: 0;
-	padding: var(--space-2) var(--space-3);
+	/* Sits on the heading's first line. */
+	padding: 0.35rem 0 0;
 	list-style: none;
 	font-size: var(--font-size-sm);
-	line-height: 1.35;
-	background: var(--secondary-light);
-	border-left: 0.2rem solid var(--secondary-dark);
-	border-radius: 0 var(--radius) var(--radius) 0;
+	line-height: 1.4;
+	color: var(--text-muted);
+}
+
+.ingredientsWrap li {
+	display: grid;
+	grid-column: 1 / -1;
+	grid-template-columns: subgrid;
 }
 
 .amount {
+	grid-column: 1;
 	font-weight: 600;
+	font-variant-numeric: tabular-nums;
 	white-space: nowrap;
+	color: var(--text);
+	text-align: right;
+}
+
+.ingredientName {
+	grid-column: 2;
 }
 
 .directionsWrap {
@@ -38,7 +62,8 @@
 	max-width: var(--reading-width);
 }
 
-.stepHeading {
+/* Two classes so this beats the global h3 margins. */
+.directionsWrap .stepHeading {
 	display: flex;
 	align-items: baseline;
 	gap: var(--space-3);
@@ -50,15 +75,18 @@
 	flex-shrink: 0;
 	display: inline-grid;
 	place-items: center;
-	min-width: 1.6em;
-	height: 1.6em;
+	width: 1.75em;
+	height: 1.75em;
+	border: 1px solid var(--secondary-dark);
 	border-radius: 999px;
-	background: var(--primary);
-	color: var(--primary-contrast);
+	color: var(--secondary-dark);
+	font-family: var(--font-serif);
 	font-size: var(--font-size-sm);
-	font-variant-numeric: tabular-nums;
+	font-weight: 600;
+	font-variant-numeric: lining-nums tabular-nums;
+	line-height: 1;
 	/* Lines the circle up with the heading text, which is baseline aligned. */
-	transform: translateY(-0.1em);
+	transform: translateY(-0.15em);
 }
 
 .directionsWrap p:last-of-type {
@@ -70,5 +98,10 @@
 		grid-template-columns: minmax(0, 1fr);
 		grid-template-areas: "step" "ing";
 		gap: var(--space-3);
+		padding: var(--space-4);
+	}
+
+	.ingredientsWrap {
+		padding: 0;
 	}
 }

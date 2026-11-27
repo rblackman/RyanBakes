@@ -7,17 +7,17 @@
 	display: flex;
 	flex-flow: row wrap;
 	row-gap: var(--space-1);
-	font-size: 0.95rem;
+	font-size: var(--font-size-sm);
 }
 
 .dl dt {
 	margin: 0;
-	font-weight: bold;
+	font-weight: 500;
+	color: var(--text-muted);
 }
 
 .dl dt::after {
 	content: ":";
-	font-weight: normal;
 	margin-right: var(--space-1);
 }
 

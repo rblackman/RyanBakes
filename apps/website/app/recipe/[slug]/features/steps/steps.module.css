@@ -1,6 +1,7 @@
 .ol {
+	display: flex;
+	flex-direction: column;
 	padding: 0;
 	list-style: none;
 	counter-reset: step;
-	border-top: 1px solid var(--border);
 }

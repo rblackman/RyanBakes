@@ -44,7 +44,7 @@ export default function StepItem({ ingredients, step: { title, content }, units 
 										</span>{" "}
 									</>
 								)}
-								{ingredientName}
+								<span className={styles.ingredientName}>{ingredientName}</span>
 							</li>
 						);
 					})}
