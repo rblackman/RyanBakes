@@ -21,4 +21,10 @@ export default defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 	],
+	preview: {
+		select: { title: "recipe.title", media: "recipe.picture", large: "large" },
+		prepare({ title, media, large }) {
+			return { title: title ?? "No recipe picked", subtitle: large ? "Recipe card, large" : "Recipe card", media };
+		},
+	},
 });
