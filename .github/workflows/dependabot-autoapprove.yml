@@ -1,29 +1,50 @@
-name: Dependabot Auto-approve
+name: Dependabot auto-merge
 
+# Turns on squash auto-merge for Dependabot patch and minor updates, so they
+# land once every required check passes. Major updates are left for a person
+# to review, as AGENTS.md asks. No approval step: the main ruleset requires
+# zero approvals, so auto-merge alone is enough.
 on:
   pull_request:
     types: [opened, reopened, synchronize, ready_for_review]
 
 permissions:
   contents: read
-  pull-requests: write
 
 jobs:
-  autoapprove:
-    name: Approve + enable auto-merge
+  automerge:
+    name: Enable auto-merge (patch/minor)
     runs-on: ubuntu-latest
+    timeout-minutes: 5
 
-    if: ${{ github.actor == 'dependabot[bot]' }}
+    # Check the PR author, not github.actor: github.actor is whoever triggered
+    # this run, so a person re-running it on a Dependabot PR would also match.
+    if: ${{ github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'rblackman/RyanBakes' }}
+
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
-      - name: Approve PR
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr review "${{ github.event.pull_request.number }}" --approve
+      - name: Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
+      # update-type is the largest bump in the PR, so a grouped PR with one
+      # major update in it is left for review too. Only an explicit patch or
+      # minor bump qualifies; an unknown update type is left for review.
       - name: Enable auto-merge (squash)
+        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr merge "${{ github.event.pull_request.number }}" --squash --auto
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: gh pr merge --auto --squash "$PR_URL"
+
+      - name: Leave for review
+        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-patch' && steps.metadata.outputs.update-type != 'version-update:semver-minor' }}
+        env:
+          DEPS: ${{ steps.metadata.outputs.dependency-names }}
+          UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
+        run: echo "::notice title=Needs review::Not auto-merged (${UPDATE_TYPE:-unknown update type}). Updates $DEPS"
