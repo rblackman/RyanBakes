@@ -34,20 +34,47 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-      # update-type is the largest bump in the PR, so a grouped PR with one
-      # major update in it is left for review too. Only an explicit patch or
-      # minor bump qualifies; an unknown update type is left for review.
+      # Decide once, from every dependency in the PR, not from update-type:
+      # update-type is the largest *known* bump, so a group with a minor update
+      # and an unknown one would still read as minor. fetch-metadata also reads
+      # only the PR's first commit, so a PR with extra commits pushed on top is
+      # left for review. Dependabot's own rebases keep a single commit.
+      - name: Check eligibility
+        id: eligible
+        if: ${{ !cancelled() }}
+        env:
+          COMMITS: ${{ github.event.pull_request.commits }}
+          UPDATES: ${{ steps.metadata.outputs.updated-dependencies-json }}
+        run: |
+          eligible=false
+          if [ "$COMMITS" = "1" ]; then
+            if printf '%s' "${UPDATES:-[]}" | jq -e 'length > 0 and all(.[]; .updateType == "version-update:semver-patch" or .updateType == "version-update:semver-minor")' > /dev/null 2>&1; then
+              eligible=true
+            fi
+          fi
+          echo "result=$eligible" >> "$GITHUB_OUTPUT"
+
       - name: Enable auto-merge (squash)
-        if: ${{ steps.metadata.outputs.update-type == 'version-update:semver-patch' || steps.metadata.outputs.update-type == 'version-update:semver-minor' }}
+        if: ${{ steps.eligible.outputs.result == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_URL: ${{ github.event.pull_request.html_url }}
         run: gh pr merge --auto --squash "$PR_URL"
 
-      # Also runs when the metadata step failed, so the run says why nothing merged.
+      # Also runs when an earlier step failed, so the run says why nothing
+      # merged. Turns off auto-merge if an earlier run had turned it on, so a
+      # PR that stopped qualifying (a new commit, a bigger bump) can't merge
+      # on the old decision. Note this also clears auto-merge a person turned
+      # on by hand for an ineligible Dependabot PR when Dependabot rebases it.
       - name: Leave for review
-        if: ${{ !cancelled() && steps.metadata.outputs.update-type != 'version-update:semver-patch' && steps.metadata.outputs.update-type != 'version-update:semver-minor' }}
+        if: ${{ !cancelled() && steps.eligible.outputs.result != 'true' }}
         env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+          COMMITS: ${{ github.event.pull_request.commits }}
           DEPS: ${{ steps.metadata.outputs.dependency-names }}
           UPDATE_TYPE: ${{ steps.metadata.outputs.update-type }}
-        run: echo "::notice title=Needs review::Not auto-merged (${UPDATE_TYPE:-unknown update type}). Updates $DEPS"
+        run: |
+          # Fails harmlessly when auto-merge is already off.
+          gh pr merge --disable-auto "$PR_URL" 2> /dev/null || echo "Auto-merge was not on."
+          echo "::notice title=Needs review::Not auto-merged (${UPDATE_TYPE:-unknown update type}, ${COMMITS} commit(s)). Updates $DEPS"
