@@ -33,8 +33,9 @@ jobs:
 
       # The title goes through env, never into the script, so a crafted title
       # can't run commands.
-      - name: Check title against commitlint.config.mjs
+      # Uses the repo's commitlint rules with default ignores turned off.
+      - name: Check title against commitlint rules
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
         run: |
-          printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --config commitlint.config.mjs
+          printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --config .github/commitlint-pr-title.config.mjs
