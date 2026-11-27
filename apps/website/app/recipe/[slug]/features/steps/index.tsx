@@ -35,7 +35,7 @@ export default function RecipeSteps({ ingredients, steps, units }: Props) {
 			<Heading level={2}>Instructions</Heading>
 			<ol className={styles.ol}>
 				{steps.map((step, i) => (
-					<StepItem key={step._key} step={step} ingredients={getIngredientsForIndex(i)} units={units} />
+					<StepItem key={step._key} number={i + 1} step={step} ingredients={getIngredientsForIndex(i)} units={units} />
 				))}
 			</ol>
 		</>

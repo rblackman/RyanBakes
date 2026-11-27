@@ -35,7 +35,7 @@
 	"scripts": {
 		"preinstall": "corepack enable",
 		"prepare": "husky",
-		"ci:verify": "pnpm run typegen && pnpm -w exec biome check . && pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit && pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit",
+		"ci:verify": "pnpm run typegen && pnpm -w exec biome check . && pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit && pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit && pnpm run test",
 		"dev:website": "pnpm --filter website dev",
 		"dev:cms": "pnpm --filter cms dev",
 		"dev:all": "pnpm -r --parallel --filter cms --filter website dev",
@@ -48,6 +48,7 @@
 		"typecheck": "pnpm -r --filter=!ryan-bakes typecheck",
 		"typecheck:website": "pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit",
 		"typecheck:cms": "pnpm -w exec tsc -p apps/cms/tsconfig.json --noEmit",
+		"test": "pnpm -w exec tsx --tsconfig apps/website/tsconfig.json --test \"apps/website/helpers/**/*.test.ts\"",
 		"validate:env": "pnpm --filter website validate:env",
 		"typegen": "pnpm --filter cms run schema:extract && pnpm --filter cms run typegen",
 		"deploy:cms": "pnpm --filter cms run deploy"

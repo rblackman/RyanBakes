@@ -50,6 +50,9 @@ jobs:
       - name: Type check CMS
         run: pnpm run typecheck:cms
 
+      - name: Unit tests (website helpers)
+        run: pnpm run test
+
   build:
     name: Build (non-fork PRs + main)
     runs-on: ubuntu-latest

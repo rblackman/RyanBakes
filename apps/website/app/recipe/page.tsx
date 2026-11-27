@@ -1,40 +1,25 @@
 import FeaturedRecipe from "@components/features/recipe/featured-recipe";
 import Heading from "@components/ui/heading";
 import PortableText from "@components/ui/portable-text";
-import buildCanonicalUrl from "@helpers/build-canonical-url";
+import buildPageMetadata from "@helpers/page-metadata";
+import portableTextToPlainText from "@helpers/structured-data/plain-text";
+import truncateDescription from "@helpers/truncate-description";
 import getRecipeById from "@queries/live/getRecipeById";
 import getRecipesPage from "@queries/live/getRecipesPage";
 import type { Recipe } from "@ryan-bakes/sanity-types";
+import getSiteInfo from "@shared/lib/site-info";
 import type { Metadata } from "next";
+import { stegaClean } from "next-sanity";
 import "server-only";
 import SecondaryFeaturedRecipes from "./features/secondary-featured-recipes";
 
 export async function generateMetadata(): Promise<Metadata> {
-	const recipesPage = await getRecipesPage();
-	const title = recipesPage.title ?? "Recipes";
-	const description = "Browse all recipes.";
-	const canonical = buildCanonicalUrl("/recipe");
+	const [recipesPage, site] = await Promise.all([getRecipesPage(), getSiteInfo()]);
+	const title = stegaClean(recipesPage.title)?.trim() || "Recipes";
+	const intro = portableTextToPlainText(stegaClean(recipesPage.intro));
+	const description = intro ? truncateDescription(intro) : `Featured recipes from ${site.title}.`;
 
-	return {
-		title,
-		description,
-		alternates: canonical ? { canonical } : undefined,
-		openGraph: canonical
-			? {
-					title,
-					description,
-					url: canonical,
-				}
-			: {
-					title,
-					description,
-				},
-		twitter: {
-			card: "summary_large_image",
-			title,
-			description,
-		},
-	};
+	return buildPageMetadata({ site, title, description, path: "/recipe" });
 }
 
 export default async function Page() {

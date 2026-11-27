@@ -40,6 +40,13 @@ draft mode) and a Dashboard.
 | `tagsPage`    | Content for `/tags` (singleton)             | `title`, `intro`, `featuredTag`, `secondaryFeature[]` (2 to 6 tag strings). Featured tags must match a recipe tag exactly or they are skipped |
 | `navItem`     | One entry in the main navigation            | `name`, `page` (ref to `page`, `tagsPage` or `recipesPage`)                                                                                 |
 
+Recipe pages also describe the recipe to search engines as schema.org `Recipe` structured data, built
+from these fields: `title`, `description`, `picture`, `totalTime` and `bakeTime` (prep time is the
+difference), `serves`, `tags` (as keywords), `ingredients` (as the page shows them) and `steps` (title
+and text). Empty fields are left out, so filling in times, servings and a picture is what makes a
+recipe eligible for Google's recipe results. The author is "Ryan" (`defaultAuthorName` in
+`apps/website/shared/config/site-defaults.ts`); there is no author field.
+
 Tags are plain strings on each recipe, not documents. `/tags` and `/tags/[slug]` are built from the
 distinct values across all recipes, so a tag exists only while a recipe uses it and matching is
 exact (case and spelling).

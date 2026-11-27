@@ -1,16 +1,13 @@
 import Footer from "@components/footer";
 import MainNav from "@components/menu";
 import DisableDraftMode from "@components/ui/disable-draft-mode";
-import getSiteConfig from "@queries/live/getSiteConfig";
-import { clientEnv } from "@shared/config/env.client";
-import { defaultSiteDescription, defaultSiteTitle } from "@shared/config/site-defaults";
 import { SanityLive } from "@shared/lib/live";
 import { handleLiveEvent } from "@shared/lib/live-action";
+import getSiteInfo from "@shared/lib/site-info";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Source_Sans_3 } from "next/font/google";
 import { draftMode } from "next/headers";
-import { stegaClean } from "next-sanity";
 import { VisualEditing } from "next-sanity/visual-editing";
 import type { ReactNode } from "react";
 import "server-only";
@@ -41,38 +38,40 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-	const { title, url, description } = await getSiteConfig();
-	const baseUrl = url ?? clientEnv.NEXT_PUBLIC_BASE_URL;
+	const site = await getSiteInfo();
 
-	const defaultTitle = stegaClean(title)?.trim() || defaultSiteTitle;
-	const defaultDescription = stegaClean(description)?.trim() || defaultSiteDescription;
-	const metadataBase = baseUrl ? new URL(baseUrl) : undefined;
-
+	// Pages set their own title, description, canonical URL and social cards through
+	// buildPageMetadata. These are the defaults for anything that doesn't, plus site-wide values.
 	return {
 		title: {
-			template: `${defaultTitle} | %s`,
-			default: defaultTitle,
+			template: `%s | ${site.title}`,
+			default: site.title,
 		},
-		description: defaultDescription,
-		metadataBase,
+		description: site.description,
+		applicationName: site.title,
+		authors: [{ name: site.authorName, url: site.baseUrl }],
+		creator: site.authorName,
+		metadataBase: new URL(site.baseUrl),
+		// Recipe amounts and times look like phone numbers to some mobile browsers.
+		formatDetection: { telephone: false, address: false, email: false },
 		openGraph: {
 			type: "website",
-			...(metadataBase && { url: metadataBase }),
-			siteName: defaultTitle,
-			title: defaultTitle,
-			description: defaultDescription,
+			url: site.baseUrl,
+			siteName: site.title,
+			locale: site.locale,
+			title: site.title,
+			description: site.description,
 		},
 		twitter: {
-			card: "summary_large_image",
-			title: defaultTitle,
-			description: defaultDescription,
+			card: "summary",
+			title: site.title,
+			description: site.description,
 		},
 	};
 }
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
-	const { lang: rawLang } = await getSiteConfig();
-	const lang = stegaClean(rawLang)?.trim() || "en";
+	const { lang } = await getSiteInfo();
 	const { isEnabled } = await draftMode();
 	const shouldInjectToolbar = process.env.NODE_ENV === "development" || isEnabled;
 

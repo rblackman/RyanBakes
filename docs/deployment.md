@@ -49,7 +49,7 @@ deployment.
 
 | Workflow                     | Runs on                               | What it does |
 | ---------------------------- | ------------------------------------- | ------------ |
-| `ci.yml`                     | Every PR, pushes to `main`, manual    | **Verify** (typegen, `biome ci`, `tsc` for both apps; same checks as `pnpm ci:verify`, no secrets needed), then **Build** (`pnpm build`, skipped for fork PRs). Also **Dependency review** (PRs; fails on new high or critical vulnerabilities) and **Lint workflows** (actionlint). |
+| `ci.yml`                     | Every PR, pushes to `main`, manual    | **Verify** (typegen, `biome ci`, `tsc` for both apps, unit tests; same checks as `pnpm ci:verify`, no secrets needed), then **Build** (`pnpm build`, skipped for fork PRs). Also **Dependency review** (PRs; fails on new high or critical vulnerabilities) and **Lint workflows** (actionlint). |
 | `pr-title.yml`               | PRs (opened, edited, updated)         | Runs commitlint on the PR title (`.github/commitlint-pr-title.config.mjs`: repo rules, no default ignores), because squash merges use it as the commit message. Skips bot PRs. |
 | `codeql.yml`                 | PRs, pushes to `main`, weekly, manual | CodeQL (`security-extended`) for JavaScript/TypeScript and for the workflows themselves |
 | `lighthouse.yml`             | PRs (not forks), manual               | Builds the website, serves it with `next start` and runs Lighthouse CI five times each on `/`, `/tags` and a recipe page, mobile then desktop. Budgets in `lighthouserc.json`. Not required yet; see [Lighthouse](#lighthouse). |

@@ -84,7 +84,8 @@ All commands run from the repo root.
 | `pnpm dev:cms`           | Sanity Studio dev server                                                         |
 | `pnpm dev:all`           | Both dev servers in parallel                                                     |
 | `pnpm typegen`           | Schema extract, then Sanity TypeGen                                              |
-| `pnpm ci:verify`         | Exactly what CI's Verify job runs: typegen, `biome check .`, `tsc` for both apps |
+| `pnpm ci:verify`         | Exactly what CI's Verify job runs: typegen, `biome check .`, `tsc` for both apps, unit tests |
+| `pnpm test`              | Unit tests for website helpers (structured data, page metadata), with `node:test` |
 | `pnpm typecheck`         | `tsc --noEmit` for the website and the Studio                                    |
 | `pnpm typecheck:website` | `tsc --noEmit` for the website only                                              |
 | `pnpm typecheck:cms`     | `tsc --noEmit` for the Studio only                                               |

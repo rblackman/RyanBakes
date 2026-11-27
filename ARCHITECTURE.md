@@ -38,7 +38,7 @@ Core principle:
 │       ├── shared/
 │       │   ├── config/         Zod env schema, validated client and server env
 │       │   └── lib/            Sanity client, defineLive setup and image URL helpers
-│       ├── helpers/            pure functions (throwError, canonical URLs, ...)
+│       ├── helpers/            pure functions (throwError, page metadata, structured data, ...)
 │       ├── hooks/              small client-side React hooks
 │       ├── styles/             global.css and variables.css
 │       ├── types/              hand-written types that are not Sanity's (Keyed, ...)
@@ -99,16 +99,34 @@ text back to fields.
 | `/recipe/[slug]`            | One `recipe`; prebuilt for every slug via `generateStaticParams`           |
 | `/tags`                     | `tagsPage` intro and featured tags, then every distinct tag with its recipe count |
 | `/tags/[slug]`              | Recipes with that tag; prebuilt for every tag; 404 when no recipe uses it  |
+| `/sitemap.xml`              | `app/sitemap.ts`: home, `/recipe`, `/tags`, every recipe not hidden from search engines, every tag page |
+| `/robots.txt`               | `app/robots.ts`: allow all but `/api/` and `/studio`, and link the sitemap |
 | `/studio`                   | Redirect to `NEXT_PUBLIC_SANITY_STUDIO_URL`                                |
 | `/api/revalidate`           | Sanity webhook target (below)                                              |
 | `/api/draft-mode/enable`    | Turns on draft mode for the Presentation tool                              |
 | `/api/draft-mode/disable`   | Turns it off                                                               |
 | `/.well-known/vercel/flags` | Flags discovery endpoint for the Vercel toolbar                            |
 
-The root layout loads `siteConfig` for the page title template and `<html lang>`, renders a skip
+The root layout loads `siteConfig` (through `shared/lib/site-info.ts`) for the page title template
+(`<page> | <site title>`) and `<html lang>`, renders a skip
 link and the main navigation, wraps every page in the one `<main id="main-content">` landmark, and
 mounts `<SanityLive />`. Pages don't render their own `<main>`. Each page has exactly one `<h1>`, its
 title; the site name in the navigation is a paragraph.
+
+### Search engines and sharing
+
+- **Metadata.** Every page returns `buildPageMetadata` (`helpers/page-metadata.ts`) from
+  `generateMetadata`: title, description, canonical URL on `NEXT_PUBLIC_BASE_URL`, Open Graph (site
+  name, locale, type) and a Twitter card. Recipes use the type `article`, their sharing image and
+  description (falling back to the main picture and description), and `noindex, nofollow` when
+  "Hide from search engines" is on.
+- **Structured data.** `helpers/structured-data/` builds schema.org JSON-LD and
+  `components/ui/json-ld` renders it inline. Recipe pages get a `Recipe` (ingredients as shown on the
+  page, steps as `HowToStep` linking to `#step-N`, times as ISO 8601 durations, yield, keywords from
+  tags, images in 16x9, 4x3 and 1x1) and a `BreadcrumbList`; tag pages a `BreadcrumbList`; the home
+  page a `WebSite`. Check a page with Google's Rich Results Test.
+- **Sitemap and robots.** `app/sitemap.ts` and `app/robots.ts`. The sitemap query is tagged `recipe`,
+  so publishing a recipe refreshes it.
 
 ---
 

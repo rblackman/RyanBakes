@@ -24,7 +24,8 @@ correctly.
 ```bash
 corepack enable && pnpm install   # setup (Node 22)
 pnpm typegen                      # regenerate Sanity types; run after any schema change
-pnpm ci:verify                    # what CI's Verify job runs: typegen + biome check + tsc (both apps)
+pnpm ci:verify                    # what CI's Verify job runs: typegen + biome check + tsc (both apps) + tests
+pnpm test                         # unit tests for website helpers (node:test through tsx)
 pnpm build                        # full build of Studio and website (needs apps/website/.env)
 pnpm build:website                # website only
 pnpm typecheck:website            # fast type check while iterating
@@ -134,8 +135,15 @@ The website uses Zod 4. Write the current API, not Zod 3 habits:
 
 ### React and Next.js
 
-- App Router only. Every route defines `metadata` or `generateMetadata`, with a canonical URL from
-  `buildCanonicalUrl`.
+- App Router only. Every page defines `generateMetadata` and returns `buildPageMetadata` from
+  `@helpers/page-metadata` (with `getSiteInfo` from `@shared/lib/site-info`). It sets the canonical
+  URL, description, robots and full Open Graph and Twitter objects. Next.js replaces a parent's
+  `openGraph` and `twitter` instead of merging them, so don't set those by hand in a page.
+- Structured data (JSON-LD) is built by pure functions in `helpers/structured-data/` and rendered with
+  `@components/ui/json-ld`. Recipe pages emit `Recipe` and `BreadcrumbList`, tag pages
+  `BreadcrumbList`, the home page `WebSite`. Leave a property out when its value is empty; never emit a
+  placeholder. Keep the step anchors (`#step-1`, ...) in the steps list, since `HowToStep.url` links to
+  them. Cover new builders in a `*.test.ts` next to them.
 - Server components by default. Add `"use client"` only for real interactivity, as a small leaf.
 - Route-only components go in `app/<route>/features/<feature>/index.tsx`; reusable ones in
   `components/ui` (small) or `components/features` (sections).

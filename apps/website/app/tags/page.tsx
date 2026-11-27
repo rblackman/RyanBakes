@@ -1,11 +1,14 @@
 import Heading from "@components/ui/heading";
 import PortableText from "@components/ui/portable-text";
-import buildCanonicalUrl from "@helpers/build-canonical-url";
 import formatRecipeCount from "@helpers/format-recipe-count";
 import formatTagName from "@helpers/format-tag-name";
+import buildPageMetadata from "@helpers/page-metadata";
+import portableTextToPlainText from "@helpers/structured-data/plain-text";
 import tagHref from "@helpers/tag-href";
+import truncateDescription from "@helpers/truncate-description";
 import getTagSummaries, { type TagSummary } from "@queries/live/getTagSummaries";
 import getTagsPage from "@queries/live/getTagsPage";
+import getSiteInfo from "@shared/lib/site-info";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { stegaClean } from "next-sanity";
@@ -73,26 +76,12 @@ function resolveFeatured(featuredTag: string | undefined, secondary: string[] | 
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-	const tagsPage = await getTagsPage();
-	const title = stegaClean(tagsPage.title) ?? "Tags";
-	const description = "Browse every recipe by tag.";
-	const canonical = buildCanonicalUrl("/tags");
+	const [tagsPage, site] = await Promise.all([getTagsPage(), getSiteInfo()]);
+	const title = stegaClean(tagsPage.title)?.trim() || "Tags";
+	const intro = portableTextToPlainText(stegaClean(tagsPage.intro));
+	const description = intro ? truncateDescription(intro) : `Browse every ${site.title} recipe by tag.`;
 
-	return {
-		title,
-		description,
-		alternates: canonical ? { canonical } : undefined,
-		openGraph: {
-			title,
-			description,
-			...(canonical ? { url: canonical } : {}),
-		},
-		twitter: {
-			card: "summary_large_image",
-			title,
-			description,
-		},
-	};
+	return buildPageMetadata({ site, title, description, path: "/tags" });
 }
 
 export default async function Page() {
