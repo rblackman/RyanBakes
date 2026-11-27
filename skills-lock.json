@@ -1,0 +1,278 @@
+{
+  "version": 2,
+  "skills": {
+    "acquire-codebase-knowledge": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/acquire-codebase-knowledge/SKILL.md",
+      "computedHash": "70d25e06e176bd7010562256ecb752f7aaa777d65cec3776c66ccc762847b8f2"
+    },
+    "agent-browser": {
+      "source": "vercel-labs/agent-browser",
+      "commit": "3f43a2affd9944298104b7bb39d5f241aef85e91",
+      "sourceType": "github",
+      "skillPath": "skills/agent-browser/SKILL.md",
+      "computedHash": "a0dfac7503f69bcf529b2660fc79964064c4f179eb65695904ddc45fc0d99d20"
+    },
+    "ai-ready": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/ai-ready/SKILL.md",
+      "computedHash": "5b12d391935810260b1078c76831dc38fbaf1b6fcaa0dfa9e7b251bb26e2929e"
+    },
+    "chrome-devtools": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/chrome-devtools/SKILL.md",
+      "computedHash": "5487469a94b2003f826cddc0f7c5c021541b194a3a8ca0e010c34845da7641ac"
+    },
+    "code-review": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": ".github/skills/code-review/SKILL.md",
+      "computedHash": "760e03b431f5debb83d370b80245b53efa5834b861f586e6683999ab7b0ddcc2"
+    },
+    "codeql": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/codeql/SKILL.md",
+      "computedHash": "6423300c8b76515c71949224f2c53e51f4353b54cc8d4973aaa82ed244d70b7c"
+    },
+    "content-experimentation-best-practices": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/content-experimentation-best-practices/SKILL.md",
+      "computedHash": "7bdce53eb54950f5403c00931167c7fa0b33f0b4bd0eefc207d1043a36df626c"
+    },
+    "content-modeling-best-practices": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/content-modeling-best-practices/SKILL.md",
+      "computedHash": "327f5f5e44e831a74b9541ed2dccb4df3d687f54c99de752c74e5cee9c406e7b"
+    },
+    "dependabot": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/dependabot/SKILL.md",
+      "computedHash": "e7dcdefae4267b43969c776e1837e7a597d9a3c1842bf49f0e5fa76fc6352f3c"
+    },
+    "deploy-to-vercel": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/deploy-to-vercel/SKILL.md",
+      "computedHash": "66b99dfa063b1c405155e9bffd99c04ca3e312e81b168d540b757bb194b7400a"
+    },
+    "frontend-design": {
+      "source": "anthropics/skills",
+      "commit": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
+      "sourceType": "github",
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "83485963700bcf11d5bf78118facb301676b69d918fee2e45a95e7f1a2840f6c"
+    },
+    "git-commit": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/git-commit/SKILL.md",
+      "computedHash": "90716f49501831c6c0679509b295495021eae83923d6a39035ce7c2d9cd2e8f2"
+    },
+    "github-actions-efficiency": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/github-actions-efficiency/SKILL.md",
+      "computedHash": "1e29703ead16150c7a746ba4eaba1680239636f3da1a616adf4a58b06943c874"
+    },
+    "github-actions-hardening": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/github-actions-hardening/SKILL.md",
+      "computedHash": "ce7df8e90622480a41ffae4a81c78dbf4de3a6965cc21a91693efdf15fb3284c"
+    },
+    "github-actions-runtime-upgrade-conventions": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/github-actions-runtime-upgrade-conventions/SKILL.md",
+      "computedHash": "e8ddc49f3c7ce94c02e1e994866c09c7b3806817f4cf453523e4527725ea63dc"
+    },
+    "github-issues": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/github-issues/SKILL.md",
+      "computedHash": "2f264ec8b6728b145806031d0e98c3d6e076684bce64ca596be8e82d5495814a"
+    },
+    "github-release": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/github-release/SKILL.md",
+      "computedHash": "46b78cf4aeccb15c365214808c7841ea420fea53e811fc95a75755d03c8fa199"
+    },
+    "portable-text-conversion": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/portable-text-conversion/SKILL.md",
+      "computedHash": "b9af301219af0a93707340e6120b2984037f32a512742cbf0a500a8031de75e3"
+    },
+    "portable-text-serialization": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/portable-text-serialization/SKILL.md",
+      "computedHash": "53d298581e63c4cf36ef7ac3b51e15fdaa065b17ea38ed5f65147fba24b85bde"
+    },
+    "rebase-current-branch": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/rebase-current-branch/SKILL.md",
+      "computedHash": "3d10589881b69b357fbbe6bf3c6318a571ab2a8200809d80cc41fe80be452205"
+    },
+    "repo-standardizer": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/repo-standardizer/SKILL.md",
+      "computedHash": "617dc57f35224ef2e1f717c0f2a3ad89cf17dd58e200843984409ee43055fd65"
+    },
+    "sanity-best-practices": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-best-practices/SKILL.md",
+      "computedHash": "87f90e741e47e84de5001853314acf156fda2471cad4956f4730ea37240e591c"
+    },
+    "sanity-form-component-suspense": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-form-component-suspense/SKILL.md",
+      "computedHash": "81e08a49deffdc6e2dc27ad4c5c5b829b8856d87cea10a0b9aa0c1947a72ad0b"
+    },
+    "sanity-migration": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-migration/SKILL.md",
+      "computedHash": "51bd118081b8d9f34100d9064d00049caee9d74fc21226a647a2ce1f534d3fc5"
+    },
+    "sanity-singletons": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-singletons/SKILL.md",
+      "computedHash": "6eb4e2f1fd1851232df1e7da38563bbaf07707e0674eac5de0de23e199f11710"
+    },
+    "sanity-studio-listeners": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-studio-listeners/SKILL.md",
+      "computedHash": "188e95ae261ae303cb2cb45c8d22ef7cf3d73df66f1680270f44fe6a954a46e5"
+    },
+    "sanity-studio-upgrade": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/sanity-studio-upgrade/SKILL.md",
+      "computedHash": "4bfe887545477b332679a11f3d6251e7bdffa409730f76ab80adae202630e98d"
+    },
+    "seo-aeo-best-practices": {
+      "source": "sanity-io/agent-toolkit",
+      "commit": "627296c38d9bd80b23343f93666e5bcb3c9ccc86",
+      "sourceType": "github",
+      "skillPath": "skills/seo-aeo-best-practices/SKILL.md",
+      "computedHash": "3dd0a23b819eb148b81ebc609dfe0827491018591afc0c35dc0401013300b5a1"
+    },
+    "ui-screenshots": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/ui-screenshots/SKILL.md",
+      "computedHash": "304f2712fc35eff6acf50d51d9a21ab56ecc4a0bbe3547a73f0baf10fb6e198a"
+    },
+    "ui-taste": {
+      "source": "uizze.sh",
+      "sourceUrl": "https://uizze.sh/",
+      "sourceType": "well-known",
+      "computedHash": "85da37a788dc4b5b63411e5681403d930b1077604a20497739fa05c8d21f01fc",
+      "wellKnownDigest": "sha256:f26d607ceb3f3a6fa8c98f8dbcb2b1aeb0392de1953e826bb8893d9e49983bf9"
+    },
+    "update-markdown-file-index": {
+      "source": "github/awesome-copilot",
+      "commit": "93fc8b9ee3ef56b9b5e7261e6ce92d314cb2c1cf",
+      "sourceType": "github",
+      "skillPath": "skills/update-markdown-file-index/SKILL.md",
+      "computedHash": "75d892be7abcb5982c626549d816f300b2c5a6d78a9861285f79c307484bc89a"
+    },
+    "vercel-cli-with-tokens": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/vercel-cli-with-tokens/SKILL.md",
+      "computedHash": "a294080c5464284c5ed06bde9e5bf0fb16981958600f4ae829eaab5d7f17d29a"
+    },
+    "vercel-composition-patterns": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/composition-patterns/SKILL.md",
+      "computedHash": "f711ed8b16162eaa712abbcdbbae6c926f86c57e60127735fecc3ad0dd85b3fa"
+    },
+    "vercel-optimize": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/vercel-optimize/SKILL.md",
+      "computedHash": "f69b2d70e9928eb4ae0b0acdaabb2ba2f42ba694aa33df52b4ee41e8fb9ced60"
+    },
+    "vercel-react-best-practices": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/react-best-practices/SKILL.md",
+      "computedHash": "7991ed4fbecdac23f47c1a40c243e00a212a9e7f3604db93959b3ae11dffe299"
+    },
+    "vercel-react-view-transitions": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/react-view-transitions/SKILL.md",
+      "computedHash": "d5bdffc1f132ae0d6d9260c260ae206d48cd83cb148e3e3b75fc1a3b94b249fa"
+    },
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "5994e4cfd86144903d2ba750f862b9e36af15e3297aac983679e347b99f6cb71"
+    },
+    "webapp-testing": {
+      "source": "anthropics/skills",
+      "commit": "e4bb5d960d87126ff3b3a8af1a104b7db67560ba",
+      "sourceType": "github",
+      "skillPath": "skills/webapp-testing/SKILL.md",
+      "computedHash": "48cd9a742a59250edec6db89cf081ef5465f365e2133f6d6c5e29c380b754b7d"
+    },
+    "writing-guidelines": {
+      "source": "vercel-labs/agent-skills",
+      "commit": "5a37a6329fbad3666c3207392a6a7c0110e92efb",
+      "sourceType": "github",
+      "skillPath": "skills/writing-guidelines/SKILL.md",
+      "computedHash": "fe1390adbe2f7ba68d5fb85d3b14a1d55e71ce04cff5c175245c550d1c3a6f7e"
+    }
+  }
+}

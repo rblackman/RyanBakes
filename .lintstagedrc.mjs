@@ -8,11 +8,17 @@ const toRepoRelative = (filenames) => {
 };
 
 const isIgnored = (f) => {
+	// Paths are repo-relative, so root-level folders have no leading slash
+	const segments = f.split("/");
+
 	return (
 		f.startsWith("packages/sanity-types/") ||
 		f.includes("/.next/") ||
 		f.includes("/dist/") ||
 		f.includes("/build/") ||
+		segments.includes(".agents") ||
+		segments.includes(".claude") ||
+		f === "skills-lock.json" ||
 		f.includes("/out/") ||
 		f.includes("/coverage/")
 	);
@@ -25,6 +31,8 @@ const biomeCheck = (filenames) => {
 		})
 		.map(quote)
 		.join(" ");
+
+	console.log("Files to check with Biome:", files);
 
 	if (!files) {
 		return 'node -e "process.exit(0)"';
