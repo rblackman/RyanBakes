@@ -1,24 +1,78 @@
 .toggleWrap {
-	display: grid;
-	justify-content: flex-start;
+	display: inline-flex;
+	flex-flow: row wrap;
 	align-items: center;
-	grid-template-columns: auto 1fr;
-	gap: 0.75rem;
+	gap: var(--space-1) var(--space-3);
+	margin: 0 0 var(--space-2);
 }
 
-.checkbox {
-	font-size: 2rem;
-	accent-color: var(--secondary);
-	transform: scale(1.75);
-	margin-top: 0.2rem;
+/*
+ * A native checkbox (role="switch") drawn as a sliding switch. The sizes are tokens so the knob stays
+ * centered: it is inset by the same gap on every side, in both states (box-sizing is border-box).
+ */
+.switch {
+	--track-width: 2.4rem;
+	--track-height: 1.3rem;
+	--track-border: 1px;
+	--knob-gap: 0.15rem;
+	--knob-size: calc(var(--track-height) - 2 * var(--track-border) - 2 * var(--knob-gap));
+	--knob-travel: calc(var(--track-width) - var(--track-height));
+	position: relative;
+	flex-shrink: 0;
+	width: var(--track-width);
+	height: var(--track-height);
+	margin: 0;
+	appearance: none;
+	background: var(--neutral-200);
+	/* At least 3:1 against the page so the switch's outline is visible (WCAG 1.4.11). */
+	border: var(--track-border) solid var(--neutral-600);
+	border-radius: 999px;
+	cursor: pointer;
+	transition:
+		background-color var(--animation-duration) ease-in-out,
+		border-color var(--animation-duration) ease-in-out;
+}
+
+/* The knob, positioned inside the track's border. */
+.switch::before {
+	content: "";
+	position: absolute;
+	top: var(--knob-gap);
+	left: var(--knob-gap);
+	width: var(--knob-size);
+	height: var(--knob-size);
+	background: var(--surface);
+	border-radius: 999px;
+	box-shadow:
+		0 0 0 1px var(--neutral-600),
+		0 0.05rem 0.15rem rgb(28 37 48 / 20%);
+	/* Motion that shows the change of state; --animation-duration is 0 when reduced motion is on. */
+	transition: transform var(--animation-duration) ease-in-out;
+}
+
+.switch:checked {
+	background: var(--secondary-dark);
+	border-color: var(--secondary-dark);
+}
+
+.switch:checked::before {
+	box-shadow: 0 0.05rem 0.15rem rgb(28 37 48 / 25%);
+	transform: translateX(var(--knob-travel));
 }
 
 .label {
-	font-size: 1rem;
-	line-height: 1.75;
+	font-size: var(--font-size-sm);
+	font-weight: 600;
+	cursor: pointer;
 }
 
-.checkbox,
-.label {
-	display: inline-block;
+.hint {
+	font-size: var(--font-size-xs);
+	color: var(--text-muted);
+}
+
+@media (forced-colors: active) {
+	.switch {
+		appearance: auto;
+	}
 }

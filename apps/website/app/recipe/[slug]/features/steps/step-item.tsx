@@ -29,17 +29,29 @@ export default function StepItem({ ingredients, step: { title, content }, units 
 				<ul className={styles.ingredientsWrap}>
 					{ingredients.map(({ _key, amount, name, unit }) => {
 						const ingredientName = name ?? "";
+						// Show the quantity when there is a number, or a unit that renders on its own ("to taste").
+						const resolvedUnit = units.find(({ _id }) => {
+							return _id === unit?._ref;
+						});
+						const hasAmount =
+							(amount ?? "").trim().length > 0 || (resolvedUnit !== undefined && resolvedUnit.noUnit !== true);
 						return (
 							<li key={_key}>
-								<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} /> &ndash;{" "}
-								{ingredientName}
+								{hasAmount && (
+									<>
+										<span className={styles.amount}>
+											<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} />
+										</span>{" "}
+									</>
+								)}
+								<span className={styles.ingredientName}>{ingredientName}</span>
 							</li>
 						);
 					})}
 				</ul>
 			)}
 			<div className={styles.directionsWrap}>
-				<Heading level={3} style={{ margin: 0 }}>
+				<Heading level={3} className={styles.stepHeading}>
 					{headingTitle}
 				</Heading>
 				{(content ?? []).map((block: StepBlock) => {

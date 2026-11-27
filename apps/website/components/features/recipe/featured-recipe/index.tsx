@@ -9,8 +9,8 @@ import styles from "./featured-recipe.module.css";
 
 /** The large layout shows a 350px square photo. */
 const largeImageWidth = 350;
-/** The compact layout's photo column is 4.5rem (72px) wide; see featured-recipe.module.css. */
-const compactImageWidth = 72;
+/** The compact layout's photo column is 4.5rem wide, 90px at the site's 20px root size; see featured-recipe.module.css. */
+const compactImageWidth = 90;
 
 type Props = Readonly<{
 	recipe: Recipe | undefined;
@@ -43,6 +43,8 @@ export default function FeaturedRecipe({ recipe, priority = false, large = false
 					width={large ? largeImageWidth : compactImageWidth}
 					aspectRatio={1}
 					className={styles.img}
+					responsive
+					sizes={large ? `(max-width: 640px) 100vw, ${largeImageWidth}px` : `${compactImageWidth}px`}
 					preload={priority}
 				/>
 			)}

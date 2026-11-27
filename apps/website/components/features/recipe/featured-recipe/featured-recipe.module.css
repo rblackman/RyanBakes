@@ -1,56 +1,114 @@
+/*
+ * A featured recipe: picture beside title, tags and blurb, styled like the recipe cards.
+ * The title link stretches over the whole block (see .heading a::after), so the picture is
+ * clickable too; tags and blurb links sit above that layer.
+ */
 .featuredRecipe {
-	--featured-padding: 0.75rem;
-	padding: 0 var(--featured-padding) 0 0;
-
-	background: var(--bg-subtle);
-	box-shadow: var(--card-shadow);
-
-	max-width: 60rem;
-
+	--featured-padding: var(--space-4);
+	position: relative;
 	display: grid;
+	/* Full width of the column, so it lines up exactly with the card grid below it. */
 	overflow: hidden;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	box-shadow: var(--card-shadow);
+	transition:
+		box-shadow var(--animation-duration) ease-in-out,
+		border-color var(--animation-duration) ease-in-out;
+}
+
+.featuredRecipe:hover,
+.featuredRecipe:focus-within {
+	border-color: var(--border-strong);
+	box-shadow: var(--card-shadow-hover);
 }
 
 .featuredRecipe + .featuredRecipe {
-	margin-top: 1.5rem;
+	margin-top: var(--space-4);
 }
 
 .featuredRecipe.large {
-	--featured-padding: 0.75rem;
+	--featured-padding: var(--space-6);
 	grid-template-areas: "img title" "img tags" "img blurb";
-	grid-template-columns: max-content 1fr;
+	grid-template-columns: minmax(0, 17.5rem) 1fr;
 	grid-template-rows: min-content min-content 1fr;
-	gap: var(--featured-padding);
-	max-height: 350px;
+	column-gap: var(--space-6);
+	row-gap: var(--space-3);
 }
 
 .featuredRecipe.noLarge {
-	--featured-padding: 0.25rem;
+	--featured-padding: var(--space-3);
 	grid-template-areas: "img title" "img tags";
 	grid-template-columns: 4.5rem 1fr;
-	grid-template-rows: min-content min-content;
-	gap: var(--featured-padding) 0.75rem;
+	grid-template-rows: min-content 1fr;
+	column-gap: var(--space-4);
+	row-gap: var(--space-1);
+	align-items: center;
 }
 
 .img {
 	grid-area: img;
+	align-self: stretch;
+}
+
+/* Two classes so this beats the global heading margins and the h2 section-label style. */
+.featuredRecipe .heading {
+	grid-area: title;
+	margin: var(--featured-padding) var(--featured-padding) 0 0;
+	font-size: var(--font-size-xl);
+	font-weight: 500;
+}
+
+.heading a {
+	text-decoration-color: transparent;
+}
+
+.heading a::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+/* The stretched link would ring the title only; ring the whole block instead. */
+.heading a:focus-visible {
+	outline: none;
+}
+
+.featuredRecipe:hover .heading a {
+	text-decoration-color: var(--secondary-dark);
+}
+
+.featuredRecipe:has(.heading a:focus-visible) {
+	outline: var(--focus-outline-width) solid var(--focus-outline-color);
+	outline-offset: var(--focus-outline-offset);
+}
+
+.featuredRecipe.noLarge .heading {
+	align-self: end;
+	margin-top: 0;
+	font-size: var(--font-size-lg);
+}
+
+.tags,
+.blurb {
+	position: relative;
+	z-index: 1;
+	margin-right: var(--featured-padding);
 }
 
 .tags {
 	grid-area: tags;
 }
 
-.heading:is(h1, h2, h3) {
-	grid-area: title;
-	margin: var(--featured-padding) 0 0 0;
-}
-
-.noLarge .heading:is(h1, h2, h3) {
-	font-size: 1.2em;
+.noLarge .tags {
+	align-self: start;
 }
 
 .blurb {
 	grid-area: blurb;
+	padding-bottom: var(--featured-padding);
+	color: var(--text-muted);
 }
 
 .noLarge .blurb {
@@ -65,8 +123,29 @@
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 	max-height: 10rem;
+	margin: 0;
 }
 
 .blurb p + p {
 	display: none;
+}
+
+/* On phones the large layout stacks: the square picture on top, then the text. */
+@media only screen and (max-width: 640px) {
+	.featuredRecipe.large {
+		--featured-padding: var(--space-4);
+		grid-template-areas: "img" "title" "tags" "blurb";
+		grid-template-columns: 1fr;
+		grid-template-rows: auto;
+		row-gap: var(--space-2);
+	}
+
+	.large :is(.heading, .tags, .blurb) {
+		margin-left: var(--featured-padding);
+	}
+
+	.featuredRecipe.large .heading {
+		margin-top: var(--space-2);
+		font-size: var(--font-size-lg);
+	}
 }

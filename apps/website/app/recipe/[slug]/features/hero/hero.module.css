@@ -16,8 +16,9 @@
 }
 
 .headingWrap {
+	--focus-outline-color: var(--secondary-on-primary);
 	position: relative;
-	background: rgba(var(--primary_r), var(--primary_g), var(--primary_b), 0.85);
+	background: rgba(var(--primary_r), var(--primary_g), var(--primary_b), 0.82);
 	color: var(--primary-contrast);
 	padding: 1rem 4rem;
 	max-width: 90vw;
@@ -50,16 +51,22 @@
 	}
 }
 
-.heading {
-	font-size: 2rem;
+/* Two classes so this beats the global h1 colour and margins. */
+.headingWrap .heading {
+	margin: 0 0 var(--space-2);
+	color: var(--primary-contrast);
+	font-size: 2.1rem;
+	font-weight: 500;
 }
 
 @media only screen and (min-width: 1001px) {
 	.headingWrap {
-		padding: 1rem 6rem;
+		padding: var(--space-5) var(--space-7);
+		/* Line the title up with the page column below it on wide screens. */
+		padding-left: max(var(--space-7), calc((100vw - var(--max-content-width)) / 2 + var(--content-padding-inline)));
 	}
 
-	.heading {
-		font-size: 4rem;
+	.headingWrap .heading {
+		font-size: 3.25rem;
 	}
 }

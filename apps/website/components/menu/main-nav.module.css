@@ -1,46 +1,40 @@
+/* The enamel-blue band is the site's signature; the content below stays quiet. */
 .headerWrap {
-	/* The lighter green keeps the focus ring at 3:1 or better against the dark header. */
-	--focus-outline-color: var(--secondary);
+	/* The light jade keeps the focus ring at 3:1 or better against the blue. */
+	--focus-outline-color: var(--secondary-on-primary);
 	background: var(--primary);
 	color: var(--primary-contrast);
-	padding: 0.5rem 0 0.6rem;
 }
 
-.headerWrap :is(a) {
+.headerWrap a {
 	color: var(--primary-contrast);
+	text-decoration: underline;
 	text-decoration-color: transparent;
+	text-decoration-thickness: 0.08em;
+	text-underline-offset: 0.35em;
 	transition: text-decoration-color var(--animation-duration) ease-in-out;
 }
 
-.headerWrap :is(a:hover, a:focus-visible) {
-	text-decoration-color: var(--secondary-dark);
-	transition: text-decoration-color var(--animation-duration) ease-in;
-}
-
-.headerWrap :is(a:focus-visible) {
-	outline: var(--focus-outline-width) solid var(--focus-outline-color);
-	outline-offset: var(--focus-outline-offset);
+.headerWrap a:hover,
+.headerWrap a:focus-visible {
+	text-decoration-color: var(--secondary-on-primary);
 }
 
 .header {
-	display: grid;
-	grid-template-columns: max-content 1fr;
-	grid-template-rows: 1fr;
-	grid-template-areas: "title nav";
-	gap: 1rem;
-	align-items: center;
+	display: flex;
+	flex-flow: row wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--space-2) var(--space-5);
+	padding-block: var(--space-4);
 }
 
 .siteName {
-	grid-area: title;
-	font-size: 2rem;
-	font-weight: bold;
-	line-height: 1;
 	margin: 0;
-}
-
-.nav {
-	grid-area: nav;
+	font-family: var(--font-serif);
+	font-size: 1.75rem;
+	font-weight: 700;
+	line-height: 1;
 }
 
 .navList {
@@ -48,13 +42,17 @@
 	margin: 0;
 	padding: 0;
 	display: flex;
-	flex-flow: row nowrap;
-	align-items: center;
-	justify-content: flex-end;
+	flex-flow: row wrap;
+	align-items: baseline;
+	gap: var(--space-1) var(--space-3);
 }
 
 @media only screen and (max-width: 640px) {
+	.header {
+		padding-block: var(--space-3);
+	}
+
 	.siteName {
-		font-size: 1.25rem;
+		font-size: 1.35rem;
 	}
 }

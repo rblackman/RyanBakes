@@ -40,6 +40,8 @@ A change is done when all of these hold:
 
 1. `pnpm ci:verify` passes.
 2. `pnpm build` passes if you touched the schema, a query, a route, `next.config.mjs` or env handling.
+   For changes to pages, images or styles, check the Lighthouse job on the pull request too: it fails
+   below 0.85 performance or 1.0 accessibility (see `docs/deployment.md`).
 3. Docs match the code: update `README.md`, `ARCHITECTURE.md`, `docs/` or this file in the same
    change when you add a command, env var, route, content type or convention.
 4. The commit message passes commitlint (see [Commits](#commits)).
@@ -82,8 +84,10 @@ Schema extract, then TypeGen, then website build. Any new script or workflow mus
 
 - Render all Portable Text through `@components/ui/portable-text`. It accepts
   `TypedObject | TypedObject[] | undefined`; callers still guard.
-- Sanity images are `ImageWithAlt | undefined` (or `InlineImage`). Check `.asset` before use, and
-  build URLs only with `createImageBuilder` from `@hooks/useImageBuilder`.
+- Sanity images are `ImageWithAlt | undefined` (or `InlineImage`). Check `.asset` before use.
+- Render Sanity images with `@components/ui/image` (Sanity CDN `srcset`, crop and hotspot applied).
+  When you need a plain URL (Open Graph, metadata), use `urlForImage` or `socialImageUrl` from
+  `@shared/lib/image`. Don't route Sanity images through Vercel's image optimizer.
 
 ### Environment
 
@@ -136,7 +140,14 @@ The website uses Zod 4. Write the current API, not Zod 3 habits:
 - Route-only components go in `app/<route>/features/<feature>/index.tsx`; reusable ones in
   `components/ui` (small) or `components/features` (sections).
 - Styles are CSS Modules next to the component (`name.module.css`) using tokens from
-  `styles/variables.css`.
+  `styles/variables.css`: the spacing scale (`--space-1` to `--space-7`), the type scale
+  (`--font-size-*`), `--font-serif` and `--font-sans`, `--surface`, `--border`, `--radius` and the
+  card shadows. Prefer a token to a one-off value. Fonts load only through `next/font` in
+  `app/layout.tsx`; don't add a font `<link>` or `@import`. Data tables use the shared `@components/ui/table/table.module.css`.
+- Keep text contrast at 4.5:1 or better (`--text-muted` for secondary text, not `--neutral-600`;
+  `--secondary-dark` for accent lines and rings on light backgrounds, `--secondary-on-primary` on
+  the enamel blue) and
+  keep visible focus rings (`--focus-outline-*`). The Lighthouse check fails below 100 accessibility.
 
 ### Sanity Studio
 

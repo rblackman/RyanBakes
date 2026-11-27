@@ -11,23 +11,31 @@ type Props = Readonly<{
 	tags?: string[] | undefined;
 	picture?: ImageWithAlt | undefined;
 	href: string;
-	index: number;
 }>;
 
-export default function Card({ title, tags, picture, href, index }: Props) {
+export default function Card({ title, tags, picture, href }: Props) {
 	return (
-		<div className={styles.card} style={{ zIndex: 1000 + index }}>
+		<div className={styles.card}>
 			{picture && (
-				<Image image={picture} width={400} aspectRatio={300 / 125} className={styles.pic} responsive sizes="300px" />
+				<Image
+					image={picture}
+					width={480}
+					aspectRatio={3 / 2}
+					className={styles.pic}
+					responsive
+					sizes="(max-width: 380px) 100vw, (max-width: 640px) 50vw, 360px"
+				/>
 			)}
 
 			<Heading level={3} className={styles.name}>
 				<Link href={href}>{title}</Link>
 			</Heading>
 
-			<div className={styles.tags}>
-				<Tags tags={tags ?? []} noMargin small />
-			</div>
+			{tags && tags.length > 0 && (
+				<div className={styles.tags}>
+					<Tags tags={tags} noMargin small />
+				</div>
+			)}
 		</div>
 	);
 }

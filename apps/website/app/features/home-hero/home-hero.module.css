@@ -1,15 +1,37 @@
 .hero {
-	margin: 0 0 2.5rem;
-	padding: 0 0 2rem;
-	border-bottom: 1px solid var(--neutral-200);
+	margin: 0 0 var(--space-7);
+	padding: var(--space-5) 0 var(--space-6);
+	border-bottom: 1px solid var(--border);
 }
 
-.tagline {
-	margin: 0 0 0.75rem;
+/* Two classes so this beats the global h1 size. */
+.hero .tagline {
+	max-width: 22ch;
+	margin: 0 0 var(--space-4);
+	font-size: 3rem;
+	font-weight: 500;
+	letter-spacing: -0.01em;
+	line-height: 1.08;
 }
 
 .description {
 	margin: 0;
-	font-size: 1.15rem;
-	max-width: 60ch;
+	max-width: 52ch;
+	color: var(--text-muted);
+	font-size: 1.05rem;
+	line-height: 1.6;
+}
+
+@media only screen and (max-width: 640px) {
+	.hero {
+		padding-top: var(--space-2);
+	}
+
+	.hero .tagline {
+		font-size: 2.1rem;
+	}
+
+	.description {
+		font-size: var(--font-size-base);
+	}
 }

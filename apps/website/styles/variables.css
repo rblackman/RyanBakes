@@ -1,44 +1,89 @@
 :root {
-	--max-content-width: 1900px;
+	/* Header, content and footer share one column so their edges line up. */
+	--max-content-width: 70rem;
+	/* Comfortable line length for running text such as steps and commentary. */
+	--reading-width: 68ch;
 	--line-height: 1.6;
-	--content-padding-inline: clamp(1.5rem, 4vw, 3rem);
-	--content-padding-block-start: clamp(1.5rem, 4vh, 3rem);
-	--content-padding-block-end: clamp(3rem, 8vh, 6rem);
-	--header-footer-padding-inline: clamp(1rem, 5vw, 3rem);
+	--content-padding-inline: clamp(1rem, 4vw, 2.5rem);
+	--content-padding-block-start: clamp(1.5rem, 4vh, 2.5rem);
+	--content-padding-block-end: clamp(3rem, 8vh, 5rem);
 
-	/* Neutral ramp for surfaces, borders, and body text */
-	--neutral-50: #f7f8fa;
-	--neutral-100: #eef1f4;
-	--neutral-200: #d8dee6;
-	--neutral-400: #9aa5b5;
-	--neutral-600: #6c7a89;
-	--neutral-900: #1f2a36;
+	/* Spacing scale. Use these for gaps and margins instead of one-off values. */
+	--space-1: 0.25rem;
+	--space-2: 0.5rem;
+	--space-3: 0.75rem;
+	--space-4: 1rem;
+	--space-5: 1.5rem;
+	--space-6: 2rem;
+	--space-7: 3rem;
+
+	/* Type scale (the root size is 20px; body text is 0.9rem, 18px) */
+	--font-size-xs: 0.7rem;
+	--font-size-sm: 0.8rem;
+	--font-size-base: 0.9rem;
+	--font-size-lg: 1.2rem;
+	--font-size-xl: 1.6rem;
+	--font-size-2xl: 2.5rem;
+
+	/*
+	 * Fonts are self-hosted by next/font (see app/layout.tsx), with system fallbacks.
+	 * EB Garamond, a classic book serif, for headings; Source Sans 3 for text, tables and controls.
+	 */
+	--font-sans:
+		var(--font-source-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+		sans-serif;
+	--font-serif: var(--font-heading), Georgia, "Times New Roman", serif;
+
+	--radius: 0.5rem;
+	--radius-sm: 0.3rem;
+
+	/*
+	 * Palette, named for the bench: flour (page), bench (cards and tables), proof (alternate rows),
+	 * ink (text), enamel blue (the brand colour) and jade (accent).
+	 */
+	--neutral-50: #f7f7f4;
+	--neutral-100: #eeeee9;
+	--neutral-200: #e2e2dc;
+	--neutral-300: #cfcfc7;
+	--neutral-400: #a9aea9;
+	--neutral-600: #7a828c;
+	--neutral-900: #1c2530;
 
 	--text: var(--neutral-900);
-	/* Secondary text; at least 4.5:1 on --bg and --bg-alt (--neutral-600 is not) */
-	--text-muted: #556270;
+	/* Secondary text; at least 5:1 on --bg, --bg-alt and --surface (--neutral-600 is not) */
+	--text-muted: #5a6470;
 	--bg: var(--neutral-50);
 	--bg-alt: var(--neutral-100);
-	--bg-subtle: linear-gradient(90deg, #eef1f4, #f7f8fa);
-	--card-shadow: -2rem 0 3rem -2rem var(--neutral-400);
+	/* Cards and tables sit a shade lighter than the page, held by a hairline border rather than contrast. */
+	--surface: #fdfdfb;
+	/* Alternate rows inside a surface (tables) */
+	--surface-stripe: #f2f2ee;
+	--border: var(--neutral-200);
+	--border-strong: var(--neutral-300);
+	--card-shadow: 0 0.05rem 0.1rem rgb(28 37 48 / 4%);
+	--card-shadow-hover: 0 0.1rem 0.2rem rgb(28 37 48 / 5%), 0 0.5rem 1.2rem rgb(28 37 48 / 7%);
 
-	/* Blue primary */
-	--primary: #0c2d57;
-	--primary-light: #e7edf7;
-	--primary-dark: #081c35;
-	--primary_r: 12;
-	--primary_g: 45;
-	--primary_b: 87;
-	--primary-contrast: #ffffff;
+	/* Enamel blue: the header, the recipe title band and the step numbers */
+	--primary: #163a63;
+	--primary-light: #e6edf5;
+	--primary-dark: #0e2643;
+	--primary_r: 22;
+	--primary_g: 58;
+	--primary_b: 99;
+	--primary-contrast: #fdfdfb;
 
-	/* Jade secondary */
-	--secondary: #2fb37c;
-	--secondary-light: #e4f7ef;
+	/*
+	 * Jade accent. --secondary-dark is for underlines and focus rings (4.9:1 on --bg); --secondary is
+	 * for icons (3.8:1); --secondary-on-primary is the accent on the enamel header and title band.
+	 */
+	--secondary: #258f63;
+	--secondary-light: #e8f2ec;
 	--secondary-dark: #1f7b55;
-	--secondary_r: 47;
-	--secondary_g: 179;
-	--secondary_b: 124;
-	--secondary-contrast: #0a110c;
+	--secondary-on-primary: #6fd3a5;
+	--secondary_r: 37;
+	--secondary_g: 143;
+	--secondary_b: 99;
+	--secondary-contrast: #ffffff;
 
 	/* Warm accent for highlights */
 	--accent-warm: #f08a5d;
@@ -57,7 +102,7 @@
 	--bp_mobile: 768px;
 
 	--animation-duration: 0.2s;
-	/* Dark enough for 3:1 against the light backgrounds (WCAG 2.2). Dark areas such as the header override it. */
+	/* Dark enough for 3:1 against the light backgrounds (WCAG 2.2). The enamel header and recipe title band override it. */
 	--focus-outline-color: var(--secondary-dark);
 	--focus-outline-offset: 0.2rem;
 	--focus-outline-width: 0.15rem;

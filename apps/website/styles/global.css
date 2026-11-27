@@ -12,79 +12,96 @@ body {
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
-	font-family:
-		system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
-		"Helvetica Neue", sans-serif;
+	font-family: var(--font-sans);
+	font-size: var(--font-size-base);
 	line-height: var(--line-height);
 	color: var(--text);
 	background: var(--bg);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	text-rendering: optimizeLegibility;
 }
 
 @media only screen and (max-width: 660px) {
 	:root {
-		--content-padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+		--content-padding-inline: clamp(0.75rem, 4vw, 1.25rem);
 		--content-padding-block-start: clamp(1.25rem, 3vh, 2rem);
 		--content-padding-block-end: clamp(2rem, 6vh, 3rem);
-		--header-footer-padding-inline: clamp(0.75rem, 4vw, 1.5rem);
 	}
 }
 
 /*
  * Each page has one h1 (its title), sections use h2 and subsections h3.
- * The sizes match the site's look from before the outline was fixed: h1 is the large page title,
- * h2 the uppercase section label, h3 the small bold subheading.
+ * Headings are set in the serif; h4 drops back to the sans as a small label.
  */
 :is(h1, h2, h3, h4) {
-	line-height: 1.2;
+	line-height: 1.15;
+	text-wrap: balance;
+	font-family: var(--font-serif);
+	font-weight: 600;
+	color: var(--text);
 }
 
 :is(h1, h2, h3, h4):not(:first-child) {
-	margin-top: 3rem;
+	margin-top: var(--space-7);
 }
 
 h1 {
-	font-size: 3rem;
+	margin: 0 0 var(--space-4);
+	font-size: var(--font-size-2xl);
+	font-weight: 500;
+	letter-spacing: -0.01em;
 }
 
 h2 {
-	margin: 0 0 2rem;
-	text-transform: uppercase;
-	font-size: 2rem;
-	font-weight: normal;
+	margin: 0 0 var(--space-5);
+	font-size: var(--font-size-xl);
+	font-weight: 500;
 }
 
 h3 {
-	margin: 0.5rem 0 1rem;
-	font-size: 1.25rem;
+	margin: var(--space-2) 0 var(--space-3);
+	font-size: var(--font-size-lg);
+	font-weight: 700;
 }
 
 h4 {
-	margin: 0.5rem 0 0.75rem;
-	font-size: 1rem;
+	margin: var(--space-2) 0 var(--space-3);
+	font-family: var(--font-sans);
+	font-size: var(--font-size-base);
+}
+
+/* Sections on a page are spaced the same way everywhere. */
+.content > section:not(:first-child) {
+	margin-top: var(--space-7);
 }
 
 @media only screen and (max-width: 640px) {
 	:is(h1, h2, h3, h4):not(:first-child) {
-		margin-top: 1.5rem;
+		margin-top: var(--space-6);
 	}
 
 	h1 {
-		font-size: 2rem;
+		font-size: 1.9rem;
 	}
 
 	h2 {
-		margin: 0 0 1rem;
-		font-size: 1.2rem;
+		margin: 0 0 var(--space-4);
+		font-size: 1.35rem;
 	}
 
 	h3 {
-		margin: 0.3rem 0 0.5rem;
-		font-size: 1rem;
+		margin: var(--space-1) 0 var(--space-2);
+		font-size: 1.05rem;
 	}
 
 	h4 {
-		margin: 0.3rem 0 0.5rem;
-		font-size: 0.9rem;
+		margin: var(--space-1) 0 var(--space-2);
+		font-size: var(--font-size-base);
+	}
+
+	.content > section:not(:first-child) {
+		margin-top: var(--space-6);
 	}
 }
 
@@ -96,38 +113,39 @@ header,
 .content,
 footer {
 	width: 100%;
-	max-width: clamp(0px, 90vw, var(--max-content-width));
+	max-width: var(--max-content-width);
 	margin: 0 auto;
+	padding-inline: var(--content-padding-inline);
+}
+
+/* The main area grows so the footer sits at the bottom of short pages. */
+main {
+	flex: 1 0 auto;
 }
 
 .content {
-	width: 100%;
-	padding: var(--content-padding-block-start) var(--content-padding-inline) var(--content-padding-block-end);
-	min-height: 100vh;
-}
-
-header,
-footer {
-	padding: 0 var(--header-footer-padding-inline);
+	padding-block: var(--content-padding-block-start) var(--content-padding-block-end);
 }
 
 p {
 	line-height: var(--line-height);
-	margin: 0 0 1rem 0;
-	max-width: 75ch;
+	margin: 0 0 var(--space-4) 0;
+	max-width: var(--reading-width);
 }
 
 a {
 	color: var(--text);
-	text-decoration-color: currentColor;
-	text-underline-offset: 0.15em;
+	text-decoration-color: var(--border-strong);
+	text-decoration-thickness: 0.08em;
+	text-underline-offset: 0.2em;
 	transition:
 		color var(--animation-duration) ease-in-out,
 		text-decoration-color var(--animation-duration) ease-in-out;
 }
 
 a:hover {
-	text-decoration-color: var(--secondary);
+	text-decoration-color: var(--secondary-dark);
+	text-decoration-thickness: 0.12em;
 }
 
 a:focus-visible,
@@ -138,14 +156,16 @@ a:focus-visible,
 }
 
 .skipLink {
-	/* It sits over the dark header, where the lighter green ring shows best. */
-	--focus-outline-color: var(--secondary);
+	/* It sits over the blue header, where the light jade ring keeps 3:1 contrast (about 6.3:1). */
+	--focus-outline-color: var(--secondary-on-primary);
 	position: absolute;
 	top: 0.5rem;
 	left: 0.5rem;
 	z-index: 10000;
 	padding: 0.5rem 1rem;
-	background: var(--bg);
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius-sm);
 	color: var(--text);
 	transform: translateY(-200%);
 }
@@ -194,4 +214,9 @@ a:focus-visible,
 		--hero-aspectRatio_W: 3;
 		--hero-aspectRatio_H: 4;
 	}
+}
+
+::selection {
+	background: var(--secondary-light);
+	color: var(--text);
 }

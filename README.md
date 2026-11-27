@@ -143,6 +143,10 @@ Anything that starts with `NEXT_PUBLIC_` ends up in the browser bundle, so never
 - **CI** (`.github/workflows/ci.yml`) runs on every pull request and push to `main`: a Verify job
   (the `pnpm ci:verify` checks), then a Build job (`pnpm build`) that is skipped for PRs from forks,
   plus dependency review and workflow linting. PR titles are checked with commitlint.
+- **Lighthouse** (`.github/workflows/lighthouse.yml`) builds the site on every pull request and
+  audits the home page, `/tags` and a recipe on mobile and desktop. Scores and failed audits are in
+  the job summary, and the full reports are in the run's `lighthouse-reports` artifact. Not a
+  required check yet.
 - **CodeQL** scans JavaScript, TypeScript and the workflows on PRs, on pushes to `main` and weekly.
 - **Dependabot** opens weekly grouped npm and GitHub Actions updates; a workflow turns on auto-merge
   for patch and minor updates, and majors wait for review. See [docs/deployment.md](docs/deployment.md#github-actions).

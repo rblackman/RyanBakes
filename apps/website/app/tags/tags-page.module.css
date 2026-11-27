@@ -1,11 +1,11 @@
 .intro {
-	margin: 1rem 0 0;
+	margin: 0;
 }
 
 .featuredList {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
-	gap: 1.5rem;
+	gap: var(--space-5);
 	padding: 0;
 	margin: 0;
 	list-style: none;
@@ -14,11 +14,12 @@
 .featuredCard {
 	display: flex;
 	flex-direction: column;
-	gap: 0.5rem;
-	padding: 1.25rem 1.5rem;
-	background: var(--bg-alt);
-	border-left: 0.25rem solid var(--secondary);
-	border-radius: 0.25rem;
+	gap: var(--space-2);
+	padding: var(--space-4) var(--space-5);
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	box-shadow: var(--card-shadow);
 }
 
 .featuredHeading {
@@ -34,32 +35,28 @@
 	text-decoration-color: var(--secondary-dark);
 }
 
-.featuredCard .count {
-	margin: 0;
-}
-
 .featuredRecipes {
 	display: flex;
 	flex-direction: column;
-	gap: 0.35rem;
+	gap: var(--space-1);
 	padding-left: 1.1rem;
 	margin: 0;
-	font-size: 0.85rem;
+	font-size: var(--font-size-sm);
 }
 
 .seeAll {
 	margin-top: auto;
-	font-size: 0.8rem;
+	font-size: var(--font-size-sm);
 }
 
 .tagList {
 	display: grid;
 	grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
-	gap: 0.75rem 1.5rem;
+	gap: var(--space-3) var(--space-5);
 	padding-left: 0;
-	margin: 0 0 clamp(5vh, 3rem, 50vh);
+	margin: 0;
 	list-style: none;
-	font-size: 0.9rem;
+	font-size: var(--font-size-base);
 }
 
 .tagList svg {
@@ -92,16 +89,15 @@
 	text-decoration-color: var(--secondary-dark);
 }
 
-.tagLink:focus-visible {
-	outline: var(--focus-outline-width) solid var(--focus-outline-color);
-	outline-offset: var(--focus-outline-offset);
-}
-
 .tagIcon {
 	fill: var(--secondary);
 }
 
 .count {
-	font-size: 0.75rem;
+	font-size: var(--font-size-xs);
 	color: var(--text-muted);
+}
+
+.featuredCard .count {
+	margin: 0;
 }

@@ -89,15 +89,21 @@ export default function BakeModeToggle() {
 	return (
 		<p className={styles.toggleWrap}>
 			<input
-				className={styles.checkbox}
+				className={styles.switch}
 				id="bake-mode-toggle"
 				type="checkbox"
+				role="switch"
+				aria-checked={isBakeModeEnabled}
+				aria-describedby="bake-mode-hint"
 				checked={isBakeModeEnabled}
 				onChange={toggleBakeMode}
 			/>
 			<label className={styles.label} htmlFor="bake-mode-toggle">
 				Bake Mode
 			</label>
+			<span className={styles.hint} id="bake-mode-hint">
+				Keeps your screen on
+			</span>
 		</p>
 	);
 }
