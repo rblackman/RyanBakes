@@ -13,4 +13,4 @@ export const defaultSiteDescription =
  * The author named in recipe structured data (schema.org Recipe `author`). There is no author field in
  * Sanity yet, so every recipe uses this name.
  */
-export const defaultAuthorName = "Ryan";
+export const defaultAuthorName = "Ryan Blackman";

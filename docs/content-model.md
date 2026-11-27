@@ -44,7 +44,7 @@ Recipe pages also describe the recipe to search engines as schema.org `Recipe` s
 from these fields: `title`, `description`, `picture`, `totalTime` and `bakeTime` (prep time is the
 difference), `serves`, `tags` (as keywords), `ingredients` (as the page shows them) and `steps` (title
 and text). Empty fields are left out, so filling in times, servings and a picture is what makes a
-recipe eligible for Google's recipe results. The author is "Ryan" (`defaultAuthorName` in
+recipe eligible for Google's recipe results. The author is "Ryan Blackman" (`defaultAuthorName` in
 `apps/website/shared/config/site-defaults.ts`); there is no author field.
 
 Tags are plain strings on each recipe, not documents. `/tags` and `/tags/[slug]` are built from the
