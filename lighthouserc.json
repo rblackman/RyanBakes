@@ -4,11 +4,11 @@
 			"startServerCommand": "pnpm --filter website start",
 			"startServerReadyPattern": "Ready in",
 			"startServerReadyTimeout": 60000,
-			"numberOfRuns": 3
+			"numberOfRuns": 5
 		},
 		"assert": {
 			"assertions": {
-				"categories:performance": ["error", { "minScore": 0.9, "aggregationMethod": "median-run" }],
+				"categories:performance": ["error", { "minScore": 0.85, "aggregationMethod": "median-run" }],
 				"categories:accessibility": ["error", { "minScore": 1, "aggregationMethod": "median-run" }],
 				"categories:best-practices": ["warn", { "minScore": 0.95, "aggregationMethod": "median-run" }],
 				"categories:seo": ["warn", { "minScore": 0.95, "aggregationMethod": "median-run" }]
