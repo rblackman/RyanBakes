@@ -14,9 +14,12 @@ on:
     - cron: "30 7 * * 1" # Mondays 07:30 UTC
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 concurrency:
-  group: codeql-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   analyze:
@@ -32,20 +35,24 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        language: ["javascript-typescript"]
+        # "actions" scans the workflows themselves (injection, permissions).
+        language: ["javascript-typescript", "actions"]
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+        with:
+          persist-credentials: false
 
+      # Both languages are analysed from source; no build step is needed.
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@v4
         with:
           languages: ${{ matrix.language }}
-
-      # For JS/TS, this is typically fine (often a no-op)
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v3
+          build-mode: none
+          queries: security-extended
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: "/language:${{ matrix.language }}"
