@@ -95,7 +95,7 @@ for (const entry of representative) {
 const markdown = [
 	`### ${label}`,
 	"",
-	"Median of the runs for each page.",
+	"Scores from the representative run for each page: the run whose load timings are closest to the median.",
 	"",
 	"| Page | Performance | Accessibility | Best practices | SEO | LCP | TBT | CLS |",
 	"| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",

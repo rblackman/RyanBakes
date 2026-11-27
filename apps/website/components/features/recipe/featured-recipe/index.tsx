@@ -7,6 +7,11 @@ import clsx from "clsx";
 import Link from "next/link";
 import styles from "./featured-recipe.module.css";
 
+/** The large layout shows a 350px square photo. */
+const largeImageWidth = 350;
+/** The compact layout's photo column is 4.5rem (72px) wide; see featured-recipe.module.css. */
+const compactImageWidth = 72;
+
 type Props = Readonly<{
 	recipe: Recipe | undefined;
 	priority?: boolean;
@@ -32,7 +37,15 @@ export default function FeaturedRecipe({ recipe, priority = false, large = false
 
 	return (
 		<div className={recipeClass}>
-			{picture && <Image image={picture} width={350} aspectRatio={1} className={styles.img} preload={priority} />}
+			{picture && (
+				<Image
+					image={picture}
+					width={large ? largeImageWidth : compactImageWidth}
+					aspectRatio={1}
+					className={styles.img}
+					preload={priority}
+				/>
+			)}
 
 			<Heading level={2} className={styles.heading}>
 				<Link href={href}>{title}</Link>
