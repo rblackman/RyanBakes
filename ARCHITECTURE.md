@@ -180,7 +180,7 @@ CSS Modules next to the component (`foo.module.css`). There is no CSS framework.
 `variables.css` holds the colors (soft neutral surfaces, enamel blue as the brand colour, jade as
 the accent), a spacing scale (`--space-1` to `--space-7`), a type scale (`--font-size-*`), the font
 stacks, and the shared card look (`--surface`, `--border`, `--radius`, `--card-shadow`). Headings use
-`--font-serif` (Alegreya) and everything else `--font-sans` (Source Sans 3). Both are self-hosted by
+`--font-serif` (EB Garamond) and everything else `--font-sans` (Source Sans 3). Both are self-hosted by
 `next/font/google` in `app/layout.tsx`, so pages make no font requests to Google.
 `global.css` sets the heading sizes, section spacing and the page column (`--max-content-width`),
 which the header, content and footer share. Recipe cards (`components/ui/card`) and featured recipes

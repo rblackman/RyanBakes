@@ -8,7 +8,7 @@ import { SanityLive } from "@shared/lib/live";
 import { handleLiveEvent } from "@shared/lib/live-action";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import type { Metadata, Viewport } from "next";
-import { Alegreya, Source_Sans_3 } from "next/font/google";
+import { EB_Garamond, Source_Sans_3 } from "next/font/google";
 import { draftMode } from "next/headers";
 import { stegaClean } from "next-sanity";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -18,14 +18,14 @@ import "../styles/global.css";
 import "../styles/variables.css";
 
 // Self-hosted at build time by next/font, so pages make no requests to Google.
-// Alegreya (a calligraphic book serif) for headings; Source Sans 3 for text, tables and controls.
+// EB Garamond (a classic book serif) for headings; Source Sans 3 for text, tables and controls.
 // Headings only. Not preloaded, so it doesn't compete with the page's main photo on slow phones;
 // headings show in the size-matched fallback until it arrives.
-const alegreya = Alegreya({
+const headingFont = EB_Garamond({
 	subsets: ["latin"],
 	display: "swap",
 	preload: false,
-	variable: "--font-alegreya",
+	variable: "--font-heading",
 });
 
 const sourceSans = Source_Sans_3({
@@ -77,7 +77,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 	const shouldInjectToolbar = process.env.NODE_ENV === "development" || isEnabled;
 
 	return (
-		<html lang={lang} className={`${alegreya.variable} ${sourceSans.variable}`}>
+		<html lang={lang} className={`${headingFont.variable} ${sourceSans.variable}`}>
 			<body>
 				<a className="skipLink" href="#main-content">
 					Skip to main content

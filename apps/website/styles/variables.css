@@ -27,12 +27,12 @@
 
 	/*
 	 * Fonts are self-hosted by next/font (see app/layout.tsx), with system fallbacks.
-	 * Alegreya, a calligraphic book serif, for headings; Source Sans 3 for text, tables and controls.
+	 * EB Garamond, a classic book serif, for headings; Source Sans 3 for text, tables and controls.
 	 */
 	--font-sans:
 		var(--font-source-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
 		sans-serif;
-	--font-serif: var(--font-alegreya), Georgia, "Times New Roman", serif;
+	--font-serif: var(--font-heading), Georgia, "Times New Roman", serif;
 
 	--radius: 0.5rem;
 	--radius-sm: 0.3rem;
