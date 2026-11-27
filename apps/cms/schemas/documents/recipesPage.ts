@@ -1,5 +1,6 @@
 import { FcShop } from "react-icons/fc";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { warnOnPlaceholderText } from "../../helpers/validation";
 
 export default defineType({
 	name: "recipesPage",
@@ -18,14 +19,14 @@ export default defineType({
 			name: "intro",
 			title: "Intro",
 			type: "portableText",
-			description: "Intro text to show before featured recipes",
-			validation: (Rule) => Rule.required(),
+			description: "Intro text shown above the featured recipes.",
+			validation: (Rule) => [Rule.required(), Rule.custom(warnOnPlaceholderText).warning()],
 		}),
 		defineField({
 			name: "featuredRecipe",
-			title: "Featured Tag",
+			title: "Featured Recipe",
 			type: "reference",
-			description: "The main recipe to feature.",
+			description: "The recipe shown large at the top of the page.",
 			to: [{ type: "recipe" }],
 			validation: (Rule) => Rule.required(),
 		}),
@@ -33,7 +34,7 @@ export default defineType({
 			name: "secondaryFeatured",
 			title: "Secondary Featured Recipes",
 			type: "array",
-			description: "Other recipes to feature.",
+			description: "Two to six more recipes shown below the featured recipe.",
 			of: [defineArrayMember({ type: "reference", to: [{ type: "recipe" }] })],
 			validation: (Rule) => Rule.unique().required().min(2).max(6),
 		}),

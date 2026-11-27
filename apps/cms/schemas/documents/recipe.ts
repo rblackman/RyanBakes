@@ -1,5 +1,6 @@
 import { FcList } from "react-icons/fc";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { warnOnPlaceholderText } from "../../helpers/validation";
 
 export default defineType({
 	name: "recipe",
@@ -35,27 +36,27 @@ export default defineType({
 			title: "Commentary",
 			type: "portableText",
 			description: "Commentary about this recipe to display at the top of the page.",
-			validation: (Rule) => Rule.required(),
+			validation: (Rule) => [Rule.required(), Rule.custom(warnOnPlaceholderText).warning()],
 		}),
 		defineField({
 			name: "preheat",
 			title: "Preheat",
 			type: "number",
-			description: "Oven preheat temperature in fahrenheit",
+			description: "Oven preheat temperature in °F. Leave empty if the recipe does not use the oven.",
 			fieldset: "metadata",
 		}),
 		defineField({
 			name: "bakeTime",
 			title: "Bake Time",
 			type: "number",
-			description: "Cook time in minutes (i.e. Time under heat)",
+			description: "Cook time in minutes (time under heat).",
 			fieldset: "metadata",
 		}),
 		defineField({
 			name: "totalTime",
 			title: "Total Time",
 			type: "number",
-			description: "Total time (start to finish) in minutes",
+			description: "Total time from start to finish in minutes, including rests and rises.",
 			fieldset: "metadata",
 			validation: (Rule) => Rule.required(),
 		}),
@@ -63,7 +64,7 @@ export default defineType({
 			name: "serves",
 			title: "Serves",
 			type: "string",
-			description: "Input in format N-N (e.g. 2-4)",
+			description: "Number of servings, e.g. 4 or a range like 2-4.",
 			fieldset: "metadata",
 		}),
 		defineField({
@@ -82,7 +83,8 @@ export default defineType({
 			name: "tags",
 			title: "Tags",
 			type: "array",
-			description: "Tags this recipe falls under.",
+			description:
+				"Lowercase words that group this recipe, e.g. pizza or weeknight. Each tag gets a page at /tags/<tag>, so reuse existing tags where they fit.",
 			of: [defineArrayMember({ type: "string" })],
 			options: { layout: "tags" },
 			validation: (Rule) => Rule.unique().required(),
@@ -115,9 +117,9 @@ export default defineType({
 		}),
 		defineField({
 			name: "description",
-			title: "description",
+			title: "Description",
 			type: "text",
-			description: "HTML description. Should be ~200 characters.",
+			description: "Short summary for search engines, about 150 to 200 characters.",
 			fieldset: "seo",
 			validation: (Rule) => Rule.required(),
 		}),
@@ -125,7 +127,7 @@ export default defineType({
 			name: "disallowRobots",
 			title: "Disallow in robots.txt",
 			type: "boolean",
-			description: "Hide this route for search engines",
+			description: "Ask search engines not to index this recipe.",
 			initialValue: false,
 			fieldset: "seo",
 		}),

@@ -1,13 +1,20 @@
 import FeaturedRecipe from "@components/features/recipe/featured-recipe";
 import Heading from "@components/ui/heading";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
+import decodeRouteParam from "@helpers/decode-route-param";
+import formatRecipeCount from "@helpers/format-recipe-count";
+import formatTagName from "@helpers/format-tag-name";
 import resolveParams from "@helpers/resolve-params";
+import tagHref from "@helpers/tag-href";
 import getRecipesByTag from "@queries/live/getRecipesByTag";
 import getAllTags from "@queries/static/getAllTags";
 import type { Recipe } from "@ryan-bakes/sanity-types";
 import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
 import "server-only";
 import SecondaryFeaturedRecipes from "../../recipe/features/secondary-featured-recipes";
+import styles from "./tag-page.module.css";
 
 type RouteParams = Readonly<{ slug: string }>;
 
@@ -15,28 +22,19 @@ export type Props = Readonly<{
 	params: RouteParams | Promise<RouteParams>;
 }>;
 
-function formatTagTitle(slug: string): string {
-	return slug
-		.split("-")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join(" ");
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
 	const { slug } = await resolveParams(params);
+	const tag = decodeRouteParam(slug);
+	const title = formatTagName(tag);
 
-	// convert slug to title case for metadata
-	// replace - with spaces
-	const title = formatTagTitle(slug);
-
-	const description = `Recipes tagged with "${title}"`;
-	const canonical = buildCanonicalUrl(`/tags/${slug}`);
+	const description = `Recipes tagged "${title}".`;
+	const canonical = buildCanonicalUrl(tagHref(tag));
 
 	return {
 		title,
 		description,
 		alternates: canonical ? { canonical } : undefined,
-		keywords: [slug],
+		keywords: [tag],
 		openGraph: {
 			title,
 			description,
@@ -52,9 +50,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Tag({ params }: Props) {
 	const { slug } = await resolveParams(params);
-	const tagTitle = formatTagTitle(slug);
+	const tag = decodeRouteParam(slug);
 
-	const recipes = await getRecipesByTag(slug);
+	const recipes = await getRecipesByTag(tag);
+
+	// A tag only exists while at least one recipe uses it.
+	if (recipes.length === 0) {
+		notFound();
+	}
 
 	const featuredRecipe = recipes[0];
 	const secondaryRecipes = recipes
@@ -64,16 +67,13 @@ export default async function Tag({ params }: Props) {
 	return (
 		<main>
 			<div className="content">
-				<Heading level={2}>Tag: {tagTitle}</Heading>
+				<Heading level={2}>Tag: {formatTagName(tag)}</Heading>
+				<p className={styles.summary}>
+					{formatRecipeCount(recipes.length)} · <Link href="/tags">All tags</Link>
+				</p>
 
-				{recipes.length > 0 ? (
-					<>
-						<FeaturedRecipe recipe={featuredRecipe} priority large />
-						{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
-					</>
-				) : (
-					<p>No recipes available for this tag yet.</p>
-				)}
+				<FeaturedRecipe recipe={featuredRecipe} priority large />
+				{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
 			</div>
 		</main>
 	);

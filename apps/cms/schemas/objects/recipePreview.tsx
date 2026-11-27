@@ -9,6 +9,7 @@ export default defineType({
 			name: "large",
 			title: "Large",
 			type: "boolean",
+			description: "Show this recipe as a large card with its intro text.",
 			initialValue: false,
 			validation: (Rule) => Rule.required(),
 		}),

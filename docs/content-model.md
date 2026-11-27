@@ -28,14 +28,25 @@ draft mode) and a Dashboard.
 | ------------- | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `recipe`      | A recipe page at `/recipe/[slug]`           | `title`, `slug`, `picture`, `commentary`, `preheat` (°F), `bakeTime` and `totalTime` (minutes), `serves`, `ingredients[]`, `steps[]`, `tags[]`, `showBakerPercentage`; SEO group: `description`, `ogDescription`, `openGraphImage`, `disallowRobots` |
 | `unit`        | A unit of measure referenced by ingredients | `name`, `abbreviation`, `system` (Imperial/Metric), `type` (Volume/Weight), `display` (Fraction/Decimal), `noUnit`, `noCount`               |
-| `siteConfig`  | Global settings (singleton)                 | `title`, `url`, `lang`, `mainNav[]` (refs to `navItem`), `homepage` (ref to `page`)                                                         |
-| `page`        | A general content page; the homepage is one | `title`, `slug`, `content[]` (`inlineImage`, `textSection`, `recipePreview`)                                                               |
+| `siteConfig`  | Global settings (singleton)                 | `title`, `tagline` and `description` (homepage hero and default meta description), `url`, `lang`, `mainNav[]` (refs to `navItem`), `homepage` (ref to `page`) |
+| `page`        | A general content page; the homepage is one | `title`, `slug`, `content[]` (`inlineImage`, `textSection`, `recipePreview`). On the homepage the blocks render below the `siteConfig` tagline |
 | `recipesPage` | Content for `/recipe` (singleton)           | `title`, `intro`, `featuredRecipe` (ref), `secondaryFeatured[]` (2 to 6 recipe refs)                                                        |
-| `tagsPage`    | Content for `/tags` (singleton)             | `title`, `intro`, `featuredTag`, `secondaryFeature[]` (2 to 6 tag strings)                                                                  |
+| `tagsPage`    | Content for `/tags` (singleton)             | `title`, `intro`, `featuredTag`, `secondaryFeature[]` (2 to 6 tag strings). Featured tags must match a recipe tag exactly or they are skipped |
 | `navItem`     | One entry in the main navigation            | `name`, `page` (ref to `page`, `tagsPage` or `recipesPage`)                                                                                 |
 
 Tags are plain strings on each recipe, not documents. `/tags` and `/tags/[slug]` are built from the
-distinct values across all recipes.
+distinct values across all recipes, so a tag exists only while a recipe uses it and matching is
+exact (case and spelling).
+
+`siteConfig.tagline` and `siteConfig.description` are optional. When empty, the website falls back to
+the copy in `apps/website/shared/config/site-defaults.ts`.
+
+### Editor warnings
+
+Custom validators in `apps/cms/helpers/validation.ts` show warnings (they never block publishing):
+
+- Portable Text that still contains "lorem ipsum" placeholder copy.
+- A `tagsPage` featured or secondary tag that no recipe uses (checked live against the dataset).
 
 ## Objects
 
