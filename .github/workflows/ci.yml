@@ -1,20 +1,24 @@
 name: CI
 
+# Runs on every PR and every push to main, docs-only changes included.
+# The ruleset on main requires "Verify (typegen, biome, tsc)" and
+# "Build (non-fork PRs + main)"; a path filter here would leave those checks
+# pending forever on a docs-only PR, so there isn't one.
+# Keep those two job names exactly as they are unless the ruleset changes too.
+
 on:
   workflow_dispatch:
   pull_request:
-    paths-ignore:
-      - "**/*.md"
-      - "docs/**"
   push:
     branches: [main]
-    paths-ignore:
-      - "**/*.md"
-      - "docs/**"
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  # Superseded PR runs are cancelled; runs on main always finish.
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   verify:
@@ -22,38 +26,29 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
+    # Same checks as `pnpm run ci:verify`, split into steps so a failure names
+    # its stage. Needs no env vars or secrets, so it also runs on fork and
+    # Dependabot PRs.
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: pnpm-lock.yaml
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Set up Node + pnpm
+        uses: ./.github/actions/setup
 
-      - name: Write website .env (CI)
-        uses: ./.github/actions/write-website-env
-        with:
-          next_public_base_url: ${{ vars.NEXT_PUBLIC_BASE_URL }}
-          next_public_sanity_dataset: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
-          next_public_sanity_key: ${{ vars.NEXT_PUBLIC_SANITY_KEY }}
-          recipes_page_key: ${{ vars.RECIPES_PAGE_KEY }}
-          site_config_key: ${{ vars.SITE_CONFIG_KEY }}
-          tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
-          sanity_revalidate_secret: ${{ secrets.SANITY_REVALIDATE_SECRET }}
-          next_public_sanity_studio_url: ${{ vars.NEXT_PUBLIC_SANITY_STUDIO_URL }}
-          sanity_viewer_token: ${{ secrets.SANITY_VIEWER_TOKEN }}
+      - name: Sanity typegen (schema extract + typegen)
+        run: pnpm run typegen
 
-      - name: Verify
-        run: pnpm run ci:verify
+      - name: Biome (lint + format)
+        run: pnpm -w exec biome ci .
+
+      - name: Type check website
+        run: pnpm run typecheck:website
+
+      - name: Type check CMS
+        run: pnpm run typecheck:cms
 
   build:
     name: Build (non-fork PRs + main)
@@ -61,25 +56,26 @@ jobs:
     timeout-minutes: 20
     needs: verify
 
-    # Fork PRs don't have access to repo vars.
+    # Fork PRs don't get this repo's secrets, so the build can't run there.
+    # A skipped job still satisfies the required check.
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.fork == false }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
-      - name: Enable Corepack (pnpm)
-        run: corepack enable
-
-      - name: Setup Node
-        uses: actions/setup-node@v6
         with:
-          node-version: "22"
-          cache: "pnpm"
-          cache-dependency-path: pnpm-lock.yaml
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Set up Node + pnpm
+        uses: ./.github/actions/setup
+
+      - name: Restore Next.js build cache
+        uses: actions/cache@v6
+        with:
+          path: apps/website/.next/cache
+          key: nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-${{ hashFiles('apps/website/**/*.ts', 'apps/website/**/*.tsx', 'apps/website/**/*.css', 'apps/website/next.config.mjs') }}
+          restore-keys: |
+            nextjs-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
 
       - name: Write website .env (CI)
         uses: ./.github/actions/write-website-env
@@ -94,5 +90,40 @@ jobs:
           next_public_sanity_studio_url: ${{ vars.NEXT_PUBLIC_SANITY_STUDIO_URL }}
           sanity_viewer_token: ${{ secrets.SANITY_VIEWER_TOKEN }}
 
+      # The website's prebuild runs typegen and validates the env first,
+      # preserving the extract -> typegen -> build order.
       - name: Build all workspaces
         run: pnpm run build
+
+  dependency-review:
+    name: Dependency review
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    if: ${{ github.event_name == 'pull_request' }}
+
+    # Blocks PRs that add a dependency with a known high or critical
+    # vulnerability. Results show in the job summary.
+    steps:
+      - name: Review dependency changes
+        uses: actions/dependency-review-action@v5
+        with:
+          fail-on-severity: high
+
+  workflow-lint:
+    name: Lint workflows (actionlint)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    # Catches workflow syntax errors, bad expressions and shell bugs in run
+    # steps before they break CI. Pinned by tag and digest; Dependabot's
+    # github-actions updates don't cover docker:// images, so bump by hand.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: actionlint
+        uses: docker://rhysd/actionlint:1.7.12@sha256:b1934ee5f1c509618f2508e6eb47ee0d3520686341fec936f3b79331f9315667
+        with:
+          args: -color
