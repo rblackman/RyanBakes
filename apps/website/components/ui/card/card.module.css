@@ -61,7 +61,6 @@
 
 .content p {
 	text-overflow: ellipsis;
-	display: flex;
 	display: -webkit-box;
 	-webkit-line-clamp: 4;
 	line-clamp: 4;

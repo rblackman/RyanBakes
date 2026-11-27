@@ -1,15 +1,14 @@
 {
 	"extends": "../../tsconfig.base.json",
 	"compilerOptions": {
-		"baseUrl": ".",
 		"paths": {
-			"@apps/*": ["app/*"],
-			"@components/*": ["components/*"],
-			"@helpers/*": ["helpers/*"],
-			"@hooks/*": ["hooks/*"],
-			"@queries/*": ["queries/*"],
-			"@shared/*": ["shared/*"],
-			"@t/*": ["types/*"]
+			"@apps/*": ["./app/*"],
+			"@components/*": ["./components/*"],
+			"@helpers/*": ["./helpers/*"],
+			"@hooks/*": ["./hooks/*"],
+			"@queries/*": ["./queries/*"],
+			"@shared/*": ["./shared/*"],
+			"@t/*": ["./types/*"]
 		},
 		"plugins": [
 			{

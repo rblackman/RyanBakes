@@ -59,7 +59,6 @@
 
 .blurb p {
 	text-overflow: ellipsis;
-	display: flex;
 	display: -webkit-box;
 	-webkit-line-clamp: 5;
 	line-clamp: 5;

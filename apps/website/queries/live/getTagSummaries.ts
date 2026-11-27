@@ -28,7 +28,7 @@ export default async function getTagSummaries(): Promise<TagSummary[]> {
 		stega: false,
 	});
 
-	const recipes: TagSummariesQueryResult = data;
+	const recipes = data as TagSummariesQueryResult;
 	const counts = new Map<string, number>();
 	const byTag = new Map<string, TagRecipe[]>();
 
