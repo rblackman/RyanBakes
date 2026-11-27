@@ -2,7 +2,7 @@ import type { CustomValidator } from "sanity";
 import blockToString from "./blockToString";
 
 const apiVersion = "2025-01-01";
-const placeholderPattern = /\blorem ipsum\b/i;
+const placeholderPattern = /\blorem\s+ipsum\b/i;
 const tagUsageQuery = `count(*[_type == "recipe" && $recipeTag in tags])`;
 
 /**

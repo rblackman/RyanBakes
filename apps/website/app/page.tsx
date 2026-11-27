@@ -45,8 +45,10 @@ export default async function Page() {
 	const blocks: Array<Keyed<InlineImage | TextSection | RecipePreview>> = content ?? [];
 
 	// Keep the raw (possibly stega-encoded) values so visual editing can map them to fields.
-	const tagline = siteConfig.tagline?.trim() ? siteConfig.tagline : defaultTagline;
-	const description = siteConfig.description?.trim() ? siteConfig.description : defaultSiteDescription;
+	// Check emptiness on cleaned values, since stega characters survive trim().
+	const { tagline: rawTagline, description: rawDescription } = siteConfig;
+	const tagline = rawTagline && stegaClean(rawTagline).trim() ? rawTagline : defaultTagline;
+	const description = rawDescription && stegaClean(rawDescription).trim() ? rawDescription : defaultSiteDescription;
 
 	return (
 		<main>

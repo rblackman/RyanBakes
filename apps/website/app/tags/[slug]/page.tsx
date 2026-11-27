@@ -1,7 +1,6 @@
 import FeaturedRecipe from "@components/features/recipe/featured-recipe";
 import Heading from "@components/ui/heading";
 import buildCanonicalUrl from "@helpers/build-canonical-url";
-import decodeRouteParam from "@helpers/decode-route-param";
 import formatRecipeCount from "@helpers/format-recipe-count";
 import formatTagName from "@helpers/format-tag-name";
 import resolveParams from "@helpers/resolve-params";
@@ -23,8 +22,8 @@ export type Props = Readonly<{
 }>;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-	const { slug } = await resolveParams(params);
-	const tag = decodeRouteParam(slug);
+	// Next.js already decodes dynamic params.
+	const { slug: tag } = await resolveParams(params);
 	const title = formatTagName(tag);
 
 	const description = `Recipes tagged "${title}".`;
@@ -49,8 +48,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Tag({ params }: Props) {
-	const { slug } = await resolveParams(params);
-	const tag = decodeRouteParam(slug);
+	const { slug: tag } = await resolveParams(params);
 
 	const recipes = await getRecipesByTag(tag);
 

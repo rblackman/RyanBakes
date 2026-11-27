@@ -29,6 +29,7 @@ export default async function getTagSummaries(): Promise<TagSummary[]> {
 	});
 
 	const recipes: TagSummariesQueryResult = data;
+	const counts = new Map<string, number>();
 	const byTag = new Map<string, TagRecipe[]>();
 
 	for (const recipe of recipes) {
@@ -41,6 +42,9 @@ export default async function getTagSummaries(): Promise<TagSummary[]> {
 				continue;
 			}
 
+			counts.set(tag, (counts.get(tag) ?? 0) + 1);
+
+			// Only recipes with a title and slug can be linked; they still count above.
 			const list = byTag.get(tag) ?? [];
 			if (title && slug) {
 				list.push({ title, slug });
@@ -49,8 +53,7 @@ export default async function getTagSummaries(): Promise<TagSummary[]> {
 		}
 	}
 
-	return [...byTag.entries()]
-		.map(([tag, tagRecipes]) => ({ tag, count: tagRecipes.length, recipes: tagRecipes }))
-		.filter(({ count }) => count > 0)
+	return [...counts.entries()]
+		.map(([tag, count]) => ({ tag, count, recipes: byTag.get(tag) ?? [] }))
 		.sort((a, b) => a.tag.localeCompare(b.tag));
 }
