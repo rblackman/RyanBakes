@@ -46,8 +46,33 @@ function failingAudits(report) {
 	return failing;
 }
 
+/** One line on what the largest contentful paint waited for, from the LCP breakdown insight. */
+function lcpBreakdown(report) {
+	const details = report.audits?.["lcp-breakdown-insight"]?.details;
+	if (details?.type !== "list") {
+		return undefined;
+	}
+	const table = details.items.find((item) => item.type === "table");
+	const node = details.items.find((item) => item.type === "node");
+	if (!table) {
+		return undefined;
+	}
+	const parts = table.items.map((item) => `${item.label} ${Math.round(item.duration)} ms`).join(", ");
+	const element = node?.snippet ? ` on \`${node.snippet.slice(0, 80)}\`` : "";
+	return `${parts}${element}`;
+}
+
+/** The first few browser console errors, which cost best-practices points. */
+function consoleErrors(report) {
+	const items = report.audits?.["errors-in-console"]?.details?.items ?? [];
+	return items
+		.slice(0, 3)
+		.map((item) => `${item.source ?? "console"}: ${String(item.description ?? "").slice(0, 160)}`);
+}
+
 const rows = [];
 const failures = [];
+const notes = [];
 for (const entry of representative) {
 	const report = JSON.parse(readFileSync(entry.jsonPath, "utf8"));
 	const page = new URL(entry.url).pathname;
@@ -57,6 +82,13 @@ for (const entry of representative) {
 	);
 	for (const failure of failingAudits(report)) {
 		failures.push(`- \`${page}\`: ${failure}`);
+	}
+	for (const error of consoleErrors(report)) {
+		failures.push(`  - ${error.replace(/\s+/g, " ")}`);
+	}
+	const breakdown = lcpBreakdown(report);
+	if (breakdown) {
+		notes.push(`- \`${page}\`: ${breakdown}`);
 	}
 }
 
@@ -70,6 +102,7 @@ const markdown = [
 	...rows,
 	"",
 	...(failures.length > 0 ? ["Audits that did not pass:", "", ...failures, ""] : []),
+	...(notes.length > 0 ? ["Largest contentful paint breakdown:", "", ...notes, ""] : []),
 ].join("\n");
 
 console.log(markdown);
