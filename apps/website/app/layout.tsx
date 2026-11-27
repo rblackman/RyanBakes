@@ -19,9 +19,12 @@ import "../styles/variables.css";
 
 // Self-hosted at build time by next/font, so pages make no requests to Google.
 // Alegreya (a calligraphic book serif) for headings; Source Sans 3 for text, tables and controls.
+// Headings only. Not preloaded, so it doesn't compete with the page's main photo on slow phones;
+// headings show in the size-matched fallback until it arrives.
 const alegreya = Alegreya({
 	subsets: ["latin"],
 	display: "swap",
+	preload: false,
 	variable: "--font-alegreya",
 });
 
