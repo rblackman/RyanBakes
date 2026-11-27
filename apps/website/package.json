@@ -36,9 +36,9 @@
 		"zod": "^4.3.5"
 	},
 	"devDependencies": {
-		"@portabletext/types": "^4.0.1",
-		"@vercel/toolbar": "^0.1.41",
-		"dotenv": "^17.2.3",
-		"next-devtools-mcp": "^0.3.10"
+		"@portabletext/types": "^4.0.2",
+		"@vercel/toolbar": "^0.2.7",
+		"dotenv": "^18.0.10",
+		"next-devtools-mcp": "^0.4.0"
 	}
 }
