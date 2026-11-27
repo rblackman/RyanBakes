@@ -6,6 +6,12 @@ export default defineCliConfig({
 		dataset: process.env.SANITY_STUDIO_DATASET ?? "production",
 	},
 
+	// The hosted Studio this project deploys to. Lets `sanity deploy` run
+	// unattended in CI without asking which studio to update.
+	deployment: {
+		appId: "a5d9f3c7048b31b5a0737b92",
+	},
+
 	typegen: {
 		// where to scan for GROQ queries
 		path: [

@@ -1,11 +1,27 @@
 name: Deploy CMS
 
+# Deploys the Sanity Studio (and, as part of `sanity deploy`, its schema) to
+# Sanity hosting. Runs on every push to main that can change the Studio build,
+# and by hand from the Actions tab.
 on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/cms/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - ".npmrc"
+      - "tsconfig.base.json"
+      - ".github/workflows/deploy-cms.yml"
+      - ".github/actions/setup/**"
   workflow_dispatch:
 
 permissions:
   contents: read
 
+# One deploy at a time. A push that lands while a deploy runs waits, and
+# GitHub keeps only the newest waiting run, so the last merge always deploys.
 concurrency:
   group: deploy-cms
   cancel-in-progress: false
@@ -16,11 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
-    # Only allow deploys from main
-    if: ${{ github.ref == 'refs/heads/main' }}
+    # Only deploy from main, and never from a fork.
+    if: ${{ github.ref == 'refs/heads/main' && github.repository == 'rblackman/RyanBakes' }}
 
-    # Optional but recommended: create a GitHub Environment named "production"
-    # and require approvals there.
+    # Holds SANITY_AUTH_TOKEN. If this environment requires a reviewer, every
+    # automatic deploy waits for that approval.
     environment: production
 
     steps:
@@ -32,27 +48,18 @@ jobs:
       - name: Set up Node + pnpm
         uses: ./.github/actions/setup
 
-      - name: Write website .env (CI)
-        uses: ./.github/actions/write-website-env
-        with:
-          next_public_base_url: ${{ vars.NEXT_PUBLIC_BASE_URL }}
-          next_public_sanity_dataset: ${{ vars.NEXT_PUBLIC_SANITY_DATASET }}
-          next_public_sanity_key: ${{ vars.NEXT_PUBLIC_SANITY_KEY }}
-          recipes_page_key: ${{ vars.RECIPES_PAGE_KEY }}
-          site_config_key: ${{ vars.SITE_CONFIG_KEY }}
-          tags_page_key: ${{ vars.TAGS_PAGE_KEY }}
-          sanity_revalidate_secret: ${{ secrets.SANITY_REVALIDATE_SECRET }}
-          next_public_sanity_studio_url: ${{ vars.NEXT_PUBLIC_SANITY_STUDIO_URL }}
-          sanity_viewer_token: ${{ secrets.SANITY_VIEWER_TOKEN }}
-
-      # Keep the canonical ordering: extract -> typegen -> build -> deploy
+      # Same order as CI: extract -> typegen -> build -> deploy. Typegen needs
+      # no secrets, and a schema or query error stops the deploy here.
       - name: Typegen (schema extract + sanity typegen)
         run: pnpm run typegen
 
       - name: Build CMS
         run: pnpm run build:cms
 
+      # --no-build reuses the build above. --yes keeps the CLI from waiting on
+      # a prompt. The target studio comes from deployment.appId in
+      # apps/cms/sanity.cli.ts, so nothing needs choosing.
       - name: Deploy CMS
-        run: pnpm run deploy:cms
+        run: pnpm --filter cms exec sanity deploy --no-build --yes
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
