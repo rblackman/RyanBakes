@@ -156,6 +156,8 @@ a:focus-visible,
 }
 
 .skipLink {
+	/* It sits over the blue header, where the light jade ring keeps 3:1 contrast (about 6.3:1). */
+	--focus-outline-color: var(--secondary-on-primary);
 	position: absolute;
 	top: 0.5rem;
 	left: 0.5rem;
