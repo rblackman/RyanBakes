@@ -13,6 +13,8 @@ const isIgnored = (f) => {
 		f.includes("/.next/") ||
 		f.includes("/dist/") ||
 		f.includes("/build/") ||
+		f.includes("/.agents/") ||
+		f.includes("/.claude/") ||
 		f.includes("/out/") ||
 		f.includes("/coverage/")
 	);
@@ -25,6 +27,8 @@ const biomeCheck = (filenames) => {
 		})
 		.map(quote)
 		.join(" ");
+
+	console.log("Files to check with Biome:", files);
 
 	if (!files) {
 		return 'node -e "process.exit(0)"';

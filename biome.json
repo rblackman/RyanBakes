@@ -14,7 +14,16 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["**", "!**/node_modules", "!**/.next", "!**/dist", "!**/build", "!**/shared/shadcn/*.tsx"]
+		"includes": [
+			"**",
+			"!**/node_modules",
+			"!**/.next",
+			"!**/dist",
+			"!**/build",
+			"!**/shared/shadcn/*.tsx",
+			"!**/.agents",
+			"!**/.claude"
+		]
 	},
 	"formatter": {
 		"enabled": true,
