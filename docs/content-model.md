@@ -84,5 +84,5 @@ baker's percentage table from these values.
 3. If the website caches the type, update the tag map in `apps/website/app/api/revalidate/route.ts`
    so published changes revalidate (see `ARCHITECTURE.md`).
 4. Run `pnpm ci:verify` and `pnpm build`.
-5. Deploy the Studio after merging (`docs/deployment.md`). Editors keep using the old schema until
-   the Studio is redeployed.
+5. Merging to `main` deploys the Studio automatically (`docs/deployment.md`). Editors keep using
+   the old schema until that deploy finishes.
