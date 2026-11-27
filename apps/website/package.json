@@ -4,7 +4,7 @@
 	"private": true,
 	"type": "module",
 	"engines": {
-		"node": "v22.x"
+		"node": "^22.22.1"
 	},
 	"scripts": {
 		"dev": "next dev",

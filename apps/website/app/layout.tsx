@@ -3,6 +3,7 @@ import DisableDraftMode from "@components/ui/disable-draft-mode";
 import getSiteConfig from "@queries/live/getSiteConfig";
 import { clientEnv } from "@shared/config/env.client";
 import { SanityLive } from "@shared/lib/live";
+import { handleLiveEvent } from "@shared/lib/live-action";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
@@ -58,7 +59,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 			<body>
 				<MainNav />
 				{children}
-				<SanityLive />
+				<SanityLive action={handleLiveEvent} />
 				{isEnabled ? (
 					<>
 						<VisualEditing />
