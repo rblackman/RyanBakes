@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import "server-only";
+import { splitAmountParts } from "./decimal-to-fraction";
 import styles from "./fraction.module.css";
 
 function FractionPart({ val }: { val: string }) {
@@ -25,12 +26,13 @@ function FractionPart({ val }: { val: string }) {
 }
 
 export default function Fraction({ val }: { val: string }) {
-	const parts = useMemo(() => val.split(" "), [val]);
+	// Amounts may be stored as decimals ("0.25"); show them as fractions ("1/4").
+	const parts = useMemo(() => splitAmountParts(val), [val]);
 
 	return (
 		<>
-			{parts.map((part) => (
-				<FractionPart val={part} key={part} />
+			{parts.map(({ key, text }) => (
+				<FractionPart val={text} key={key} />
 			))}
 		</>
 	);
