@@ -7,9 +7,13 @@ import "server-only";
 
 type Props = Readonly<{
 	value: Keyed<RecipePreview>;
+	priority?: boolean | undefined;
 }>;
 
-export default async function RecipePreviewComponent({ value: { _key, recipe: recipeRef, large } }: Props) {
+export default async function RecipePreviewComponent({
+	value: { _key, recipe: recipeRef, large },
+	priority = false,
+}: Props) {
 	if (recipeRef === undefined) {
 		throwError(`RecipePreview block (${_key}) is missing required "recipe" reference.`);
 	}
@@ -18,5 +22,5 @@ export default async function RecipePreviewComponent({ value: { _key, recipe: re
 
 	const recipe = await getRecipeById(id);
 
-	return <FeaturedRecipe recipe={recipe} large={large ?? false} />;
+	return <FeaturedRecipe recipe={recipe} large={large ?? false} priority={priority} />;
 }

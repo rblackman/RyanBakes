@@ -11,9 +11,11 @@ type Props = Readonly<{
 	content: Keyed<InlineImage> | Keyed<TextSection> | Keyed<RecipePreview>;
 	/** The highest level a heading inside a text section may use. Pass a deeper level when nested. */
 	minHeadingLevel?: RichTextHeadingLevel | undefined;
+	/** Fetch this block's picture early. Only for a block likely to hold the page's largest element. */
+	priority?: boolean | undefined;
 }>;
 
-export default function Block({ content, minHeadingLevel }: Props) {
+export default function Block({ content, minHeadingLevel, priority = false }: Props) {
 	switch (content._type) {
 		case "inlineImage": {
 			return <ImageSectionComponent value={content} />;
@@ -22,7 +24,7 @@ export default function Block({ content, minHeadingLevel }: Props) {
 			return <TextSectionComponent value={content} minHeadingLevel={minHeadingLevel} />;
 		}
 		case "recipePreview": {
-			return <RecipePreviewComponent value={content} />;
+			return <RecipePreviewComponent value={content} priority={priority} />;
 		}
 		default: {
 			return assertUnreachable(content);

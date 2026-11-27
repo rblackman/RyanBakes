@@ -43,6 +43,9 @@ export default async function Page() {
 		getTagSummaries(),
 	]);
 	const blocks: Array<Keyed<InlineImage | TextSection | RecipePreview>> = content ?? [];
+	// On phones the first large recipe preview's photo fills the screen width, so it is usually the
+	// largest thing in view. Fetch it early instead of lazily.
+	const leadPreviewKey = blocks.find((block) => block._type === "recipePreview" && block.large === true)?._key;
 
 	// Keep the raw (possibly stega-encoded) values so visual editing can map them to fields.
 	// Check emptiness on cleaned values, since stega characters survive trim().
@@ -55,7 +58,7 @@ export default async function Page() {
 			<HomeHero tagline={tagline} description={description} />
 
 			{blocks.map((block) => (
-				<Block key={block._key} content={block} />
+				<Block key={block._key} content={block} priority={block._key === leadPreviewKey} />
 			))}
 
 			<BrowseByTag summaries={tagSummaries} />
