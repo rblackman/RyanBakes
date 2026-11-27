@@ -152,6 +152,11 @@
 		font-size: var(--font-size-lg);
 	}
 
+	/* The text column is narrow next to the photo, so let a long word break instead of being clipped. */
+	.large :is(.heading, .tags) {
+		overflow-wrap: anywhere;
+	}
+
 	.large .blurb {
 		margin-left: var(--featured-padding);
 		padding-top: var(--space-2);
