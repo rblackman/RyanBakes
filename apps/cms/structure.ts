@@ -23,10 +23,7 @@ export const deskStructure: StructureResolver = (S) =>
 				),
 
 			// Recipes
-			S.listItem()
-				.title("Recipes")
-				.icon(FcList)
-				.child(S.documentTypeList("recipe").title("Recipes")),
+			S.listItem().title("Recipes").icon(FcList).child(S.documentTypeList("recipe").title("Recipes")),
 
 			// Pages
 			S.listItem()

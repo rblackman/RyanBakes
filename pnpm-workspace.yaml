@@ -3,7 +3,7 @@ packages:
   - "packages/*"
 
 onlyBuiltDependencies:
-  - '@bradygaster/squad-cli'
+  - "@bradygaster/squad-cli"
   - core-js
   - esbuild
   - protobufjs

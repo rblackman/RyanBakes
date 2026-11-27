@@ -3,7 +3,7 @@
 	"version": "2.0.0",
 	"private": true,
 	"type": "module",
-	"packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
+	"packageManager": "pnpm@10.34.9+sha512.f49b5a8ea0fdedb44bb3c0c1d6575092a53c2950d95b7ad15df11f17974877a2de3a01c07e934e9b28ce716e51c09a94962c7306d09be2e1e4b18a8c8762fd32",
 	"engines": {
 		"node": "v22.x"
 	},
@@ -20,17 +20,17 @@
 		"url": "https://github.com/rblackman/RyanBakes"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "2.3.11",
-		"@bradygaster/squad-cli": "^0.9.1",
-		"@commitlint/cli": "^20.3.1",
-		"@commitlint/config-conventional": "^20.3.1",
-		"@types/node": "^25.0.3",
-		"@types/react": "^19.2.7",
-		"@types/react-dom": "^19.2.3",
+		"@biomejs/biome": "2.6.9",
+		"@bradygaster/squad-cli": "^0.9.4",
+		"@commitlint/cli": "^21.2.4",
+		"@commitlint/config-conventional": "^21.2.4",
+		"@types/node": "^26.6.11",
+		"@types/react": "^19.3.3",
+		"@types/react-dom": "^19.3.0",
 		"husky": "^9.1.7",
-		"lint-staged": "^16.2.7",
-		"tsx": "^4.21.0",
-		"typescript": "^5.9.3"
+		"lint-staged": "^17.6.2",
+		"tsx": "^4.23.15",
+		"typescript": "^6.0.3"
 	},
 	"scripts": {
 		"preinstall": "corepack enable",

@@ -7,10 +7,10 @@ export type TagWithCount = {
 	count: number;
 };
 
-const allTagsQuery = groq`*[_type == "recipe"]{ tags }`;
+const allTagsWithCountsQuery = groq`*[_type == "recipe"]{ tags }`;
 
 export default async function getTagsWithCounts(): Promise<TagWithCount[]> {
-	const data = await sanityClient.fetch(allTagsQuery);
+	const data = await sanityClient.fetch(allTagsWithCountsQuery);
 	const recipes = data as Array<Pick<Recipe, "tags">>;
 
 	const counts = new Map<string, number>();
