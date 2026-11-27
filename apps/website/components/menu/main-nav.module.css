@@ -1,23 +1,23 @@
-/* A light header on the page background, held by a hairline, so the content leads. */
+/* The enamel-blue band is the site's signature; the content below stays quiet. */
 .headerWrap {
-	background: var(--bg);
-	border-bottom: 1px solid var(--border);
+	/* The light jade keeps the focus ring at 3:1 or better against the blue. */
+	--focus-outline-color: var(--secondary-on-primary);
+	background: var(--primary);
+	color: var(--primary-contrast);
 }
 
 .headerWrap a {
-	color: var(--text);
+	color: var(--primary-contrast);
 	text-decoration: underline;
 	text-decoration-color: transparent;
 	text-decoration-thickness: 0.08em;
 	text-underline-offset: 0.35em;
-	transition:
-		color var(--animation-duration) ease-in-out,
-		text-decoration-color var(--animation-duration) ease-in-out;
+	transition: text-decoration-color var(--animation-duration) ease-in-out;
 }
 
 .headerWrap a:hover,
 .headerWrap a:focus-visible {
-	text-decoration-color: var(--secondary-dark);
+	text-decoration-color: var(--secondary-on-primary);
 }
 
 .header {
@@ -32,11 +32,9 @@
 .siteName {
 	margin: 0;
 	font-family: var(--font-serif);
-	font-optical-sizing: auto;
-	font-size: 1.6rem;
-	font-weight: 600;
+	font-size: 1.75rem;
+	font-weight: 700;
 	line-height: 1;
-	letter-spacing: -0.02em;
 }
 
 .navList {
@@ -55,6 +53,6 @@
 	}
 
 	.siteName {
-		font-size: 1.3rem;
+		font-size: 1.35rem;
 	}
 }

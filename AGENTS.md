@@ -145,7 +145,8 @@ The website uses Zod 4. Write the current API, not Zod 3 habits:
   card shadows. Prefer a token to a one-off value. Fonts load only through `next/font` in
   `app/layout.tsx`; don't add a font `<link>` or `@import`. Data tables use the shared `@components/ui/table/table.module.css`.
 - Keep text contrast at 4.5:1 or better (`--text-muted` for secondary text, not `--neutral-600`;
-  `--secondary-dark` for accent text, not `--secondary`) and
+  `--secondary-dark` for accent lines and rings on light backgrounds, `--secondary-on-primary` on
+  the enamel blue) and
   keep visible focus rings (`--focus-outline-*`). The Lighthouse check fails below 100 accessibility.
 
 ### Sanity Studio

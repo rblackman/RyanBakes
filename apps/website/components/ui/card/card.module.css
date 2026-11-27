@@ -15,14 +15,13 @@
 	border-radius: var(--radius);
 	box-shadow: var(--card-shadow);
 	transition:
-		transform 0.3s var(--ease-out),
-		box-shadow 0.3s var(--ease-out),
-		border-color 0.3s var(--ease-out);
+		box-shadow var(--animation-duration) ease-in-out,
+		border-color var(--animation-duration) ease-in-out;
 }
 
+/* A quiet answer to the pointer: the edge firms up and the title underlines. */
 .card:hover,
 .card:focus-within {
-	transform: translateY(-0.15rem);
 	border-color: var(--border-strong);
 	box-shadow: var(--card-shadow-hover);
 }
@@ -31,23 +30,12 @@
 	width: 100%;
 }
 
-/* A slow, slight zoom on the photo; the card clips it. */
-.pic img {
-	transition: transform 0.6s var(--ease-out);
-}
-
-.card:hover .pic img,
-.card:focus-within .pic img {
-	transform: scale(1.04);
-}
-
 /* Two classes so this beats the global heading margins. */
 .card .name {
 	margin: var(--space-2) var(--card-padding) 0;
-	font-size: 1.05rem;
-	font-weight: 600;
-	line-height: 1.25;
-	letter-spacing: -0.005em;
+	font-size: 1.1rem;
+	font-weight: 700;
+	line-height: 1.2;
 }
 
 .card .name:last-child {
@@ -83,16 +71,4 @@
 	z-index: 1;
 	margin-top: auto;
 	padding: 0 var(--card-padding) var(--card-padding);
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.card:hover,
-	.card:focus-within {
-		transform: none;
-	}
-
-	.card:hover .pic img,
-	.card:focus-within .pic img {
-		transform: none;
-	}
 }

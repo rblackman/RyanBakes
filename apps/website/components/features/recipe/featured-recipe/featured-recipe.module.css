@@ -14,23 +14,14 @@
 	border-radius: var(--radius);
 	box-shadow: var(--card-shadow);
 	transition:
-		box-shadow 0.3s var(--ease-out),
-		border-color 0.3s var(--ease-out);
+		box-shadow var(--animation-duration) ease-in-out,
+		border-color var(--animation-duration) ease-in-out;
 }
 
 .featuredRecipe:hover,
 .featuredRecipe:focus-within {
 	border-color: var(--border-strong);
 	box-shadow: var(--card-shadow-hover);
-}
-
-.img img {
-	transition: transform 0.6s var(--ease-out);
-}
-
-.featuredRecipe:hover .img img,
-.featuredRecipe:focus-within .img img {
-	transform: scale(1.03);
 }
 
 .featuredRecipe + .featuredRecipe {
@@ -67,7 +58,6 @@
 	margin: var(--featured-padding) var(--featured-padding) 0 0;
 	font-size: var(--font-size-xl);
 	font-weight: 500;
-	letter-spacing: -0.015em;
 }
 
 .heading a {
@@ -157,12 +147,5 @@
 	.featuredRecipe.large .heading {
 		margin-top: var(--space-2);
 		font-size: var(--font-size-lg);
-	}
-}
-
-@media (prefers-reduced-motion: reduce) {
-	.featuredRecipe:hover .img img,
-	.featuredRecipe:focus-within .img img {
-		transform: none;
 	}
 }

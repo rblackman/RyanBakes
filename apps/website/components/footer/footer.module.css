@@ -16,7 +16,6 @@
 .siteName {
 	margin: 0;
 	font-family: var(--font-serif);
-	font-optical-sizing: auto;
 	font-size: var(--font-size-lg);
 	font-weight: 600;
 	letter-spacing: -0.01em;

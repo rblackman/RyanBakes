@@ -8,7 +8,7 @@ import { SanityLive } from "@shared/lib/live";
 import { handleLiveEvent } from "@shared/lib/live-action";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Alegreya, Source_Sans_3 } from "next/font/google";
 import { draftMode } from "next/headers";
 import { stegaClean } from "next-sanity";
 import { VisualEditing } from "next-sanity/visual-editing";
@@ -18,22 +18,21 @@ import "../styles/global.css";
 import "../styles/variables.css";
 
 // Self-hosted at build time by next/font, so pages make no requests to Google.
-// Fraunces (a soft, warm serif) for headings; Inter for body text, tables and UI.
-const fraunces = Fraunces({
+// Alegreya (a calligraphic book serif) for headings; Source Sans 3 for text, tables and controls.
+const alegreya = Alegreya({
 	subsets: ["latin"],
-	axes: ["opsz"],
 	display: "swap",
-	variable: "--font-fraunces",
+	variable: "--font-alegreya",
 });
 
-const inter = Inter({
+const sourceSans = Source_Sans_3({
 	subsets: ["latin"],
 	display: "swap",
-	variable: "--font-inter",
+	variable: "--font-source-sans",
 });
 
 export const viewport: Viewport = {
-	themeColor: "#f8f5f0",
+	themeColor: "#163a63",
 	width: "device-width",
 	initialScale: 1,
 };
@@ -75,7 +74,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 	const shouldInjectToolbar = process.env.NODE_ENV === "development" || isEnabled;
 
 	return (
-		<html lang={lang} className={`${fraunces.variable} ${inter.variable}`}>
+		<html lang={lang} className={`${alegreya.variable} ${sourceSans.variable}`}>
 			<body>
 				<a className="skipLink" href="#main-content">
 					Skip to main content

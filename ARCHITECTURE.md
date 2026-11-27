@@ -177,11 +177,11 @@ in the README.
 Global styles and design tokens are in `styles/global.css` and `styles/variables.css`. Components use
 CSS Modules next to the component (`foo.module.css`). There is no CSS framework.
 
-`variables.css` holds the colors (a warm paper and ink palette with a terracotta accent), a spacing
-scale (`--space-1` to `--space-7`), a type scale (`--font-size-*`), the font stacks, and the shared
-card look (`--surface`, `--border`, `--radius`, `--card-shadow`). Headings use `--font-serif`
-(Fraunces) and everything else `--font-sans` (Inter). Both are self-hosted by `next/font/google` in
-`app/layout.tsx`, so pages make no font requests to Google.
+`variables.css` holds the colors (soft neutral surfaces, enamel blue as the brand colour, jade as
+the accent), a spacing scale (`--space-1` to `--space-7`), a type scale (`--font-size-*`), the font
+stacks, and the shared card look (`--surface`, `--border`, `--radius`, `--card-shadow`). Headings use
+`--font-serif` (Alegreya) and everything else `--font-sans` (Source Sans 3). Both are self-hosted by
+`next/font/google` in `app/layout.tsx`, so pages make no font requests to Google.
 `global.css` sets the heading sizes, section spacing and the page column (`--max-content-width`),
 which the header, content and footer share. Recipe cards (`components/ui/card`) and featured recipes
 lay out in a responsive grid; their title link covers the whole card. Data tables share

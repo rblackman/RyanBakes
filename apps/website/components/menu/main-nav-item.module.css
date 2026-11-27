@@ -1,16 +1,10 @@
 /* Padding gives each link a comfortable tap target without changing how the bar looks. */
 a.mainNavItem {
 	display: block;
-	padding: var(--space-2) var(--space-2);
-	color: var(--text-muted);
+	padding: var(--space-2);
 	font-size: var(--font-size-sm);
 	font-weight: 500;
-	letter-spacing: 0.02em;
-}
-
-a.mainNavItem:hover,
-a.mainNavItem:focus-visible {
-	color: var(--text);
+	letter-spacing: 0.01em;
 }
 
 @media only screen and (max-width: 640px) {

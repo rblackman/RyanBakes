@@ -77,12 +77,12 @@
 	place-items: center;
 	width: 1.75em;
 	height: 1.75em;
-	border: 1px solid var(--secondary-dark);
 	border-radius: 999px;
-	color: var(--secondary-dark);
+	background: var(--primary);
+	color: var(--primary-contrast);
 	font-family: var(--font-serif);
 	font-size: var(--font-size-sm);
-	font-weight: 600;
+	font-weight: 700;
 	font-variant-numeric: lining-nums tabular-nums;
 	line-height: 1;
 	/* Lines the circle up with the heading text, which is baseline aligned. */

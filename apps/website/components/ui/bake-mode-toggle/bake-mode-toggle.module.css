@@ -20,8 +20,8 @@
 	border-radius: 999px;
 	cursor: pointer;
 	transition:
-		background-color 0.25s var(--ease-out),
-		border-color 0.25s var(--ease-out);
+		background-color var(--animation-duration) ease-in-out,
+		border-color var(--animation-duration) ease-in-out;
 }
 
 .switch::before {
@@ -35,7 +35,8 @@
 	border-radius: 999px;
 	border: 1px solid var(--neutral-600);
 	box-shadow: 0 0.05rem 0.15rem rgb(43 37 32 / 20%);
-	transition: transform 0.25s var(--ease-out);
+	/* Motion that shows the change of state; --animation-duration is 0 when reduced motion is on. */
+	transition: transform var(--animation-duration) ease-in-out;
 }
 
 .switch:checked {

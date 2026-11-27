@@ -25,56 +25,64 @@
 	--font-size-xl: 1.6rem;
 	--font-size-2xl: 2.5rem;
 
-	/* Fonts are self-hosted by next/font (see app/layout.tsx), with system fallbacks. */
+	/*
+	 * Fonts are self-hosted by next/font (see app/layout.tsx), with system fallbacks.
+	 * Alegreya, a calligraphic book serif, for headings; Source Sans 3 for text, tables and controls.
+	 */
 	--font-sans:
-		var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-	--font-serif: var(--font-fraunces), Georgia, "Times New Roman", serif;
+		var(--font-source-sans), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+		sans-serif;
+	--font-serif: var(--font-alegreya), Georgia, "Times New Roman", serif;
 
 	--radius: 0.5rem;
 	--radius-sm: 0.3rem;
 
-	/* Warm neutral ramp: paper backgrounds, hairline borders, and ink for text */
-	--neutral-50: #f8f5f0;
-	--neutral-100: #f1ece4;
-	--neutral-200: #e6dfd4;
-	--neutral-300: #d6ccbd;
-	--neutral-400: #b5a99a;
-	--neutral-600: #7d7166;
-	--neutral-900: #2b2520;
+	/*
+	 * Palette, named for the bench: flour (page), bench (cards and tables), proof (alternate rows),
+	 * ink (text), enamel blue (the brand colour) and jade (accent).
+	 */
+	--neutral-50: #f7f7f4;
+	--neutral-100: #eeeee9;
+	--neutral-200: #e2e2dc;
+	--neutral-300: #cfcfc7;
+	--neutral-400: #a9aea9;
+	--neutral-600: #7a828c;
+	--neutral-900: #1c2530;
 
 	--text: var(--neutral-900);
 	/* Secondary text; at least 5:1 on --bg, --bg-alt and --surface (--neutral-600 is not) */
-	--text-muted: #6b6058;
+	--text-muted: #5a6470;
 	--bg: var(--neutral-50);
 	--bg-alt: var(--neutral-100);
 	/* Cards and tables sit a shade lighter than the page, held by a hairline border rather than contrast. */
-	--surface: #fdfbf8;
+	--surface: #fdfdfb;
 	/* Alternate rows inside a surface (tables) */
-	--surface-stripe: #f6f1ea;
+	--surface-stripe: #f2f2ee;
 	--border: var(--neutral-200);
 	--border-strong: var(--neutral-300);
-	--card-shadow: 0 0.05rem 0.1rem rgb(43 37 32 / 5%), 0 0.2rem 0.6rem rgb(43 37 32 / 4%);
-	--card-shadow-hover: 0 0.15rem 0.3rem rgb(43 37 32 / 6%), 0 0.8rem 1.8rem rgb(43 37 32 / 10%);
+	--card-shadow: 0 0.05rem 0.1rem rgb(28 37 48 / 4%);
+	--card-shadow-hover: 0 0.1rem 0.2rem rgb(28 37 48 / 5%), 0 0.5rem 1.2rem rgb(28 37 48 / 7%);
 
-	/* Ink: the dark brown used behind light text (recipe title band) */
-	--primary: #3b2f27;
-	--primary-light: #efe8df;
-	--primary-dark: #2b2520;
-	--primary_r: 59;
-	--primary_g: 47;
-	--primary_b: 39;
-	--primary-contrast: #fdfbf8;
+	/* Enamel blue: the header, the recipe title band and the step numbers */
+	--primary: #163a63;
+	--primary-light: #e6edf5;
+	--primary-dark: #0e2643;
+	--primary_r: 22;
+	--primary_g: 58;
+	--primary_b: 99;
+	--primary-contrast: #fdfdfb;
 
 	/*
-	 * Terracotta accent. --secondary-dark is the one for text, underlines and focus rings (5.4:1 on --bg);
-	 * --secondary is only for decoration such as icons (3.7:1).
+	 * Jade accent. --secondary-dark is for underlines and focus rings (4.9:1 on --bg); --secondary is
+	 * for icons (3.8:1); --secondary-on-primary is the accent on the enamel header and title band.
 	 */
-	--secondary: #c2643a;
-	--secondary-light: #f5e6dc;
-	--secondary-dark: #a34a26;
-	--secondary_r: 194;
-	--secondary_g: 100;
-	--secondary_b: 58;
+	--secondary: #258f63;
+	--secondary-light: #e8f2ec;
+	--secondary-dark: #1f7b55;
+	--secondary-on-primary: #6fd3a5;
+	--secondary_r: 37;
+	--secondary_g: 143;
+	--secondary_b: 99;
 	--secondary-contrast: #ffffff;
 
 	/* Warm accent for highlights */
@@ -94,8 +102,7 @@
 	--bp_mobile: 768px;
 
 	--animation-duration: 0.2s;
-	--ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
-	/* Dark enough for 3:1 against the light backgrounds (WCAG 2.2). The dark recipe title band overrides it. */
+	/* Dark enough for 3:1 against the light backgrounds (WCAG 2.2). The enamel header and recipe title band override it. */
 	--focus-outline-color: var(--secondary-dark);
 	--focus-outline-offset: 0.2rem;
 	--focus-outline-width: 0.15rem;
