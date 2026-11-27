@@ -140,11 +140,12 @@ Anything that starts with `NEXT_PUBLIC_` ends up in the browser bundle, so never
 
 ## CI and deployment
 
-- **CI** (`.github/workflows/ci.yml`) runs on pull requests and pushes to `main`: a Verify job
-  (`pnpm ci:verify`), then a Build job (`pnpm build`) that is skipped for PRs from forks.
-  Changes that only touch Markdown skip CI.
-- **CodeQL** scans JavaScript and TypeScript on PRs, on pushes to `main` and weekly.
-- **Dependabot** opens weekly grouped npm updates; a workflow approves them and turns on auto-merge.
+- **CI** (`.github/workflows/ci.yml`) runs on every pull request and push to `main`: a Verify job
+  (the `pnpm ci:verify` checks), then a Build job (`pnpm build`) that is skipped for PRs from forks,
+  plus dependency review and workflow linting. PR titles are checked with commitlint.
+- **CodeQL** scans JavaScript, TypeScript and the workflows on PRs, on pushes to `main` and weekly.
+- **Dependabot** opens weekly grouped npm and GitHub Actions updates; a workflow turns on auto-merge
+  for patch and minor updates, and majors wait for review. See [docs/deployment.md](docs/deployment.md#github-actions).
 - **Website**: Vercel's GitHub integration builds every branch. `main` goes to production at
   ryan-bakes.com; other branches get preview URLs.
 - **Studio**: deployed by hand, from the "Deploy CMS" workflow (main only) or `pnpm deploy:cms`.

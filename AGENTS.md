@@ -152,8 +152,12 @@ Biome formats and lints everything (tabs, width 120). Do not add Prettier or ESL
 ### GitHub Actions
 
 - Use `actions/checkout@v5` and `actions/setup-node@v6`, Node `22`, pnpm through Corepack, and
-  `pnpm install --frozen-lockfile`.
+  `pnpm install --frozen-lockfile`. Reuse the `.github/actions/setup` composite action.
 - Keep Verify before Build and keep fork PRs safe (no secrets for forks).
+- Don't rename the Verify or Build jobs or add a path filter to `ci.yml`: the `main` ruleset requires
+  those checks by name.
+- Give every workflow `permissions: contents: read` by default, and pass untrusted values (PR
+  titles, inputs) to scripts through `env:`, never `${{ }}` inside `run:`.
 - Avoid third-party actions unless clearly justified; never hardcode env values in workflows.
 
 ---
