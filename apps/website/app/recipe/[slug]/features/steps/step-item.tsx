@@ -44,7 +44,7 @@ export default function StepItem({ ingredients, step: { title, content }, units 
 				</Heading>
 				{(content ?? []).map((block: StepBlock) => {
 					const { _key: key } = block;
-					return <Block key={key} content={block} />;
+					return <Block key={key} content={block} minHeadingLevel={4} />;
 				})}
 			</div>
 		</li>

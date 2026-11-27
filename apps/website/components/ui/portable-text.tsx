@@ -24,7 +24,8 @@ function UnknownMark({ children, markType }: { children: ReactNode; markType: st
 
 type BlockProps = PortableTextComponentProps<PortableTextBlock>;
 
-type HeadingLevel = 2 | 3 | 4;
+export type RichTextHeadingLevel = 2 | 3 | 4;
+type HeadingLevel = RichTextHeadingLevel;
 
 /**
  * Renders authored headings at their own level (the Studio offers H2 to H4) but never above
