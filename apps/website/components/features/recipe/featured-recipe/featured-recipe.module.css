@@ -127,16 +127,12 @@
 	display: none;
 }
 
-/* On phones the large layout stacks: a wide picture on top, then the text. */
+/* On phones the large layout stacks: the square picture on top, then the text. */
 @media only screen and (max-width: 640px) {
 	.featuredRecipe.large {
 		grid-template-areas: "img" "title" "tags" "blurb";
 		grid-template-columns: 1fr;
 		grid-template-rows: auto;
-	}
-
-	.large .img {
-		max-height: 13rem;
 	}
 
 	.large :is(.heading, .tags, .blurb) {

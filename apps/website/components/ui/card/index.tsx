@@ -23,7 +23,7 @@ export default function Card({ title, tags, picture, href }: Props) {
 					aspectRatio={3 / 2}
 					className={styles.pic}
 					responsive
-					sizes="(max-width: 640px) 100vw, 360px"
+					sizes="(max-width: 380px) 100vw, (max-width: 640px) 50vw, 360px"
 				/>
 			)}
 
