@@ -94,10 +94,11 @@ show with each step; check the ingredients after doing that.
 
 ### Baker's math
 
-When `bakers.includeInBakersMath` is on, the ingredient carries a `grams` weight (pre-filled from
-`amount` by `schemas/components/autofill-grams-input.tsx` when the ingredient's unit is grams), and
-flags for `isFlour` and `countsTowardHydration` with a `hydrationFactor`. Recipes with
-`showBakerPercentage` on render a baker's percentage table from these values.
+When `bakers.includeInBakersMath` is on, the ingredient carries a `grams` weight (filled in from
+`amount` by `schemas/components/autofill-grams-input.tsx` when you click into an empty grams field and
+the ingredient's unit is grams), and flags for `isFlour` and `countsTowardHydration` with a
+`hydrationFactor`. Recipes with `showBakerPercentage` on render a baker's percentage table from these
+values.
 
 ## Changing the schema
 

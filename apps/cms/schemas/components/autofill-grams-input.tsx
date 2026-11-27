@@ -1,5 +1,5 @@
 import type React from "react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { type NumberInputProps, set, unset, useClient, useFormValue } from "sanity";
 
 const gramUnitQuery = `*[_id == $id][0].abbreviation == "g"`;
@@ -25,7 +25,7 @@ function parseAmountToNumber(amount: unknown): number | null {
 }
 
 export default function AutofillGramsInput(props: NumberInputProps) {
-	const { value, onChange, elementProps, path } = props;
+	const { value, onChange, elementProps, path, readOnly } = props;
 
 	// useFormValue takes a path from the document root. Grams lives at
 	// ingredients[_key].bakers.grams, so the ingredient is two levels up.
@@ -64,16 +64,15 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 		};
 	}, [client, unitRef]);
 
-	const didAutofill = useRef(false);
-
+	// Fill only when the editor moves into the grams field, never while the amount is being typed:
+	// an effect would copy "3" on the way to "350" and keep it.
 	const tryAutofill = useCallback(() => {
-		if (didAutofill.current) {
+		if (readOnly) {
 			return;
 		}
 
-		// Don’t overwrite user-entered values.
+		// Don't overwrite a weight that is already there.
 		if (value !== undefined && value !== null) {
-			didAutofill.current = true;
 			return;
 		}
 
@@ -87,12 +86,7 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 		}
 
 		onChange(set(parsed));
-		didAutofill.current = true;
-	}, [amount, isGrams, onChange, value]);
-
-	useEffect(() => {
-		tryAutofill();
-	}, [tryAutofill]);
+	}, [amount, isGrams, onChange, readOnly, value]);
 
 	const handleFocus = useCallback(
 		(event: React.FocusEvent<HTMLInputElement>) => {
