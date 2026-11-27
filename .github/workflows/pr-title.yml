@@ -1,0 +1,40 @@
+name: PR title
+
+# main only allows squash merges, so the PR title becomes the commit message.
+# This runs the same commitlint rules the commit-msg hook uses locally.
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    name: Conventional PR title
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    # Bot PRs (Dependabot) set their own titles.
+    if: ${{ github.event.pull_request.user.type != 'Bot' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Set up Node + pnpm
+        uses: ./.github/actions/setup
+
+      # The title goes through env, never into the script, so a crafted title
+      # can't run commands.
+      - name: Check title against commitlint.config.mjs
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --config commitlint.config.mjs

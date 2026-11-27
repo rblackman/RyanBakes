@@ -1,0 +1,28 @@
+name: "Set up Node + pnpm"
+description: "Enables Corepack (pnpm from packageManager), sets up Node with the pnpm store cache, and installs dependencies from the lockfile."
+
+inputs:
+  node-version:
+    description: "Node.js version. Keep in step with engines.node in package.json."
+    required: false
+    default: "22"
+
+runs:
+  using: "composite"
+  steps:
+    # Corepack has to be on before setup-node so `cache: pnpm` can find pnpm.
+    # pnpm's version comes from the packageManager field in the root package.json.
+    - name: Enable Corepack (pnpm)
+      shell: bash
+      run: corepack enable
+
+    - name: Setup Node
+      uses: actions/setup-node@v6
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: "pnpm"
+        cache-dependency-path: pnpm-lock.yaml
+
+    - name: Install dependencies
+      shell: bash
+      run: pnpm install --frozen-lockfile
