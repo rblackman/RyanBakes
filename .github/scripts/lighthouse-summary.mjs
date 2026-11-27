@@ -24,12 +24,41 @@ function metric(report, id) {
 	return audit.displayValue.replace(/ /g, " ");
 }
 
-const rows = representative.map((entry) => {
+// Categories where any audit below a full score is worth fixing. Performance is left out because
+// its opportunities are estimates, not failures.
+const checkedCategories = ["accessibility", "best-practices", "seo"];
+
+/** Lists the scored audits that did not pass in the checked categories, as "category: title". */
+function failingAudits(report) {
+	const failing = [];
+	for (const categoryId of checkedCategories) {
+		const category = report.categories?.[categoryId];
+		if (!category) {
+			continue;
+		}
+		for (const ref of category.auditRefs ?? []) {
+			const audit = report.audits?.[ref.id];
+			if (ref.weight > 0 && audit && typeof audit.score === "number" && audit.score < 1) {
+				failing.push(`${category.title}: ${audit.title}`);
+			}
+		}
+	}
+	return failing;
+}
+
+const rows = [];
+const failures = [];
+for (const entry of representative) {
 	const report = JSON.parse(readFileSync(entry.jsonPath, "utf8"));
 	const page = new URL(entry.url).pathname;
 	const { summary } = entry;
-	return `| \`${page}\` | ${score(summary.performance)} | ${score(summary.accessibility)} | ${score(summary["best-practices"])} | ${score(summary.seo)} | ${metric(report, "largest-contentful-paint")} | ${metric(report, "total-blocking-time")} | ${metric(report, "cumulative-layout-shift")} |`;
-});
+	rows.push(
+		`| \`${page}\` | ${score(summary.performance)} | ${score(summary.accessibility)} | ${score(summary["best-practices"])} | ${score(summary.seo)} | ${metric(report, "largest-contentful-paint")} | ${metric(report, "total-blocking-time")} | ${metric(report, "cumulative-layout-shift")} |`,
+	);
+	for (const failure of failingAudits(report)) {
+		failures.push(`- \`${page}\`: ${failure}`);
+	}
+}
 
 const markdown = [
 	`### ${label}`,
@@ -40,6 +69,7 @@ const markdown = [
 	"| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |",
 	...rows,
 	"",
+	...(failures.length > 0 ? ["Audits that did not pass:", "", ...failures, ""] : []),
 ].join("\n");
 
 console.log(markdown);
