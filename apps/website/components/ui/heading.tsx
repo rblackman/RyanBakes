@@ -9,9 +9,10 @@ type Props = Readonly<{
 	style?: CSSProperties | undefined;
 	sr?: boolean;
 	className?: string;
+	id?: string | undefined;
 }>;
 
-export default function Heading({ level, children, sr, style: inlineStyles, className: providedClass }: Props) {
+export default function Heading({ level, children, sr, style: inlineStyles, className: providedClass, id }: Props) {
 	let heading: "h2" | "h3" | "h4";
 
 	switch (level) {
@@ -33,6 +34,7 @@ export default function Heading({ level, children, sr, style: inlineStyles, clas
 	const props = {
 		style: inlineStyles || {},
 		className,
+		...(id ? { id } : {}),
 	};
 
 	return createElement(heading, props, children);

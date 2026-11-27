@@ -2,10 +2,12 @@ import MainNav from "@components/menu";
 import DisableDraftMode from "@components/ui/disable-draft-mode";
 import getSiteConfig from "@queries/live/getSiteConfig";
 import { clientEnv } from "@shared/config/env.client";
+import { defaultSiteDescription, defaultSiteTitle } from "@shared/config/site-defaults";
 import { SanityLive } from "@shared/lib/live";
 import { VercelToolbar } from "@vercel/toolbar/next";
 import type { Metadata, Viewport } from "next";
 import { draftMode } from "next/headers";
+import { stegaClean } from "next-sanity";
 import { VisualEditing } from "next-sanity/visual-editing";
 import type { ReactNode } from "react";
 import "server-only";
@@ -19,11 +21,11 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-	const { title, url } = await getSiteConfig();
+	const { title, url, description } = await getSiteConfig();
 	const baseUrl = url ?? clientEnv.NEXT_PUBLIC_BASE_URL;
 
-	const defaultTitle = title ?? "Ryan Bakes";
-	const defaultDescription = "Browse Ryan Bakes recipes and baking tips.";
+	const defaultTitle = stegaClean(title)?.trim() || defaultSiteTitle;
+	const defaultDescription = stegaClean(description)?.trim() || defaultSiteDescription;
 	const metadataBase = baseUrl ? new URL(baseUrl) : undefined;
 
 	return {

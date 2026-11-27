@@ -1,6 +1,7 @@
 import { FcTemplate } from "react-icons/fc";
 import { defineField, defineType } from "sanity";
 import blockToString from "../../helpers/blockToString";
+import { warnOnPlaceholderText } from "../../helpers/validation";
 
 export default defineType({
 	name: "textSection",
@@ -11,7 +12,7 @@ export default defineType({
 			name: "text",
 			title: "Text",
 			type: "portableText",
-			validation: (Rule) => Rule.required(),
+			validation: (Rule) => [Rule.required(), Rule.custom(warnOnPlaceholderText).warning()],
 		}),
 	],
 	preview: {

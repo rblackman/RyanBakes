@@ -1,0 +1,15 @@
+.hero {
+	margin: 0 0 2.5rem;
+	padding: 0 0 2rem;
+	border-bottom: 1px solid var(--neutral-200);
+}
+
+.tagline {
+	margin: 0 0 0.75rem;
+}
+
+.description {
+	margin: 0;
+	font-size: 1.15rem;
+	max-width: 60ch;
+}

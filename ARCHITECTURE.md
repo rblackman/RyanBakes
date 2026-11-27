@@ -80,7 +80,7 @@ apps/cms/schemas  ──sanity schema extract──▶  apps/cms/schema.json
 | Folder            | Fetches with                                    | Used for                                                       |
 | ----------------- | ----------------------------------------------- | -------------------------------------------------------------- |
 | `queries/live/`   | `sanityFetch` from `defineLive` (`next-sanity`) | Page content. Cache-tagged, live-updating, draft-aware         |
-| `queries/static/` | `sanityClient.fetch`                            | Lists for `generateStaticParams` and tag counts, at build time |
+| `queries/static/` | `sanityClient.fetch`                            | Lists for `generateStaticParams`, at build time                |
 
 The client (`shared/lib/sanity.ts`) uses the CDN, the `published` perspective, a pinned
 `apiVersion`, and stega encoding pointed at the Studio URL so the Presentation tool can map rendered
@@ -90,11 +90,11 @@ text back to fields.
 
 | Route                       | Source                                                                     |
 | --------------------------- | -------------------------------------------------------------------------- |
-| `/`                         | The `page` referenced by `siteConfig.homepage`, rendered as content blocks |
+| `/`                         | `siteConfig` tagline and description, the content blocks of the `page` referenced by `siteConfig.homepage`, then the most used tags |
 | `/recipe`                   | `recipesPage` singleton: featured recipe and secondary featured recipes    |
 | `/recipe/[slug]`            | One `recipe`; prebuilt for every slug via `generateStaticParams`           |
-| `/tags`                     | Every distinct tag with its recipe count                                   |
-| `/tags/[slug]`              | Recipes with that tag; prebuilt for every tag                              |
+| `/tags`                     | `tagsPage` intro and featured tags, then every distinct tag with its recipe count |
+| `/tags/[slug]`              | Recipes with that tag; prebuilt for every tag; 404 when no recipe uses it  |
 | `/studio`                   | Redirect to `NEXT_PUBLIC_SANITY_STUDIO_URL`                                |
 | `/api/revalidate`           | Sanity webhook target (below)                                              |
 | `/api/draft-mode/enable`    | Turns on draft mode for the Presentation tool                              |
