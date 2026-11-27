@@ -1,5 +1,6 @@
 version: 2
 updates:
+  # One entry at the root covers the whole pnpm workspace (apps/* and packages/*).
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
@@ -10,6 +11,19 @@ updates:
 
     open-pull-requests-limit: 10
     versioning-strategy: "increase"
+
+    # Wait a few days after a release before proposing it, so a compromised or
+    # broken publish is usually caught and pulled first. Security updates skip this.
+    cooldown:
+      default-days: 3
+      semver-major-days: 7
+
+    # Squash merges use the PR title, so keep it in commitlint's format,
+    # e.g. "build(deps): bump the production-deps group ...".
+    commit-message:
+      prefix: "build"
+      prefix-development: "build"
+      include: "scope"
 
     labels:
       - "dependencies"
@@ -30,3 +44,33 @@ updates:
         update-types: ["version-update:semver-major"]
       - dependency-name: "sanity"
         update-types: ["version-update:semver-major"]
+
+  # Keeps the actions used in .github/workflows and .github/actions current.
+  # docker:// images (actionlint) aren't covered and are bumped by hand.
+  - package-ecosystem: "github-actions"
+    directories:
+      - "/"
+      - "/.github/actions/*"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "America/Chicago"
+
+    open-pull-requests-limit: 5
+
+    cooldown:
+      default-days: 3
+
+    commit-message:
+      prefix: "build"
+      include: "scope"
+
+    labels:
+      - "dependencies"
+      - "dependabot"
+
+    groups:
+      github-actions:
+        patterns:
+          - "*"
