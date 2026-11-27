@@ -18,9 +18,7 @@ export default function IngredientRow({ ingredient, units }: Props) {
 				{name ?? ""}
 				{notes && notes.length > 0 && <span className={styles.note}> ({notes})</span>}
 			</td>
-			<td className={table.nowrap}>
-				{unit && <IngredientAmount amount={amount ?? ""} unit={unit} units={units} />}
-			</td>
+			<td className={table.nowrap}>{unit && <IngredientAmount amount={amount ?? ""} unit={unit} units={units} />}</td>
 		</tr>
 	);
 }

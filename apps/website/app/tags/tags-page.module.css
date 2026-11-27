@@ -36,10 +36,6 @@
 	text-decoration-color: var(--secondary-dark);
 }
 
-.featuredCard .count {
-	margin: 0;
-}
-
 .featuredRecipes {
 	display: flex;
 	flex-direction: column;
@@ -101,4 +97,8 @@
 .count {
 	font-size: var(--font-size-xs);
 	color: var(--text-muted);
+}
+
+.featuredCard .count {
+	margin: 0;
 }

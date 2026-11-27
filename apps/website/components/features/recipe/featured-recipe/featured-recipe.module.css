@@ -68,13 +68,13 @@
 	inset: 0;
 }
 
-.featuredRecipe:hover .heading a {
-	text-decoration-color: var(--secondary-dark);
-}
-
 /* The stretched link would ring the title only; ring the whole block instead. */
 .heading a:focus-visible {
 	outline: none;
+}
+
+.featuredRecipe:hover .heading a {
+	text-decoration-color: var(--secondary-dark);
 }
 
 .featuredRecipe:has(.heading a:focus-visible) {

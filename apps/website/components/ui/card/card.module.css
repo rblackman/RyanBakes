@@ -50,13 +50,13 @@
 	inset: 0;
 }
 
-.card:hover .name a {
-	text-decoration-color: var(--secondary-dark);
-}
-
 /* The stretched link would draw its focus ring around the title only; ring the card instead. */
 .name a:focus-visible {
 	outline: none;
+}
+
+.card:hover .name a {
+	text-decoration-color: var(--secondary-dark);
 }
 
 .card:has(.name a:focus-visible) {
