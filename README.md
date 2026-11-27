@@ -1,226 +1,159 @@
 # RyanBakes
 
-This repository contains the full Ryan-Bakes.com application stack, organized as a PNPM monorepo. It includes:
+Source for [ryan-bakes.com](https://ryan-bakes.com/), a personal recipe site. Recipes are written in a
+Sanity Studio and rendered by a Next.js site hosted on Vercel.
 
-- A **Sanity Studio CMS** for content authoring
-- A **Next.js website** (App Router) for rendering content
-- A **generated type package** shared between CMS and website
-- Centralized tooling for linting, type-checking, and builds
+This is a pnpm monorepo with two apps and one generated package:
 
-The repo is designed to ensure **schema-first, type-safe content flow** from Sanity into the website.
+| Path                    | What it is                                                        |
+| ----------------------- | ----------------------------------------------------------------- |
+| `apps/website`          | Next.js (App Router) site that renders the recipes                |
+| `apps/cms`              | Sanity Studio where content is authored                           |
+| `packages/sanity-types` | TypeScript types generated from the Studio schema (not committed) |
 
----
+More detail lives in:
 
-## Repository Structure
-
-```
-.
-├── apps/
-│   ├── cms/                # Sanity Studio (v5+)
-│   │   ├── schemas/        # Document & object schemas
-│   │   ├── sanity.config.ts
-│   │   ├── sanity.cli.ts   # Includes typegen config
-│   │   └── schema.json     # Extracted schema (generated)
-│   │
-│   └── website/            # Next.js App Router site
-│       ├── app/            # Routes & server components
-│       ├── queries/        # GROQ queries
-│       ├── hooks/
-│       └── next.config.mjs
-│
-├── packages/
-│   └── sanity-types/       # Generated, shared TypeScript types
-│       └── sanity.types.ts # (generated, gitignored)
-│
-├── .lintstagedrc.mjs
-├── package.json
-├── pnpm-workspace.yaml
-├── tsconfig.base.json      # TypeScript config shared across all projects.
-└── tsconfig.json           # TypeScript config for root project.
-```
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md): how content flows from Sanity to the page, caching and revalidation
+- [`docs/content-model.md`](./docs/content-model.md): every Sanity document and object type
+- [`docs/deployment.md`](./docs/deployment.md): Vercel, Studio deploys, the webhook, CI and secrets
+- [`AGENTS.md`](./AGENTS.md): rules, conventions and commands for anyone (human or AI) changing the code
 
 ---
 
-## Architecture Overview
+## Quick start
 
-### 1. Schema-first CMS
+### Prerequisites
 
-- All content models live in `apps/cms/schemas`
-- Portable Text, references, and objects are explicitly defined
-- Required vs optional fields are enforced in schema validation
-- The CMS is the **single source of truth**
+- Node.js 22 (the `engines` field and the Vercel project both pin 22.x)
+- pnpm through Corepack: `corepack enable` (the root `packageManager` field pins the version)
+- Access to the Sanity project if you want to run the Studio or read draft content
 
-### 2. Type Generation Pipeline
+A dev container (`.devcontainer/devcontainer.json`) is included with Node 22, pnpm and the GitHub CLI.
 
-Sanity TypeGen is used for type generation.
-
-Flow:
-```
-Sanity Schemas
-   ↓
-sanity schema extract
-   ↓
-schema.json
-   ↓
-sanity typegen generate
-   ↓
-packages/sanity-types/sanity.types.ts
-```
-
-- Generated types include documents, objects, references, and images
-- Website imports types from `@ryan-bakes/sanity-types`
-- No runtime dependency on the CMS package
-
-### 3. Website (Next.js)
-
-- Uses **Next.js App Router**
-- All data fetching is server-side (`server-only`)
-- GROQ queries return typed results
-- Components defensively handle optional fields (`undefined`)
-- PortableText rendering is centralized and typed
-
-### 4. Strict Type Safety
-
-The repo intentionally uses:
-
-- `exactOptionalPropertyTypes`
-- Strict null checks
-- No implicit `any`
-- No fake “shape-matching” interfaces
-
-If Sanity says a field is optional, the UI must handle it.
-
----
-
-## Scripts
-
-### Root-level
+### Install
 
 ```bash
-pnpm run dev:all         # Run CMS + website in parallel
-pnpm run dev:website     # Run just website
-pnpm run dev:cms         # Run just CMS
-
-pnpm run build:all       # Typegen + build all apps
-pnpm run build:cms       # Typegen build just CMS
-pnpm run build:website   # Website build (invokes CMS typegen via prebuild)
-pnpm run format          # Biome formatting
-pnpm run lint            # Biome check
-pnpm run typecheck       # TypeScript checks
+corepack enable
+pnpm install
 ```
 
-### CMS
+`pnpm install` also installs the Husky git hooks (see [Commits and hooks](#commits-and-hooks)).
+
+### Configure the website
 
 ```bash
-pnpm --filter cms dev
-pnpm --filter cms build
-pnpm --filter cms typegen
+cp apps/website/.env.example apps/website/.env
 ```
 
-### Website
+Fill in the values. Every variable is required: the dev server and the build both stop until
+`apps/website/.env` passes validation. See [Environment variables](#environment-variables).
+
+The Studio needs no `.env` for local work. It reads two optional variables:
+
+- `SANITY_STUDIO_DATASET`: dataset to edit (defaults to `production`)
+- `SANITY_STUDIO_VERCEL_PREVIEW_URL`: a Vercel preview host to allow in the Presentation tool
+
+### Generate types
 
 ```bash
-pnpm --filter website dev
-pnpm --filter website build
+pnpm typegen
 ```
 
-### Website Conventions
+This extracts the Studio schema to `apps/cms/schema.json` and writes
+`packages/sanity-types/sanity.types.ts`. Both files are generated and gitignored. Run it after
+cloning and after any schema change. The website's `prebuild` runs it for you; `pnpm dev:website`
+does not, so the editor shows missing-type errors until you run it once.
 
-- App Router pages define `metadata` or `generateMetadata` to ensure titles and descriptions are present for every route.
-- Component props favor `type` aliases wrapped in `Readonly<>` instead of `interface` to keep contracts immutable and consistent.
-- Optional Sanity fields remain optional in UI code; guard and provide fallbacks rather than asserting.
-
----
-
----
-
-## CI & Automation
-
-This repository uses GitHub Actions for continuous verification and deployment safety.
-
-### CI Workflow
-On pull requests and pushes to `main`:
-
-- **Verify**
-  - Sanity schema extract + typegen
-  - Biome linting
-  - TypeScript checks (strict, `exactOptionalPropertyTypes`)
-- **Build**
-  - Runs full workspace build
-  - Skipped for fork PRs (repo variables unavailable)
-
-Docs-only changes (`.md`, `docs/`) skip CI entirely.
-
-### Vercel Preview
-- Pull requests (non-forks) deploy preview builds via Vercel
-- Preview URLs are automatically commented on the PR
-- Uses deterministic `vercel build` + `deploy --prebuilt`
-
-### Dependency Updates
-- Dependabot opens weekly dependency update PRs
-- Safe updates are auto-approved and auto-merged after CI passes
-- Major framework upgrades are handled manually
-
-## Linting & Type Checking
-
-- **Biome** for formatting and linting
-- **TypeScript** for correctness
-- **lint-staged** runs:
-  - `tsc` for the website
-  - Biome on all staged files
-- Husky enforces checks at commit time
-
-You can run everything manually:
+### Run
 
 ```bash
-pnpm -w exec biome check .
-pnpm -w exec tsc -p apps/website/tsconfig.json --noEmit
+pnpm dev:website   # http://localhost:3000
+pnpm dev:cms       # http://localhost:3333
+pnpm dev:all       # both, in parallel
 ```
 
 ---
 
-## Environment Variables
+## Commands
 
-The website validates env vars at build time using Zod.
+All commands run from the repo root.
 
-Required (example):
+| Command                  | What it does                                                                     |
+| ------------------------ | -------------------------------------------------------------------------------- |
+| `pnpm dev:website`       | Next.js dev server (validates env first)                                         |
+| `pnpm dev:cms`           | Sanity Studio dev server                                                         |
+| `pnpm dev:all`           | Both dev servers in parallel                                                     |
+| `pnpm typegen`           | Schema extract, then Sanity TypeGen                                              |
+| `pnpm ci:verify`         | Exactly what CI's Verify job runs: typegen, `biome check .`, `tsc` for both apps |
+| `pnpm typecheck`         | `tsc --noEmit` for the website and the Studio                                    |
+| `pnpm typecheck:website` | `tsc --noEmit` for the website only                                              |
+| `pnpm typecheck:cms`     | `tsc --noEmit` for the Studio only                                               |
+| `pnpm lint`              | `biome check --write` over `apps/website` (fixes what it can)                    |
+| `pnpm format`            | `biome format --write` over `apps/website`                                       |
+| `pnpm validate:env`      | Validate `apps/website/.env` against the Zod schema                              |
+| `pnpm build`             | Build the Studio and the website                                                 |
+| `pnpm build:website`     | Website build (runs typegen and env validation first)                            |
+| `pnpm build:cms`         | Studio build                                                                     |
+| `pnpm start`             | Serve the last website build                                                     |
+| `pnpm deploy:cms`        | Deploy the Studio to Sanity hosting (needs Sanity auth)                          |
 
-```env
-NEXT_PUBLIC_BASE_URL=
-NEXT_PUBLIC_SANITY_KEY=
-NEXT_PUBLIC_SANITY_DATASET=
-NEXT_PUBLIC_SANITY_STUDIO_URL=
-SANITY_REVALIDATE_SECRET=
-SANITY_VIEWER_TOKEN=
-```
+`pnpm lint` and `pnpm format` only cover the website because the Studio has no such scripts. For
+the whole repo, run `pnpm -w exec biome check .` (what CI runs) or add `--write` to fix.
 
-### CI Variables
-
-CI uses GitHub **repository variables** (not secrets) for build-time configuration.
-
-These values are non-sensitive identifiers (dataset names, document keys, etc.)
-and are written to `apps/website/.env` during CI.
-
-The `SANITY_REVALIDATE_SECRET` is provided via a secret or repo variable and must
-match the secret configured on the Sanity webhook that posts to
-`/api/revalidate`; webhook requests are validated using the
-`sanity-webhook-signature` header.
-
-Sensitive credentials (e.g., deploy tokens) are stored as GitHub Secrets.
-
----
-
-## Key Design Decisions
-
-- Generated types are not checked in
-- `schema.json` is generated and checked in
-- No client-side GROQ
-- No implicit assumptions about content existence
+Before opening a pull request, run `pnpm ci:verify`. Also run `pnpm build` if you changed the
+schema, a query or routing.
 
 ---
 
-## Philosophy
+## Environment variables
 
-> The CMS may lie. TypeScript never should.
+The website validates its environment with Zod (`apps/website/shared/config/env.schema.ts`) when
+the dev server starts, before a build, and when the server modules load. `apps/website/.env.example`
+lists every name.
 
-If content is optional, the UI must survive it.
+| Name                            | Used by          | Notes                                                       |
+| ------------------------------- | ---------------- | ----------------------------------------------------------- |
+| `NEXT_PUBLIC_BASE_URL`          | Browser + server | Canonical origin for URLs and metadata                      |
+| `NEXT_PUBLIC_SANITY_KEY`        | Browser + server | Sanity project ID (8 characters)                            |
+| `NEXT_PUBLIC_SANITY_DATASET`    | Browser + server | Sanity dataset                                              |
+| `NEXT_PUBLIC_SANITY_STUDIO_URL` | Browser + server | Hosted Studio URL; target of the `/studio` redirect         |
+| `SITE_CONFIG_KEY`               | Server           | Document ID of the `siteConfig` singleton                   |
+| `RECIPES_PAGE_KEY`              | Server           | Document ID of the `recipesPage` singleton                  |
+| `TAGS_PAGE_KEY`                 | Server           | Document ID of the `tagsPage` singleton                     |
+| `SANITY_REVALIDATE_SECRET`      | Server           | Secret. Must match the Sanity webhook's signing secret      |
+| `SANITY_VIEWER_TOKEN`           | Server           | Secret. Sanity Viewer token for draft mode and live preview |
+
+Anything that starts with `NEXT_PUBLIC_` ends up in the browser bundle, so never put a secret in one.
+
+---
+
+## Commits and hooks
+
+- Commit messages follow Conventional Commits and are checked by commitlint
+  (`commitlint.config.mjs`). Allowed types: `build`, `add`, `feature`, `bug`, `chore`, `docs`,
+  `refactor`, `revert`, `test`, `style`, `perf`, `package`. Header at most 100 characters,
+  lower-case subject, no trailing period, body lines at most 100 characters.
+- The pre-commit hook runs lint-staged (`.lintstagedrc.mjs`): Biome on staged files, and `tsc` for
+  whichever app has staged TypeScript.
+
+---
+
+## CI and deployment
+
+- **CI** (`.github/workflows/ci.yml`) runs on pull requests and pushes to `main`: a Verify job
+  (`pnpm ci:verify`), then a Build job (`pnpm build`) that is skipped for PRs from forks.
+  Changes that only touch Markdown skip CI.
+- **CodeQL** scans JavaScript and TypeScript on PRs, on pushes to `main` and weekly.
+- **Dependabot** opens weekly grouped npm updates; a workflow approves them and turns on auto-merge.
+- **Website**: Vercel's GitHub integration builds every branch. `main` goes to production at
+  ryan-bakes.com; other branches get preview URLs.
+- **Studio**: deployed by hand, from the "Deploy CMS" workflow (main only) or `pnpm deploy:cms`.
+- **Content changes** reach the live site through a Sanity webhook to `/api/revalidate`.
+
+Details are in [`docs/deployment.md`](./docs/deployment.md).
+
+---
+
+## License
+
+See [`LICENSE`](./LICENSE).
