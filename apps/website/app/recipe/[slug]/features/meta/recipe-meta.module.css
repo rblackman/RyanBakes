@@ -10,10 +10,10 @@
 	font-size: var(--font-size-sm);
 }
 
+/* The list sits on the dark title band, so it keeps the band's light text colour. */
 .dl dt {
 	margin: 0;
-	font-weight: 500;
-	color: var(--text-muted);
+	font-weight: 600;
 }
 
 .dl dt::after {
