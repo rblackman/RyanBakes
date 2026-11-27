@@ -18,8 +18,16 @@ export default defineType({
 			name: "page",
 			title: "Page",
 			type: "reference",
+			description: "The page this menu item links to.",
 			to: [{ type: "page" }, { type: "tagsPage" }, { type: "recipesPage" }],
 			validation: (Rule) => Rule.required(),
 		}),
 	],
+	preview: {
+		select: { title: "name", pageTitle: "page.title", slug: "page.slug.current" },
+		prepare({ title, pageTitle, slug }) {
+			const target = slug ? `/${slug}` : pageTitle;
+			return { title: title ?? "Untitled item", subtitle: target ? `Links to ${target}` : "No page picked" };
+		},
+	},
 });

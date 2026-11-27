@@ -20,8 +20,10 @@ Core principle:
 │   │   │   ├── objects/        ingredient, step, portableText, images, links, ...
 │   │   │   ├── components/     custom Studio inputs
 │   │   │   └── index.ts        registers every type
-│   │   ├── structure.ts        desk layout (Settings, Recipes, Pages)
-│   │   ├── sanity.config.ts    plugins: structure, vision, presentation, dashboard
+│   │   ├── helpers/            validation rules and Portable Text helpers
+│   │   ├── structure.ts        desk layout (Recipes, Pages, Settings)
+│   │   ├── singletons.ts       the one-of-a-kind documents and their fixed IDs
+│   │   ├── sanity.config.ts    plugins: structure, vision, presentation, dashboard; singleton rules
 │   │   └── sanity.cli.ts       project ID, dataset, TypeGen config
 │   └── website/                Next.js App Router site
 │       ├── app/                routes; route-only components live in app/<route>/features/

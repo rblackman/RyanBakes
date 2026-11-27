@@ -1,19 +1,22 @@
 import type React from "react";
-import { useCallback, useEffect, useRef } from "react";
-import { type NumberInputProps, set, unset, useFormValue } from "sanity";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { type NumberInputProps, set, unset, useClient, useFormValue } from "sanity";
+
+const gramUnitQuery = `*[_id == $id][0].abbreviation == "g"`;
 
 function parseAmountToNumber(amount: unknown): number | null {
 	if (typeof amount !== "string") {
 		return null;
 	}
 
-	// Simple: grab the first numeric token (supports "350", "350.5", "350 g")
-	const match = amount.trim().match(/-?\d+(\.\d+)?/);
-	if (!match) {
+	// Only a plain whole or decimal number ("350", "350.5", ".5"). Fractions and ranges are left for
+	// the editor to enter by hand, so "1/2" never becomes 1 gram.
+	const trimmed = amount.trim();
+	if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(trimmed)) {
 		return null;
 	}
 
-	const value = Number(match[0]);
+	const value = Number(trimmed);
 	if (Number.isNaN(value)) {
 		return null;
 	}
@@ -22,32 +25,60 @@ function parseAmountToNumber(amount: unknown): number | null {
 }
 
 export default function AutofillGramsInput(props: NumberInputProps) {
-	const { value, onChange, elementProps } = props;
+	const { value, onChange, elementProps, path, readOnly } = props;
 
-	// This reads the sibling field "amount" from the current ingredient object.
-	// Path [] means "current object". Since grams lives at ingredient.bakers.grams,
-	// the current object is the ingredient object, so ["amount"] is correct.
-	const amount = useFormValue(["amount"]) as unknown;
+	// useFormValue takes a path from the document root. Grams lives at
+	// ingredients[_key].bakers.grams, so the ingredient is two levels up.
+	const ingredientPath = useMemo(() => path.slice(0, -2), [path]);
+	const amount = useFormValue([...ingredientPath, "amount"]) as unknown;
+	const unitRef = useFormValue([...ingredientPath, "unit", "_ref"]) as unknown;
 
-	// Optional: if you only want to autofill when includeInBakersMath is true,
-	// uncomment the next line and add it as a guard in tryAutofill().
-	// const includeInBakersMath = useFormValue(["bakers", "includeInBakersMath"]) as boolean | undefined;
+	// Only copy the amount when the ingredient is measured in grams; 2 cups is not 2 grams.
+	const client = useClient({ apiVersion: "2025-01-01" });
+	// The unit ID last confirmed to be grams. Comparing it with the current unit means a lookup that
+	// is still running for a newly picked unit can never reuse the old answer.
+	const [gramUnitId, setGramUnitId] = useState<string | null>(null);
+	const isGrams = typeof unitRef === "string" && gramUnitId === unitRef;
+	useEffect(() => {
+		if (typeof unitRef !== "string") {
+			setGramUnitId(null);
+			return;
+		}
 
-	const didAutofill = useRef(false);
+		let cancelled = false;
+		client
+			.fetch<boolean>(gramUnitQuery, { id: unitRef })
+			.then((result) => {
+				if (!cancelled) {
+					setGramUnitId(result === true ? unitRef : null);
+				}
+			})
+			.catch(() => {
+				if (!cancelled) {
+					setGramUnitId(null);
+				}
+			});
 
+		return () => {
+			cancelled = true;
+		};
+	}, [client, unitRef]);
+
+	// Fill only when the editor moves into the grams field, never while the amount is being typed:
+	// an effect would copy "3" on the way to "350" and keep it.
 	const tryAutofill = useCallback(() => {
-		if (didAutofill.current) {
+		if (readOnly) {
 			return;
 		}
 
-		// Don’t overwrite user-entered values.
+		// Don't overwrite a weight that is already there.
 		if (value !== undefined && value !== null) {
-			didAutofill.current = true;
 			return;
 		}
 
-		// If you only want to autofill when enabled:
-		// if (includeInBakersMath !== true) { return; }
+		if (!isGrams) {
+			return;
+		}
 
 		const parsed = parseAmountToNumber(amount);
 		if (parsed === null) {
@@ -55,12 +86,7 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 		}
 
 		onChange(set(parsed));
-		didAutofill.current = true;
-	}, [amount, onChange, value]);
-
-	useEffect(() => {
-		tryAutofill();
-	}, [tryAutofill]);
+	}, [amount, isGrams, onChange, readOnly, value]);
 
 	const handleFocus = useCallback(
 		(event: React.FocusEvent<HTMLInputElement>) => {
