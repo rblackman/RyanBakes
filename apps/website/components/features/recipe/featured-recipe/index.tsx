@@ -43,7 +43,7 @@ export default function FeaturedRecipe({ recipe, priority = false, large = false
 			</div>
 
 			<div className={styles.blurb}>
-				<PortableText value={commentary} />
+				<PortableText value={commentary} minHeadingLevel={3} />
 			</div>
 		</div>
 	);

@@ -24,53 +24,68 @@ function UnknownMark({ children, markType }: { children: ReactNode; markType: st
 
 type BlockProps = PortableTextComponentProps<PortableTextBlock>;
 
-const portableTextComponents: PortableTextComponents = {
-	// Rich text sits under the page's h1, so authored headings keep their own level. The Studio offers
-	// H2 to H4; an h1 from older content is capped at h2 so a page never gets a second h1.
-	block: {
-		h1: ({ children }: BlockProps) => {
-			return <Heading level={2}>{children}</Heading>;
-		},
-		h2: ({ children }: BlockProps) => {
-			return <Heading level={2}>{children}</Heading>;
-		},
-		h3: ({ children }: BlockProps) => {
-			return <Heading level={3}>{children}</Heading>;
-		},
-		h4: ({ children }: BlockProps) => {
-			return <Heading level={4}>{children}</Heading>;
-		},
-		normal: ({ children }: BlockProps) => {
-			return <p>{children}</p>;
-		},
-	},
-	marks: {
-		externalLink: ({ children, value, markType }: PortableTextMarkComponentProps<ExternalLinkProps>) => {
-			if (value) {
-				const { href } = value;
-				if (href.startsWith("/")) {
-					return <Link href={href}>{children}</Link>;
-				}
-				return <a href={href}>{children}</a>;
-			}
-			return <UnknownMark markType={markType}>{children}</UnknownMark>;
-		},
-		fraction: ({ children, markType }: { children: ReactNode; markType: string }) => {
-			const childArray = children as unknown as Array<string | ReactNode>;
-			const first = childArray?.[0];
-			const val = typeof first === "string" ? first : "";
+type HeadingLevel = 2 | 3 | 4;
 
-			if (val) {
-				return <Fraction val={val} />;
-			}
+/**
+ * Renders authored headings at their own level (the Studio offers H2 to H4) but never above
+ * `minLevel`, so rich text nested under a section heading stays below it. An h1 from older
+ * content counts as h2, so a page never gets a second h1.
+ */
+function headingBlocks(minLevel: HeadingLevel) {
+	const at =
+		(authored: HeadingLevel) =>
+		({ children }: BlockProps) => <Heading level={Math.max(authored, minLevel) as HeadingLevel}>{children}</Heading>;
+	return { h1: at(2), h2: at(2), h3: at(3), h4: at(4) };
+}
 
-			return <UnknownMark markType={markType}>{children}</UnknownMark>;
-		},
+const marks = {
+	externalLink: ({ children, value, markType }: PortableTextMarkComponentProps<ExternalLinkProps>) => {
+		if (value) {
+			const { href } = value;
+			if (href.startsWith("/")) {
+				return <Link href={href}>{children}</Link>;
+			}
+			return <a href={href}>{children}</a>;
+		}
+		return <UnknownMark markType={markType}>{children}</UnknownMark>;
 	},
+	fraction: ({ children, markType }: { children: ReactNode; markType: string }) => {
+		const childArray = children as unknown as Array<string | ReactNode>;
+		const first = childArray?.[0];
+		const val = typeof first === "string" ? first : "";
+
+		if (val) {
+			return <Fraction val={val} />;
+		}
+
+		return <UnknownMark markType={markType}>{children}</UnknownMark>;
+	},
+} satisfies NonNullable<PortableTextComponents["marks"]>;
+
+function components(minLevel: HeadingLevel): PortableTextComponents {
+	return {
+		block: {
+			...headingBlocks(minLevel),
+			normal: ({ children }: BlockProps) => <p>{children}</p>,
+		},
+		marks,
+	};
+}
+
+const componentsByMinLevel: Record<HeadingLevel, PortableTextComponents> = {
+	2: components(2),
+	3: components(3),
+	4: components(4),
 };
 
-export default function PortableText<B extends TypedObject = PortableTextBlock>(
-	props: Exclude<PortableTextProps<B>, "components">,
-) {
-	return <PortableTextComponent {...props} components={portableTextComponents} />;
+type Props<B extends TypedObject> = Omit<PortableTextProps<B>, "components"> & {
+	/** The highest heading level authored headings may use. Pass 3 when the text sits under an h2. */
+	minHeadingLevel?: HeadingLevel | undefined;
+};
+
+export default function PortableText<B extends TypedObject = PortableTextBlock>({
+	minHeadingLevel = 2,
+	...props
+}: Props<B>) {
+	return <PortableTextComponent {...props} components={componentsByMinLevel[minHeadingLevel]} />;
 }
