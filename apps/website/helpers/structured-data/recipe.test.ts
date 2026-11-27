@@ -91,7 +91,7 @@ const fullRecipe: Recipe = {
 };
 
 function build(recipe: Recipe): JsonLdRecipe | undefined {
-	return buildRecipeJsonLd({ recipe, units, url, author: { "@type": "Person", name: "Ryan" }, imageUrl });
+	return buildRecipeJsonLd({ recipe, units, url, author: { "@type": "Person", name: "Ryan Blackman" }, imageUrl });
 }
 
 describe("minutesToIsoDuration", () => {
@@ -188,7 +188,7 @@ describe("buildRecipeJsonLd", () => {
 		assert.equal(jsonLd?.keywords, "pizza, dough, favorite");
 		assert.equal(jsonLd?.datePublished, "2024-03-01T12:00:00Z");
 		assert.equal(jsonLd?.dateModified, "2026-11-20T08:30:00Z");
-		assert.deepEqual(jsonLd?.author, { "@type": "Person", name: "Ryan" });
+		assert.deepEqual(jsonLd?.author, { "@type": "Person", name: "Ryan Blackman" });
 		assert.equal(jsonLd?.description, "A thick, crispy-edged pan pizza.");
 	});
 
