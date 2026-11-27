@@ -1,3 +1,4 @@
+import Footer from "@components/footer";
 import MainNav from "@components/menu";
 import DisableDraftMode from "@components/ui/disable-draft-mode";
 import getSiteConfig from "@queries/live/getSiteConfig";
@@ -67,6 +68,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 				<main id="main-content" tabIndex={-1}>
 					{children}
 				</main>
+				<Footer />
 				<SanityLive action={handleLiveEvent} />
 				{isEnabled ? (
 					<>

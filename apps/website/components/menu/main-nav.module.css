@@ -3,44 +3,37 @@
 	--focus-outline-color: var(--secondary);
 	background: var(--primary);
 	color: var(--primary-contrast);
-	padding: 0.5rem 0 0.6rem;
 }
 
-.headerWrap :is(a) {
+.headerWrap a {
 	color: var(--primary-contrast);
 	text-decoration-color: transparent;
+	text-decoration-thickness: 0.12em;
+	text-underline-offset: 0.3em;
 	transition: text-decoration-color var(--animation-duration) ease-in-out;
 }
 
-.headerWrap :is(a:hover, a:focus-visible) {
-	text-decoration-color: var(--secondary-dark);
-	transition: text-decoration-color var(--animation-duration) ease-in;
-}
-
-.headerWrap :is(a:focus-visible) {
-	outline: var(--focus-outline-width) solid var(--focus-outline-color);
-	outline-offset: var(--focus-outline-offset);
+/* The lighter green reads against the dark blue; the darker one used on light pages does not. */
+.headerWrap a:hover,
+.headerWrap a:focus-visible {
+	text-decoration-color: var(--secondary);
 }
 
 .header {
-	display: grid;
-	grid-template-columns: max-content 1fr;
-	grid-template-rows: 1fr;
-	grid-template-areas: "title nav";
-	gap: 1rem;
+	display: flex;
+	flex-flow: row wrap;
 	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-2) var(--space-5);
+	padding-block: var(--space-3);
 }
 
 .siteName {
-	grid-area: title;
-	font-size: 2rem;
+	font-size: 1.75rem;
 	font-weight: bold;
 	line-height: 1;
+	letter-spacing: -0.01em;
 	margin: 0;
-}
-
-.nav {
-	grid-area: nav;
 }
 
 .navList {
@@ -48,12 +41,16 @@
 	margin: 0;
 	padding: 0;
 	display: flex;
-	flex-flow: row nowrap;
+	flex-flow: row wrap;
 	align-items: center;
-	justify-content: flex-end;
+	gap: var(--space-1) var(--space-2);
 }
 
 @media only screen and (max-width: 640px) {
+	.header {
+		padding-block: var(--space-2);
+	}
+
 	.siteName {
 		font-size: 1.25rem;
 	}

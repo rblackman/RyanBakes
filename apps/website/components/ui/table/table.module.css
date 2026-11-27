@@ -1,0 +1,57 @@
+/*
+ * Shared look for data tables (ingredients, baker's percentages). Import this module and use
+ * .wrap around a <table className={table.table}>; mark number columns with .num.
+ */
+.wrap {
+	max-width: 40rem;
+	overflow-x: auto;
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+	font-variant-numeric: tabular-nums;
+}
+
+.table th {
+	padding: var(--space-2) var(--space-4);
+	text-align: left;
+	font-size: var(--font-size-xs);
+	font-weight: 600;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var(--text-muted);
+	border-bottom: 0.1rem solid var(--secondary-dark);
+}
+
+.table td {
+	padding: var(--space-2) var(--space-4);
+	vertical-align: top;
+}
+
+.table tbody tr + tr td {
+	border-top: 1px solid var(--border);
+}
+
+/* Helps keep your place in the list while measuring. */
+.table tbody tr:hover {
+	background: var(--bg-alt);
+}
+
+.table :is(th, td).num {
+	text-align: right;
+	white-space: nowrap;
+}
+
+.nowrap {
+	white-space: nowrap;
+}
+
+@media only screen and (max-width: 640px) {
+	.table :is(th, td) {
+		padding-inline: var(--space-3);
+	}
+}

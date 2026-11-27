@@ -18,11 +18,7 @@
 	text-decoration-color: var(--secondary-dark);
 }
 
-.tagLink:focus-visible {
-	outline: var(--focus-outline-width) solid var(--focus-outline-color);
-	outline-offset: var(--focus-outline-offset);
-}
-
 .tagLink_Svg {
+	flex-shrink: 0;
 	fill: var(--secondary);
 }

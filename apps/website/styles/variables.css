@@ -1,10 +1,31 @@
 :root {
-	--max-content-width: 1900px;
+	/* Header, content and footer share one column so their edges line up. */
+	--max-content-width: 70rem;
+	/* Comfortable line length for running text such as steps and commentary. */
+	--reading-width: 68ch;
 	--line-height: 1.6;
-	--content-padding-inline: clamp(1.5rem, 4vw, 3rem);
-	--content-padding-block-start: clamp(1.5rem, 4vh, 3rem);
-	--content-padding-block-end: clamp(3rem, 8vh, 6rem);
-	--header-footer-padding-inline: clamp(1rem, 5vw, 3rem);
+	--content-padding-inline: clamp(1rem, 4vw, 2.5rem);
+	--content-padding-block-start: clamp(1.5rem, 4vh, 2.5rem);
+	--content-padding-block-end: clamp(3rem, 8vh, 5rem);
+
+	/* Spacing scale. Use these for gaps and margins instead of one-off values. */
+	--space-1: 0.25rem;
+	--space-2: 0.5rem;
+	--space-3: 0.75rem;
+	--space-4: 1rem;
+	--space-5: 1.5rem;
+	--space-6: 2rem;
+	--space-7: 3rem;
+
+	/* Type scale (the root size is 20px) */
+	--font-size-xs: 0.75rem;
+	--font-size-sm: 0.85rem;
+	--font-size-base: 1rem;
+	--font-size-lg: 1.25rem;
+	--font-size-xl: 1.5rem;
+	--font-size-2xl: 2.25rem;
+
+	--radius: 0.4rem;
 
 	/* Neutral ramp for surfaces, borders, and body text */
 	--neutral-50: #f7f8fa;
@@ -19,8 +40,11 @@
 	--text-muted: #556270;
 	--bg: var(--neutral-50);
 	--bg-alt: var(--neutral-100);
-	--bg-subtle: linear-gradient(90deg, #eef1f4, #f7f8fa);
-	--card-shadow: -2rem 0 3rem -2rem var(--neutral-400);
+	/* Cards and tables sit on white so they lift slightly off the page background. */
+	--surface: #ffffff;
+	--border: var(--neutral-200);
+	--card-shadow: 0 0.05rem 0.15rem rgb(31 42 54 / 8%);
+	--card-shadow-hover: 0 0.4rem 1.2rem rgb(31 42 54 / 14%);
 
 	/* Blue primary */
 	--primary: #0c2d57;

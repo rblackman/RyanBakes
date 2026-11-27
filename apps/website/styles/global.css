@@ -22,69 +22,80 @@ body {
 
 @media only screen and (max-width: 660px) {
 	:root {
-		--content-padding-inline: clamp(0.75rem, 3vw, 1.5rem);
+		--content-padding-inline: clamp(0.75rem, 4vw, 1.25rem);
 		--content-padding-block-start: clamp(1.25rem, 3vh, 2rem);
 		--content-padding-block-end: clamp(2rem, 6vh, 3rem);
-		--header-footer-padding-inline: clamp(0.75rem, 4vw, 1.5rem);
 	}
 }
 
 /*
  * Each page has one h1 (its title), sections use h2 and subsections h3.
- * The sizes match the site's look from before the outline was fixed: h1 is the large page title,
- * h2 the uppercase section label, h3 the small bold subheading.
+ * h1 is the large page title, h2 the uppercase section label, h3 the small bold subheading.
  */
 :is(h1, h2, h3, h4) {
 	line-height: 1.2;
+	text-wrap: balance;
 }
 
 :is(h1, h2, h3, h4):not(:first-child) {
-	margin-top: 3rem;
+	margin-top: var(--space-7);
 }
 
 h1 {
-	font-size: 3rem;
+	margin: 0 0 var(--space-4);
+	font-size: var(--font-size-2xl);
+	letter-spacing: -0.01em;
 }
 
 h2 {
-	margin: 0 0 2rem;
+	margin: 0 0 var(--space-5);
 	text-transform: uppercase;
-	font-size: 2rem;
-	font-weight: normal;
+	font-size: var(--font-size-xl);
+	font-weight: 600;
+	letter-spacing: 0.04em;
 }
 
 h3 {
-	margin: 0.5rem 0 1rem;
-	font-size: 1.25rem;
+	margin: var(--space-2) 0 var(--space-3);
+	font-size: var(--font-size-lg);
 }
 
 h4 {
-	margin: 0.5rem 0 0.75rem;
-	font-size: 1rem;
+	margin: var(--space-2) 0 var(--space-3);
+	font-size: var(--font-size-base);
+}
+
+/* Sections on a page are spaced the same way everywhere. */
+.content > section:not(:first-child) {
+	margin-top: var(--space-7);
 }
 
 @media only screen and (max-width: 640px) {
 	:is(h1, h2, h3, h4):not(:first-child) {
-		margin-top: 1.5rem;
+		margin-top: var(--space-6);
 	}
 
 	h1 {
-		font-size: 2rem;
+		font-size: 1.75rem;
 	}
 
 	h2 {
-		margin: 0 0 1rem;
-		font-size: 1.2rem;
+		margin: 0 0 var(--space-4);
+		font-size: 1.1rem;
 	}
 
 	h3 {
-		margin: 0.3rem 0 0.5rem;
+		margin: var(--space-1) 0 var(--space-2);
 		font-size: 1rem;
 	}
 
 	h4 {
-		margin: 0.3rem 0 0.5rem;
+		margin: var(--space-1) 0 var(--space-2);
 		font-size: 0.9rem;
+	}
+
+	.content > section:not(:first-child) {
+		margin-top: var(--space-6);
 	}
 }
 
@@ -96,25 +107,24 @@ header,
 .content,
 footer {
 	width: 100%;
-	max-width: clamp(0px, 90vw, var(--max-content-width));
+	max-width: var(--max-content-width);
 	margin: 0 auto;
+	padding-inline: var(--content-padding-inline);
+}
+
+/* The main area grows so the footer sits at the bottom of short pages. */
+main {
+	flex: 1 0 auto;
 }
 
 .content {
-	width: 100%;
-	padding: var(--content-padding-block-start) var(--content-padding-inline) var(--content-padding-block-end);
-	min-height: 100vh;
-}
-
-header,
-footer {
-	padding: 0 var(--header-footer-padding-inline);
+	padding-block: var(--content-padding-block-start) var(--content-padding-block-end);
 }
 
 p {
 	line-height: var(--line-height);
-	margin: 0 0 1rem 0;
-	max-width: 75ch;
+	margin: 0 0 var(--space-4) 0;
+	max-width: var(--reading-width);
 }
 
 a {
@@ -127,7 +137,8 @@ a {
 }
 
 a:hover {
-	text-decoration-color: var(--secondary);
+	text-decoration-color: var(--secondary-dark);
+	text-decoration-thickness: 0.12em;
 }
 
 a:focus-visible,

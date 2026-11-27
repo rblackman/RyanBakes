@@ -1,4 +1,5 @@
 import Heading from "@components/ui/heading";
+import table from "@components/ui/table/table.module.css";
 import type { BakerPercentageEntry } from ".";
 import styles from "./baker-table.module.css";
 
@@ -34,11 +35,19 @@ function calculateTotalHydration(ingredients: BakerPercentageEntry[], totalFlour
 
 function ingredientCompare(a: BakerPercentageEntry, b: BakerPercentageEntry): number {
 	// First: flour ingredients come first
-	if (a.isFlour && !b.isFlour) return -1;
-	if (!a.isFlour && b.isFlour) return 1;
+	if (a.isFlour && !b.isFlour) {
+		return -1;
+	}
+	if (!a.isFlour && b.isFlour) {
+		return 1;
+	}
 	// Second: non-liquid ingredients come before liquid
-	if (!a.countsTowardHydration && b.countsTowardHydration) return -1;
-	if (a.countsTowardHydration && !b.countsTowardHydration) return 1;
+	if (!a.countsTowardHydration && b.countsTowardHydration) {
+		return -1;
+	}
+	if (a.countsTowardHydration && !b.countsTowardHydration) {
+		return 1;
+	}
 	// Finally: sort by name
 	if (b.grams - a.grams !== 0) {
 		return b.grams - a.grams;
@@ -53,27 +62,32 @@ export default function BakersPercentageTable({ heading, headingLevel = 2, ingre
 
 	return (
 		<>
-			<Heading level={headingLevel}>
-				{heading} (<em>{totalHydration.toFixed(1)}% hydration</em>)
-			</Heading>
-			<div className={styles.percentageTableWrap}>
-				<table className={styles.percentageTable}>
+			<Heading level={headingLevel}>{heading}</Heading>
+			<p className={styles.hydration}>
+				<strong>{totalHydration.toFixed(1)}%</strong> hydration
+			</p>
+			<div className={table.wrap}>
+				<table className={table.table}>
 					<caption className="sr">Baker's Percentage Table</caption>
-					<thead className={styles.percentageTable_thead}>
+					<thead>
 						<tr>
 							<th scope="col">Ingredient</th>
-							<th scope="col">Grams</th>
-							<th scope="col">Baker's %</th>
+							<th scope="col" className={table.num}>
+								Grams
+							</th>
+							<th scope="col" className={table.num}>
+								Baker's %
+							</th>
 						</tr>
 					</thead>
-					<tbody className={styles.percentageTable_tbody}>
+					<tbody>
 						{sorted.map(({ name, grams, key }) => {
 							const bakersPercentage = totalFlourWeight > 0 ? (grams / totalFlourWeight) * 100 : 0;
 							return (
 								<tr key={key}>
 									<td>{name}</td>
-									<td>{grams.toFixed(0)}</td>
-									<td>{bakersPercentage.toFixed(1)}%</td>
+									<td className={table.num}>{grams.toFixed(0)}</td>
+									<td className={table.num}>{bakersPercentage.toFixed(1)}%</td>
 								</tr>
 							);
 						})}

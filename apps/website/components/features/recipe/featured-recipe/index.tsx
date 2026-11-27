@@ -32,7 +32,17 @@ export default function FeaturedRecipe({ recipe, priority = false, large = false
 
 	return (
 		<div className={recipeClass}>
-			{picture && <Image image={picture} width={350} aspectRatio={1} className={styles.img} preload={priority} />}
+			{picture && (
+				<Image
+					image={picture}
+					width={350}
+					aspectRatio={1}
+					className={styles.img}
+					responsive
+					sizes={large ? "(max-width: 640px) 100vw, 350px" : "90px"}
+					preload={priority}
+				/>
+			)}
 
 			<Heading level={2} className={styles.heading}>
 				<Link href={href}>{title}</Link>

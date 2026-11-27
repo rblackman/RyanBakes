@@ -30,7 +30,8 @@ Core principle:
 │       ├── components/
 │       │   ├── ui/             small reusable pieces (image, fraction, tag, portable-text, ...)
 │       │   ├── features/       larger shared sections (content blocks, baker's percentage, ...)
-│       │   └── menu/           main navigation
+│       │   ├── menu/           main navigation (header)
+│       │   └── footer/         site footer with the same links as the menu
 │       ├── queries/
 │       │   ├── live/           GROQ through sanityFetch: cache-tagged, draft-aware
 │       │   └── static/         GROQ through the plain client: slug and tag lists
@@ -175,6 +176,13 @@ in the README.
 
 Global styles and design tokens are in `styles/global.css` and `styles/variables.css`. Components use
 CSS Modules next to the component (`foo.module.css`). There is no CSS framework.
+
+`variables.css` holds the colors, a spacing scale (`--space-1` to `--space-7`), a type scale
+(`--font-size-*`), and the shared card look (`--surface`, `--border`, `--radius`, `--card-shadow`).
+`global.css` sets the heading sizes, section spacing and the page column (`--max-content-width`),
+which the header, content and footer share. Recipe cards (`components/ui/card`) and featured recipes
+lay out in a responsive grid; their title link covers the whole card. Data tables share
+`components/ui/table/table.module.css`.
 
 ---
 

@@ -1,5 +1,5 @@
 .summary {
-	margin: 0.5rem 0 2rem;
+	margin: calc(-1 * var(--space-2)) 0 var(--space-6);
 	color: var(--text-muted);
 	font-size: 0.9rem;
 }

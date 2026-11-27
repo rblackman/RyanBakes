@@ -1,13 +1,9 @@
-.browse {
-	margin-top: 3rem;
-}
-
 .tagList {
 	display: flex;
 	flex-flow: row wrap;
-	gap: 0.75rem;
+	gap: var(--space-3);
 	padding: 0;
-	margin: 0 0 1.5rem;
+	margin: 0 0 var(--space-5);
 	list-style: none;
 }
 
@@ -30,14 +26,9 @@
 	border-color: var(--secondary-dark);
 }
 
-.tagLink:focus-visible {
-	outline: var(--focus-outline-width) solid var(--focus-outline-color);
-	outline-offset: var(--focus-outline-offset);
-}
-
 .count {
 	color: var(--text-muted);
-	font-size: 0.75rem;
+	font-size: var(--font-size-xs);
 }
 
 .more {

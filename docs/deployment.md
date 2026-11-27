@@ -52,12 +52,30 @@ deployment.
 | `ci.yml`                     | Every PR, pushes to `main`, manual    | **Verify** (typegen, `biome ci`, `tsc` for both apps; same checks as `pnpm ci:verify`, no secrets needed), then **Build** (`pnpm build`, skipped for fork PRs). Also **Dependency review** (PRs; fails on new high or critical vulnerabilities) and **Lint workflows** (actionlint). |
 | `pr-title.yml`               | PRs (opened, edited, updated)         | Runs commitlint on the PR title (`.github/commitlint-pr-title.config.mjs`: repo rules, no default ignores), because squash merges use it as the commit message. Skips bot PRs. |
 | `codeql.yml`                 | PRs, pushes to `main`, weekly, manual | CodeQL (`security-extended`) for JavaScript/TypeScript and for the workflows themselves |
+| `lighthouse.yml`             | PRs (not forks), manual               | Builds the website, serves it with `next start` and runs Lighthouse CI five times each on `/`, `/tags` and a recipe page, mobile then desktop. Budgets in `lighthouserc.json`. Not required yet; see [Lighthouse](#lighthouse). |
 | `dependabot-autoapprove.yml` | Dependabot PRs                        | Turns on squash auto-merge for single-commit patch and minor updates; the rest wait for a person |
 | `deploy-cms.yml`             | Pushes to `main` that touch the Studio, manual | Builds and deploys the Studio and its schema |
 
 `ci.yml` has no path filter on purpose: the `main` ruleset requires the **Verify (typegen, biome,
 tsc)** and **Build (non-fork PRs + main)** checks, and a skipped workflow would leave them pending.
 Rename those jobs only together with the ruleset.
+
+### Lighthouse
+
+- **Where to look:** the job summary of the **Lighthouse (performance + accessibility)** check shows
+  the median scores per page, every accessibility, best-practices or SEO audit that didn't pass, and
+  what each page's largest contentful paint waited for. Full HTML reports are in the run's
+  `lighthouse-reports` artifact (kept 14 days).
+- **Budgets** (`lighthouserc.json`, median of five runs): performance below 0.85 or accessibility
+  below 1.0 fails the job; best practices and SEO below 0.95 only warn.
+- **What it audits:** a local production build, not the Vercel preview, because previews sit behind
+  Vercel Authentication. Auditing the preview would need a protection bypass secret in Actions.
+- **Recipe page:** it prefers `/recipe/whipped-vanilla-honey-butter` (the `PREFERRED_RECIPE` env in
+  the workflow) and falls back to the first prerendered recipe. It fails if the build lists none.
+- **Best practices** reads 96 in CI only: `SanityLive` connects from `localhost`, which Sanity's
+  CORS rules block, and that logs console errors. Production is an allowed origin.
+- Lighthouse CI is pinned with a lockfile in `.github/lighthouse/`, so its version only changes when
+  that lockfile does.
 
 Local composite actions:
 

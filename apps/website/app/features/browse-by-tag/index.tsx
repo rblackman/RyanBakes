@@ -18,7 +18,7 @@ export default function BrowseByTag({ summaries }: Props) {
 	const popular = [...summaries].sort((a, b) => b.count - a.count || a.tag.localeCompare(b.tag)).slice(0, tagLimit);
 
 	return (
-		<section className={styles.browse} aria-labelledby="browse-heading">
+		<section aria-labelledby="browse-heading">
 			<Heading level={2} id="browse-heading">
 				Find a recipe
 			</Heading>

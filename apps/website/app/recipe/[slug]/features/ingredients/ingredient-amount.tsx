@@ -51,9 +51,13 @@ export default function IngredientAmount({ amount, unit, units, full = false }: 
 
 	const { display = "Decimal", noCount = false, noUnit = false, name = "", abbreviation = "" } = resolvedUnit;
 
+	// A space between number and unit ("300 g", "1 Tbsp") when both show.
+	const needsSpace = !noCount && !noUnit && amount.trim().length > 0;
+
 	return (
 		<>
 			<AmountDisplay amount={amount} display={display} noCount={noCount} />
+			{needsSpace && " "}
 			<UnitDisplay name={name} abbreviation={abbreviation} noUnit={noUnit} full={full} />
 		</>
 	);

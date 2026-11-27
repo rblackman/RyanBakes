@@ -1,7 +1,15 @@
 .secondaryGrid {
-	margin: 2rem 0 0 0;
-	display: flex;
-	flex-flow: row nowrap;
-	align-items: center;
-	justify-content: flex-start;
+	display: grid;
+	/* Two columns on most phones, four or five on a wide screen. */
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, clamp(8rem, 30vw, 12rem)), 1fr));
+	gap: var(--space-5);
+	margin: var(--space-6) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+@media only screen and (max-width: 640px) {
+	.secondaryGrid {
+		gap: var(--space-4);
+	}
 }

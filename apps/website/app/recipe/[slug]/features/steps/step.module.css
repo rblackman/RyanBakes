@@ -1,49 +1,74 @@
+/*
+ * One step: the ingredients it uses on the left, the directions on the right. On narrow screens
+ * the ingredients sit under the step title. Steps are numbered with a CSS counter.
+ */
 .stepWrap {
-	padding: 2rem 1rem;
+	counter-increment: step;
 	display: grid;
-	grid-template-columns: clamp(10vw, 20rem, 50vw) 1fr;
-	grid-template-rows: 1fr;
+	grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
 	grid-template-areas: "ing step";
-	gap: 2rem;
-	align-items: center;
-	background: var(--bg);
-}
-
-.stepWrap:nth-of-type(even) {
-	background: var(--bg-alt);
-}
-
-@media only screen and (max-width: 910px) {
-	.stepWrap {
-		grid-template-columns: 1fr;
-		grid-template-rows: 1fr auto;
-		gap: 1rem;
-		grid-template-areas: "step" "ing";
-	}
-
-	.stepWrap ul {
-		padding-left: 0.5rem;
-		margin-left: 0.5rem;
-		border-left: 0.1rem solid var(--secondary-dark);
-	}
+	gap: var(--space-6);
+	align-items: start;
+	padding: var(--space-5) 0;
+	border-bottom: 1px solid var(--border);
 }
 
 .ingredientsWrap {
-	list-style: none;
-	padding: 0;
 	grid-area: ing;
-	margin-right: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-1);
+	margin: 0;
+	padding: var(--space-2) var(--space-3);
+	list-style: none;
+	font-size: var(--font-size-sm);
+	line-height: 1.35;
+	background: var(--secondary-light);
+	border-left: 0.2rem solid var(--secondary-dark);
+	border-radius: 0 var(--radius) var(--radius) 0;
 }
 
-.ingredientsWrap li {
-	line-height: 1.25;
-	font-size: 0.75em;
+.amount {
+	font-weight: 600;
+	white-space: nowrap;
 }
 
 .directionsWrap {
 	grid-area: step;
+	max-width: var(--reading-width);
+}
+
+.stepHeading {
+	display: flex;
+	align-items: baseline;
+	gap: var(--space-3);
+	margin: 0 0 var(--space-2);
+}
+
+.stepHeading::before {
+	content: counter(step);
+	flex-shrink: 0;
+	display: inline-grid;
+	place-items: center;
+	min-width: 1.6em;
+	height: 1.6em;
+	border-radius: 999px;
+	background: var(--primary);
+	color: var(--primary-contrast);
+	font-size: var(--font-size-sm);
+	font-variant-numeric: tabular-nums;
+	/* Lines the circle up with the heading text, which is baseline aligned. */
+	transform: translateY(-0.1em);
 }
 
 .directionsWrap p:last-of-type {
 	margin-bottom: 0;
+}
+
+@media only screen and (max-width: 910px) {
+	.stepWrap {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-areas: "step" "ing";
+		gap: var(--space-3);
+	}
 }

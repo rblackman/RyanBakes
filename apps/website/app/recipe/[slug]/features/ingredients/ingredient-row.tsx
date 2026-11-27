@@ -1,3 +1,4 @@
+import table from "@components/ui/table/table.module.css";
 import type { Ingredient as IngredientType, Unit } from "@ryan-bakes/sanity-types";
 import type Keyed from "@t/keyed";
 import IngredientAmount from "./ingredient-amount";
@@ -13,15 +14,12 @@ export default function IngredientRow({ ingredient, units }: Props) {
 
 	return (
 		<tr>
-			<td>{name ?? ""}</td>
 			<td>
+				{name ?? ""}
+				{notes && notes.length > 0 && <span className={styles.note}> ({notes})</span>}
+			</td>
+			<td className={table.nowrap}>
 				{unit && <IngredientAmount amount={amount ?? ""} unit={unit} units={units} />}
-				{notes && notes.length > 0 && (
-					<>
-						{" "}
-						<span className={styles.note}>({notes})</span>
-					</>
-				)}
 			</td>
 		</tr>
 	);

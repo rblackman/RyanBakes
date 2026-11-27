@@ -17,10 +17,10 @@ export default async function MainNav() {
 					<Link href="/">{title}</Link>
 				</p>
 
-				<nav className={styles.nav} aria-label="Main">
+				<nav aria-label="Main">
 					<ul className={styles.navList}>
 						{mainNav.map(({ id, ...item }) => (
-							<li key={id} className={styles.navListItem}>
+							<li key={id}>
 								<MainNavItem item={item} />
 							</li>
 						))}

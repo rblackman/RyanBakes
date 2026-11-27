@@ -17,15 +17,13 @@ export default function SecondaryFeaturedRecipes({ recipes }: Props) {
 			<Heading level={2} sr>
 				Other Recipes
 			</Heading>
-			<div className={styles.secondaryGrid}>
+			<ul className={styles.secondaryGrid}>
 				{recipes.map(({ recipe, index }) => (
-					<SecondaryFeaturedRecipe
-						key={recipe._id ? `${recipe._id}-${index}` : `idx-${index}`}
-						recipe={recipe}
-						index={index}
-					/>
+					<li key={recipe._id ? `${recipe._id}-${index}` : `idx-${index}`}>
+						<SecondaryFeaturedRecipe recipe={recipe} />
+					</li>
 				))}
-			</div>
+			</ul>
 		</>
 	);
 }

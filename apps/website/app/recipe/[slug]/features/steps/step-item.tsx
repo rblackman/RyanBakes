@@ -29,9 +29,16 @@ export default function StepItem({ ingredients, step: { title, content }, units 
 				<ul className={styles.ingredientsWrap}>
 					{ingredients.map(({ _key, amount, name, unit }) => {
 						const ingredientName = name ?? "";
+						const hasAmount = (amount ?? "").trim().length > 0;
 						return (
 							<li key={_key}>
-								<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} /> &ndash;{" "}
+								{hasAmount && (
+									<>
+										<span className={styles.amount}>
+											<IngredientAmount amount={amount ?? ""} units={units} {...(unit ? { unit } : {})} />
+										</span>{" "}
+									</>
+								)}
 								{ingredientName}
 							</li>
 						);
@@ -39,7 +46,7 @@ export default function StepItem({ ingredients, step: { title, content }, units 
 				</ul>
 			)}
 			<div className={styles.directionsWrap}>
-				<Heading level={3} style={{ margin: 0 }}>
+				<Heading level={3} className={styles.stepHeading}>
 					{headingTitle}
 				</Heading>
 				{(content ?? []).map((block: StepBlock) => {

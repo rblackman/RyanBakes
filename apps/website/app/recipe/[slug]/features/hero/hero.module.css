@@ -51,15 +51,18 @@
 }
 
 .heading {
+	margin: 0 0 var(--space-2);
 	font-size: 2rem;
 }
 
 @media only screen and (min-width: 1001px) {
 	.headingWrap {
-		padding: 1rem 6rem;
+		padding: var(--space-5) var(--space-7);
+		/* Line the title up with the page column below it on wide screens. */
+		padding-left: max(var(--space-7), calc((100vw - var(--max-content-width)) / 2 + var(--content-padding-inline)));
 	}
 
 	.heading {
-		font-size: 4rem;
+		font-size: 3rem;
 	}
 }
