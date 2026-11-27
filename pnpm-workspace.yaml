@@ -9,3 +9,9 @@ onlyBuiltDependencies:
   - protobufjs
   - sharp
   - unrs-resolver
+
+# @vercel/frameworks (pulled in by @sanity/cli 8) pins smol-toml 1.5.2, which has
+# known DoS advisories (GHSA-7w5x-hrqm-74c2 and others, fixed in 1.9.0). Remove once
+# @vercel/frameworks ships a patched pin.
+overrides:
+  smol-toml: ^1.9.1
