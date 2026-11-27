@@ -1,0 +1,8 @@
+{
+	"name": "ryan-bakes-lighthouse-ci",
+	"private": true,
+	"description": "Pins Lighthouse CI and its dependencies for .github/workflows/lighthouse.yml. Install with npm ci.",
+	"devDependencies": {
+		"@lhci/cli": "0.16.1"
+	}
+}
