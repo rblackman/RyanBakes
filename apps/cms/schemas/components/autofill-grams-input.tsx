@@ -9,13 +9,14 @@ function parseAmountToNumber(amount: unknown): number | null {
 		return null;
 	}
 
-	// Gram amounts are whole or decimal numbers ("350", "350.5"); take the first one.
-	const match = amount.trim().match(/-?\d+(\.\d+)?/);
-	if (!match) {
+	// Only a plain whole or decimal number ("350", "350.5", ".5"). Fractions and ranges are left for
+	// the editor to enter by hand, so "1/2" never becomes 1 gram.
+	const trimmed = amount.trim();
+	if (!/^(?:\d+(?:\.\d+)?|\.\d+)$/.test(trimmed)) {
 		return null;
 	}
 
-	const value = Number(match[0]);
+	const value = Number(trimmed);
 	if (Number.isNaN(value)) {
 		return null;
 	}
@@ -34,10 +35,13 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 
 	// Only copy the amount when the ingredient is measured in grams; 2 cups is not 2 grams.
 	const client = useClient({ apiVersion: "2025-01-01" });
-	const [isGrams, setIsGrams] = useState(false);
+	// The unit ID last confirmed to be grams. Comparing it with the current unit means a lookup that
+	// is still running for a newly picked unit can never reuse the old answer.
+	const [gramUnitId, setGramUnitId] = useState<string | null>(null);
+	const isGrams = typeof unitRef === "string" && gramUnitId === unitRef;
 	useEffect(() => {
 		if (typeof unitRef !== "string") {
-			setIsGrams(false);
+			setGramUnitId(null);
 			return;
 		}
 
@@ -46,12 +50,12 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 			.fetch<boolean>(gramUnitQuery, { id: unitRef })
 			.then((result) => {
 				if (!cancelled) {
-					setIsGrams(result === true);
+					setGramUnitId(result === true ? unitRef : null);
 				}
 			})
 			.catch(() => {
 				if (!cancelled) {
-					setIsGrams(false);
+					setGramUnitId(null);
 				}
 			});
 
