@@ -78,10 +78,13 @@ jobs:
             const preferred = process.env.PREFERRED_RECIPE;
             console.log(recipes.includes(preferred) ? preferred : (recipes[0] ?? ""));
           ')"
-          urls="http://localhost:3000/ http://localhost:3000/tags"
-          if [ -n "$recipe" ]; then
-            urls="$urls http://localhost:3000${recipe}"
+          # Recipe pages are statically generated, so the build lists them. If none is listed, the
+          # recipe page (the slowest page) would drop out of the audit unnoticed, so fail instead.
+          if [ -z "$recipe" ]; then
+            echo "::error::No prerendered /recipe/<slug> route in the build. Is a recipe published, and is the recipe page still static?"
+            exit 1
           fi
+          urls="http://localhost:3000/ http://localhost:3000/tags http://localhost:3000${recipe}"
           echo "Auditing: $urls"
           echo "urls=$urls" >> "$GITHUB_OUTPUT"
 

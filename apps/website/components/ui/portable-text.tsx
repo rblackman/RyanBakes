@@ -25,14 +25,19 @@ function UnknownMark({ children, markType }: { children: ReactNode; markType: st
 type BlockProps = PortableTextComponentProps<PortableTextBlock>;
 
 const portableTextComponents: PortableTextComponents = {
+	// Rich text sits under the page's h1, so authored headings keep their own level. The Studio offers
+	// H2 to H4; an h1 from older content is capped at h2 so a page never gets a second h1.
 	block: {
 		h1: ({ children }: BlockProps) => {
 			return <Heading level={2}>{children}</Heading>;
 		},
 		h2: ({ children }: BlockProps) => {
-			return <Heading level={3}>{children}</Heading>;
+			return <Heading level={2}>{children}</Heading>;
 		},
 		h3: ({ children }: BlockProps) => {
+			return <Heading level={3}>{children}</Heading>;
+		},
+		h4: ({ children }: BlockProps) => {
 			return <Heading level={4}>{children}</Heading>;
 		},
 		normal: ({ children }: BlockProps) => {
