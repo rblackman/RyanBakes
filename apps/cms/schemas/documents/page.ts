@@ -38,4 +38,10 @@ export default defineType({
 			validation: (Rule) => Rule.required(),
 		}),
 	],
+	preview: {
+		select: { title: "title", slug: "slug.current" },
+		prepare({ title, slug }) {
+			return { title: title ?? "Untitled page", subtitle: slug ? `/${slug}` : "No slug yet" };
+		},
+	},
 });

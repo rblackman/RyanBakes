@@ -1,6 +1,8 @@
 import { FcCheckmark } from "react-icons/fc";
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { validateAmount, validateUsedInSteps, warnOnUnusedIngredient } from "../../helpers/validation";
 import AutoFillGramsInput from "../components/autofill-grams-input";
+import StepPickerInput from "../components/step-picker-input";
 
 export default defineType({
 	name: "ingredient",
@@ -12,36 +14,50 @@ export default defineType({
 			name: "name",
 			title: "Name",
 			type: "string",
+			description: "What to add, e.g. bread flour or unsalted butter.",
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "amount",
 			title: "Amount",
 			type: "string",
-			validation: (Rule) => Rule.required(),
+			description:
+				"A number (2, 0.25), a fraction (1/2, 1 1/2), a range (2-3) or a word such as Pinch. Units set to show fractions turn decimals like 0.25 into 1/4.",
+			validation: (Rule) => [Rule.required(), Rule.custom(validateAmount).warning()],
 		}),
 		defineField({
 			name: "unit",
 			title: "Unit",
 			type: "reference",
 			to: [{ type: "unit" }],
+			description: "Pick from the units under Settings. Use No Unit for things counted whole, like eggs.",
+			options: { disableNew: true },
 			validation: (Rule) => Rule.required(),
 		}),
 		defineField({
 			name: "notes",
 			title: "Notes",
 			type: "string",
+			description: "Optional, shown after the name, e.g. softened or divided.",
 		}),
 		defineField({
 			name: "usedInSteps",
 			title: "Used In Steps",
 			type: "array",
+			description: "Tick the steps that use this ingredient. It is listed with those steps on the recipe page.",
 			of: [defineArrayMember({ type: "number" })],
+			components: { input: StepPickerInput },
+			validation: (Rule) => [
+				Rule.unique(),
+				Rule.custom(validateUsedInSteps),
+				Rule.custom(warnOnUnusedIngredient).warning(),
+			],
 		}),
 		defineField({
 			name: "bakers",
 			title: "Baker Math",
 			type: "object",
+			description: "Only needed when the recipe shows the baker's percentage table.",
 			fields: [
 				defineField({
 					name: "includeInBakersMath",
@@ -117,8 +133,11 @@ export default defineType({
 	preview: {
 		select: {
 			name: "name",
+			notes: "notes",
 			amount: "amount",
 			unit: "unit.abbreviation",
+			noUnit: "unit.noUnit",
+			noCount: "unit.noCount",
 			steps: "usedInSteps",
 			include: "bakers.includeInBakersMath",
 			grams: "bakers.grams",
@@ -126,28 +145,27 @@ export default defineType({
 			hyd: "bakers.countsTowardHydration",
 			factor: "bakers.hydrationFactor",
 		},
-		prepare({ name, amount, unit, steps, include, grams, isFlour, hyd, factor }) {
-			const s = Array.isArray(steps) ? steps : [];
-			const base =
-				s.length > 0
-					? `${amount}${unit ?? ""} (Step${s.length > 1 ? "s" : ""}: ${s.join(", ")})`
-					: `${amount}${unit ?? ""} (Not Associated with Step)`;
+		prepare({ name, notes, amount, unit, noUnit, noCount, steps, include, grams, isFlour, hyd, factor }) {
+			const quantity = [noCount ? "" : amount, noUnit ? "" : unit].filter(Boolean).join(" ");
+			const s: number[] = Array.isArray(steps) ? steps : [];
+			const stepText = s.length > 0 ? `Step${s.length > 1 ? "s" : ""} ${s.join(", ")}` : "No step";
 
-			if (!include || !grams) {
-				return { title: name, subtitle: base, media: FcCheckmark };
-			}
+			const parts = [quantity || undefined, stepText];
 
-			const flags: string[] = [];
-			if (isFlour) {
-				flags.push("flour");
-			}
-			if (hyd) {
-				flags.push(`hydration${factor !== undefined && factor !== 1 ? ` x${factor}` : ""}`);
+			if (include && grams) {
+				const flags: string[] = [];
+				if (isFlour) {
+					flags.push("flour");
+				}
+				if (hyd) {
+					flags.push(`hydration${factor !== undefined && factor !== 1 ? ` x${factor}` : ""}`);
+				}
+				parts.push(`${grams} g${flags.length > 0 ? ` (${flags.join(", ")})` : ""}`);
 			}
 
 			return {
-				title: name,
-				subtitle: `${base} • ${grams}g${flags.length > 0 ? ` (${flags.join(", ")})` : ""}`,
+				title: notes ? `${name}, ${notes}` : name,
+				subtitle: parts.filter(Boolean).join(" · "),
 				media: FcCheckmark,
 			};
 		},

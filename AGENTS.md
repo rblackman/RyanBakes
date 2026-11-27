@@ -142,7 +142,14 @@ The website uses Zod 4. Write the current API, not Zod 3 habits:
 
 - Use `defineType`, `defineField` and `defineArrayMember`. Give fields a `title` and a helpful
   `description`; put validation in the schema.
-- Register new types in `apps/cms/schemas/index.ts`. Singletons also need an entry in `structure.ts`.
+- Register new types in `apps/cms/schemas/index.ts`. Singletons also need an entry in `singletons.ts`
+  and a list item in `structure.ts`.
+- Put fields in the document's `groups` (tabs) and give list types a `preview` that reads well.
+- Validation that catches likely mistakes in existing content is a `.warning()`, not an error, so old
+  documents still publish. Shared validators live in `apps/cms/helpers/validation.ts`.
+- Schema changes must keep existing data valid: no field renames or type changes without a
+  migration plan. Field titles, descriptions, groups and previews are safe to change.
+- Custom inputs use `@sanity/ui`. `useFormValue` takes a path from the document root.
 
 ### Formatting
 

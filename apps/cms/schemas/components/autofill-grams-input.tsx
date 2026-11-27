@@ -1,13 +1,15 @@
 import type React from "react";
-import { useCallback, useEffect, useRef } from "react";
-import { type NumberInputProps, set, unset, useFormValue } from "sanity";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type NumberInputProps, set, unset, useClient, useFormValue } from "sanity";
+
+const gramUnitQuery = `*[_id == $id][0].abbreviation == "g"`;
 
 function parseAmountToNumber(amount: unknown): number | null {
 	if (typeof amount !== "string") {
 		return null;
 	}
 
-	// Simple: grab the first numeric token (supports "350", "350.5", "350 g")
+	// Gram amounts are whole or decimal numbers ("350", "350.5"); take the first one.
 	const match = amount.trim().match(/-?\d+(\.\d+)?/);
 	if (!match) {
 		return null;
@@ -22,16 +24,41 @@ function parseAmountToNumber(amount: unknown): number | null {
 }
 
 export default function AutofillGramsInput(props: NumberInputProps) {
-	const { value, onChange, elementProps } = props;
+	const { value, onChange, elementProps, path } = props;
 
-	// This reads the sibling field "amount" from the current ingredient object.
-	// Path [] means "current object". Since grams lives at ingredient.bakers.grams,
-	// the current object is the ingredient object, so ["amount"] is correct.
-	const amount = useFormValue(["amount"]) as unknown;
+	// useFormValue takes a path from the document root. Grams lives at
+	// ingredients[_key].bakers.grams, so the ingredient is two levels up.
+	const ingredientPath = useMemo(() => path.slice(0, -2), [path]);
+	const amount = useFormValue([...ingredientPath, "amount"]) as unknown;
+	const unitRef = useFormValue([...ingredientPath, "unit", "_ref"]) as unknown;
 
-	// Optional: if you only want to autofill when includeInBakersMath is true,
-	// uncomment the next line and add it as a guard in tryAutofill().
-	// const includeInBakersMath = useFormValue(["bakers", "includeInBakersMath"]) as boolean | undefined;
+	// Only copy the amount when the ingredient is measured in grams; 2 cups is not 2 grams.
+	const client = useClient({ apiVersion: "2025-01-01" });
+	const [isGrams, setIsGrams] = useState(false);
+	useEffect(() => {
+		if (typeof unitRef !== "string") {
+			setIsGrams(false);
+			return;
+		}
+
+		let cancelled = false;
+		client
+			.fetch<boolean>(gramUnitQuery, { id: unitRef })
+			.then((result) => {
+				if (!cancelled) {
+					setIsGrams(result === true);
+				}
+			})
+			.catch(() => {
+				if (!cancelled) {
+					setIsGrams(false);
+				}
+			});
+
+		return () => {
+			cancelled = true;
+		};
+	}, [client, unitRef]);
 
 	const didAutofill = useRef(false);
 
@@ -46,8 +73,9 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 			return;
 		}
 
-		// If you only want to autofill when enabled:
-		// if (includeInBakersMath !== true) { return; }
+		if (!isGrams) {
+			return;
+		}
 
 		const parsed = parseAmountToNumber(amount);
 		if (parsed === null) {
@@ -56,7 +84,7 @@ export default function AutofillGramsInput(props: NumberInputProps) {
 
 		onChange(set(parsed));
 		didAutofill.current = true;
-	}, [amount, onChange, value]);
+	}, [amount, isGrams, onChange, value]);
 
 	useEffect(() => {
 		tryAutofill();

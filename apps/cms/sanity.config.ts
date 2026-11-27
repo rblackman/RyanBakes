@@ -5,7 +5,11 @@ import { presentationTool } from "sanity/presentation";
 import { structureTool } from "sanity/structure";
 
 import { schemaTypes } from "./schemas";
+import { singletonTypes } from "./singletons";
 import { deskStructure } from "./structure";
+
+// Singletons can be edited and published, but not duplicated, deleted or created a second time.
+const singletonActions = new Set(["publish", "discardChanges", "restore"]);
 
 const dataset = process.env.SANITY_STUDIO_DATASET ?? "production";
 
@@ -43,5 +47,13 @@ export default defineConfig({
 
 	schema: {
 		types: schemaTypes,
+		templates: (templates) => templates.filter(({ schemaType }) => !singletonTypes.has(schemaType)),
+	},
+
+	document: {
+		actions: (actions, { schemaType }) =>
+			singletonTypes.has(schemaType)
+				? actions.filter(({ action }) => action !== undefined && singletonActions.has(action))
+				: actions,
 	},
 });
