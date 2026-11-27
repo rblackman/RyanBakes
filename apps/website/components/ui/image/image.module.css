@@ -1,4 +1,14 @@
 .image {
 	position: relative;
 	max-width: 100%;
+	overflow: hidden;
+	/* Shown while the image loads */
+	background-color: var(--bg-alt);
+}
+
+.image img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
 }

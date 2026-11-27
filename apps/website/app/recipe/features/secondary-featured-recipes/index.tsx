@@ -14,7 +14,7 @@ export default function SecondaryFeaturedRecipes({ recipes }: Props) {
 
 	return (
 		<>
-			<Heading level={3} sr>
+			<Heading level={2} sr>
 				Other Recipes
 			</Heading>
 			<div className={styles.secondaryGrid}>

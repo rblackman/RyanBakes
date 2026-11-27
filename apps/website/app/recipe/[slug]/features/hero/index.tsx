@@ -1,7 +1,7 @@
 import Heading from "@components/ui/heading";
-import createImageBuilder, { type ImageBuilder } from "@hooks/useImageBuilder";
 import type { Recipe } from "@ryan-bakes/sanity-types";
-import type { CSSProperties } from "react";
+import { sanityImageProject } from "@shared/lib/image";
+import { Image as SanityImage } from "next-sanity/image";
 import RecipeMeta from "../meta";
 import styles from "./hero.module.css";
 
@@ -9,19 +9,9 @@ type Props = Readonly<{
 	recipe: Recipe;
 }>;
 
-export function generateBaseBgUrl(imageBuilder: ImageBuilder): string {
-	const baseUrl = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 2000,
-		aspectRatio: 7 / 2,
-	});
-	return baseUrl;
-}
-
 export default function RecipeHero({ recipe }: Props) {
 	const title = recipe.title ?? "";
-	const asset = recipe.picture?.asset;
+	const picture = recipe.picture;
 	const metaProps = {
 		preheat: recipe.preheat,
 		bakeTime: recipe.bakeTime,
@@ -29,81 +19,25 @@ export default function RecipeHero({ recipe }: Props) {
 		serves: recipe.serves,
 	};
 
-	if (!asset) {
-		return (
-			<div className={styles.heroContainer}>
-				<div className={styles.headingWrap}>
-					<Heading level={2} className={styles.heading}>
-						{title}
-					</Heading>
-					<RecipeMeta {...metaProps} />
-				</div>
-			</div>
-		);
-	}
-
-	const imageBuilder = createImageBuilder(asset);
-
-	const baseUrl = generateBaseBgUrl(imageBuilder);
-	const baseUrl2x = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 2000,
-		aspectRatio: 7 / 2,
-		dpr: 2,
-	});
-
-	const lqip = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 30,
-		width: 200,
-		aspectRatio: 7 / 2,
-		blur: 50,
-	});
-	console.log("LQIP URL:", lqip);
-
-	const desktop = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 1920,
-		aspectRatio: 8 / 3,
-	});
-	const desktop2x = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 1920,
-		aspectRatio: 8 / 3,
-		dpr: 2,
-	});
-	const tablet = imageBuilder.buildUrlWithOptions({ crop: "focalpoint", quality: 55, width: 1000, aspectRatio: 1 });
-	const tablet2x = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 1000,
-		aspectRatio: 1,
-		dpr: 2,
-	});
-	const mobile = imageBuilder.buildUrlWithOptions({ crop: "focalpoint", quality: 55, width: 768, aspectRatio: 1 });
-	const mobile2x = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 768,
-		aspectRatio: 1,
-		dpr: 2,
-	});
-
-	const containerStyle = {
-		"--bgUrl-lqip": `url('${lqip}')`,
-		"--bgUrl": `-webkit-image-set(url('${baseUrl}') 1x, url('${baseUrl2x}') 2x)`,
-		"--bgUrl-desk": `-webkit-image-set(url('${desktop}') 1x, url('${desktop2x}') 2x)`,
-		"--bgUrl-tablet": `-webkit-image-set(url('${tablet}') 1x, url('${tablet2x}') 2x)`,
-		"--bgUrl-mobile": `-webkit-image-set(url('${mobile}') 1x, url('${mobile2x}') 2x)`,
-	} as CSSProperties;
-
 	return (
-		<div className={styles.heroContainer} style={containerStyle}>
+		<div className={styles.heroContainer}>
+			{picture?.asset && (
+				// The likely LCP element: a real <img> (not a CSS background) so the browser finds it in
+				// the HTML, preloaded with a srcset. `fill` lets each breakpoint's aspect ratio crop it,
+				// and next-sanity positions the crop around the Studio hotspot.
+				<SanityImage
+					src={picture}
+					{...sanityImageProject}
+					fill
+					sizes="100vw"
+					preload
+					fetchPriority="high"
+					className={styles.heroImage}
+					alt={picture.emptyAlt || !picture.alt ? "" : picture.alt}
+				/>
+			)}
 			<div className={styles.headingWrap}>
-				<Heading level={2} className={styles.heading}>
+				<Heading level={1} className={styles.heading}>
 					{title}
 				</Heading>
 				<RecipeMeta {...metaProps} />

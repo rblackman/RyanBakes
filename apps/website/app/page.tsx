@@ -51,16 +51,14 @@ export default async function Page() {
 	const description = rawDescription && stegaClean(rawDescription).trim() ? rawDescription : defaultSiteDescription;
 
 	return (
-		<main>
-			<div className="content">
-				<HomeHero tagline={tagline} description={description} />
+		<div className="content">
+			<HomeHero tagline={tagline} description={description} />
 
-				{blocks.map((block) => (
-					<Block key={block._key} content={block} />
-				))}
+			{blocks.map((block) => (
+				<Block key={block._key} content={block} />
+			))}
 
-				<BrowseByTag summaries={tagSummaries} />
-			</div>
-		</main>
+			<BrowseByTag summaries={tagSummaries} />
+		</div>
 	);
 }

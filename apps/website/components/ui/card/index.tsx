@@ -18,17 +18,10 @@ export default function Card({ title, tags, picture, href, index }: Props) {
 	return (
 		<div className={styles.card} style={{ zIndex: 1000 + index }}>
 			{picture && (
-				<Image
-					image={picture}
-					width={400}
-					aspectRatio={300 / 125}
-					className={styles.pic}
-					responsive
-					alt={picture.alt ?? ""}
-				/>
+				<Image image={picture} width={400} aspectRatio={300 / 125} className={styles.pic} responsive sizes="300px" />
 			)}
 
-			<Heading level={4} className={styles.name}>
+			<Heading level={3} className={styles.name}>
 				<Link href={href}>{title}</Link>
 			</Heading>
 

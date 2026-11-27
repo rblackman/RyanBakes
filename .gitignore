@@ -69,3 +69,6 @@ apps/cms/schema.json
 .squad/sessions/
 # Squad: SubSquad activation file (local to this machine)
 .squad-workstream
+
+# Lighthouse CI output
+.lighthouseci/

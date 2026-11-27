@@ -32,18 +32,9 @@ export default function FeaturedRecipe({ recipe, priority = false, large = false
 
 	return (
 		<div className={recipeClass}>
-			{picture && (
-				<Image
-					image={picture}
-					width={350}
-					aspectRatio={1}
-					className={styles.img}
-					priority={priority}
-					alt={picture.alt ?? ""}
-				/>
-			)}
+			{picture && <Image image={picture} width={350} aspectRatio={1} className={styles.img} preload={priority} />}
 
-			<Heading level={3} className={styles.heading}>
+			<Heading level={2} className={styles.heading}>
 				<Link href={href}>{title}</Link>
 			</Heading>
 
@@ -52,7 +43,7 @@ export default function FeaturedRecipe({ recipe, priority = false, large = false
 			</div>
 
 			<div className={styles.blurb}>
-				<PortableText value={commentary} />
+				<PortableText value={commentary} minHeadingLevel={3} />
 			</div>
 		</div>
 	);

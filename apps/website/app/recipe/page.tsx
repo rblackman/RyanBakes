@@ -71,18 +71,16 @@ export default async function Page() {
 		.filter((value): value is { recipe: Recipe; index: number } => Boolean(value));
 
 	return (
-		<main>
-			<div className="content">
-				<Heading level={2}>{title}</Heading>
+		<div className="content">
+			<Heading level={1}>{title}</Heading>
 
-				<div>
-					<PortableText value={intro} />
-				</div>
-
-				{featuredRecipe && <FeaturedRecipe recipe={featuredRecipe} priority large />}
-
-				{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
+			<div>
+				<PortableText value={intro} />
 			</div>
-		</main>
+
+			{featuredRecipe && <FeaturedRecipe recipe={featuredRecipe} priority large />}
+
+			{secondaryRecipes.length > 0 && <SecondaryFeaturedRecipes recipes={secondaryRecipes} />}
+		</div>
 	);
 }

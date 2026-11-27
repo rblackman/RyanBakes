@@ -29,49 +29,62 @@ body {
 	}
 }
 
-:is(h2, h3, h4) {
+/*
+ * Each page has one h1 (its title), sections use h2 and subsections h3.
+ * The sizes match the site's look from before the outline was fixed: h1 is the large page title,
+ * h2 the uppercase section label, h3 the small bold subheading.
+ */
+:is(h1, h2, h3, h4) {
 	line-height: 1.2;
 }
 
-:is(h2, h3, h4):not(:first-child) {
+:is(h1, h2, h3, h4):not(:first-child) {
 	margin-top: 3rem;
 }
 
-h2 {
+h1 {
 	font-size: 3rem;
 }
 
-h3 {
+h2 {
 	margin: 0 0 2rem;
 	text-transform: uppercase;
 	font-size: 2rem;
 	font-weight: normal;
 }
 
-h4 {
+h3 {
 	margin: 0.5rem 0 1rem;
 	font-size: 1.25rem;
 }
 
+h4 {
+	margin: 0.5rem 0 0.75rem;
+	font-size: 1rem;
+}
+
 @media only screen and (max-width: 640px) {
-	:is(h2, h3, h4):not(:first-child) {
+	:is(h1, h2, h3, h4):not(:first-child) {
 		margin-top: 1.5rem;
 	}
 
-	h2 {
+	h1 {
 		font-size: 2rem;
 	}
 
-	h3 {
+	h2 {
 		margin: 0 0 1rem;
-		text-transform: uppercase;
 		font-size: 1.2rem;
-		font-weight: normal;
+	}
+
+	h3 {
+		margin: 0.3rem 0 0.5rem;
+		font-size: 1rem;
 	}
 
 	h4 {
 		margin: 0.3rem 0 0.5rem;
-		font-size: 1rem;
+		font-size: 0.9rem;
 	}
 }
 
@@ -117,10 +130,32 @@ a:hover {
 	text-decoration-color: var(--secondary);
 }
 
-a:focus-visible {
+a:focus-visible,
+:is(button, input, select, textarea, summary):focus-visible {
 	outline: var(--focus-outline-width) solid var(--focus-outline-color);
 	outline-offset: var(--focus-outline-offset);
 	text-decoration-color: var(--secondary-dark);
+}
+
+.skipLink {
+	/* It sits over the dark header, where the lighter green ring shows best. */
+	--focus-outline-color: var(--secondary);
+	position: absolute;
+	top: 0.5rem;
+	left: 0.5rem;
+	z-index: 10000;
+	padding: 0.5rem 1rem;
+	background: var(--bg);
+	color: var(--text);
+	transform: translateY(-200%);
+}
+
+.skipLink:focus-visible {
+	transform: none;
+}
+
+#main-content:focus {
+	outline: none;
 }
 
 .sr {

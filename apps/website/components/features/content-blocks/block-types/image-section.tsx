@@ -1,45 +1,20 @@
+import Image from "@components/ui/image";
 import throwError from "@helpers/throw-error";
-import createImageBuilder from "@hooks/useImageBuilder";
 import type { InlineImage } from "@ryan-bakes/sanity-types";
-import Image from "next/image";
 import "server-only";
 
 export type Props = Readonly<{
 	value: InlineImage;
 }>;
 
-export default function ImageSection({ value: { asset, alt, emptyAlt } }: Props) {
-	if (!asset) {
+export default function ImageSection({ value }: Props) {
+	if (!value.asset) {
 		return null;
 	}
 
-	const imageBuilder = createImageBuilder(asset);
-
-	const img2x = imageBuilder.buildUrlWithOptions({
-		crop: "focalpoint",
-		quality: 55,
-		width: 800,
-		aspectRatio: 4 / 3,
-		dpr: 2,
-	});
-
-	const altText = (() => {
-		if (emptyAlt) {
-			return "";
-		}
-		if (alt) {
-			return alt;
-		}
+	if (!value.emptyAlt && !value.alt) {
 		throwError("Image is missing alt text");
-	})();
+	}
 
-	return (
-		<Image
-			style={{ display: "block", margin: "1rem 0", padding: "0.5rem" }}
-			src={img2x}
-			alt={altText}
-			width={400}
-			height={(400 * 3) / 4}
-		/>
-	);
+	return <Image image={value} width={400} aspectRatio={4 / 3} style={{ margin: "1rem 0" }} />;
 }

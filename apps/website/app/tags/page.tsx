@@ -37,7 +37,7 @@ function FeaturedTag({ summary: { tag, count, recipes } }: TagSummaryProps) {
 
 	return (
 		<li className={styles.featuredCard}>
-			<Heading level={4} className={styles.featuredHeading}>
+			<Heading level={3} className={styles.featuredHeading}>
 				<Link href={tagHref(tag)}>{name}</Link>
 			</Heading>
 			<p className={styles.count}>{formatRecipeCount(count)}</p>
@@ -103,46 +103,44 @@ export default async function Page() {
 	const featured = resolveFeatured(tagsPage.featuredTag, tagsPage.secondaryFeature, summaries);
 
 	return (
-		<main>
-			<div className="content">
-				<Heading level={2}>{title}</Heading>
+		<div className="content">
+			<Heading level={1}>{title}</Heading>
 
-				{intro.length > 0 && (
-					<div className={styles.intro}>
-						<PortableText value={intro} />
-					</div>
-				)}
+			{intro.length > 0 && (
+				<div className={styles.intro}>
+					<PortableText value={intro} />
+				</div>
+			)}
 
-				{featured.length > 0 && (
-					<section aria-labelledby="featured-tags">
-						<Heading level={3} id="featured-tags">
-							Featured tags
-						</Heading>
-						<ul className={styles.featuredList}>
-							{featured.map((summary) => (
-								<FeaturedTag key={summary.tag} summary={summary} />
-							))}
-						</ul>
-					</section>
-				)}
-
-				<section aria-labelledby="all-tags">
-					<Heading level={3} id="all-tags">
-						All tags
+			{featured.length > 0 && (
+				<section aria-labelledby="featured-tags">
+					<Heading level={2} id="featured-tags">
+						Featured tags
 					</Heading>
-					{summaries.length > 0 ? (
-						<ul className={styles.tagList}>
-							{summaries.map((summary) => (
-								<TagWithCount key={summary.tag} summary={summary} />
-							))}
-						</ul>
-					) : (
-						<p>
-							No recipes have tags yet. <Link href="/recipe">Browse all recipes</Link> instead.
-						</p>
-					)}
+					<ul className={styles.featuredList}>
+						{featured.map((summary) => (
+							<FeaturedTag key={summary.tag} summary={summary} />
+						))}
+					</ul>
 				</section>
-			</div>
-		</main>
+			)}
+
+			<section aria-labelledby="all-tags">
+				<Heading level={2} id="all-tags">
+					All tags
+				</Heading>
+				{summaries.length > 0 ? (
+					<ul className={styles.tagList}>
+						{summaries.map((summary) => (
+							<TagWithCount key={summary.tag} summary={summary} />
+						))}
+					</ul>
+				) : (
+					<p>
+						No recipes have tags yet. <Link href="/recipe">Browse all recipes</Link> instead.
+					</p>
+				)}
+			</section>
+		</div>
 	);
 }
