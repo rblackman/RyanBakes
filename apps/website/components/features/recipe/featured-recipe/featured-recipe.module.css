@@ -130,22 +130,30 @@
 	display: none;
 }
 
-/* On phones the large layout stacks: the square picture on top, then the text. */
+/*
+ * On phones the large layout keeps a smaller square photo beside the title and tags, with the blurb
+ * full width below. The photo column is 7rem, 140px at the 20px root; see index.tsx.
+ */
 @media only screen and (max-width: 640px) {
 	.featuredRecipe.large {
 		--featured-padding: var(--space-4);
-		grid-template-areas: "img" "title" "tags" "blurb";
-		grid-template-columns: 1fr;
-		grid-template-rows: auto;
+		grid-template-areas: "img title" "img tags" "blurb blurb";
+		grid-template-columns: 7rem minmax(0, 1fr);
+		grid-template-rows: min-content 1fr auto;
+		column-gap: var(--space-4);
 		row-gap: var(--space-2);
 	}
 
-	.large :is(.heading, .tags, .blurb) {
-		margin-left: var(--featured-padding);
+	.large .img {
+		align-self: start;
 	}
 
 	.featuredRecipe.large .heading {
-		margin-top: var(--space-2);
 		font-size: var(--font-size-lg);
+	}
+
+	.large .blurb {
+		margin-left: var(--featured-padding);
+		padding-top: var(--space-2);
 	}
 }

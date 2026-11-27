@@ -43,8 +43,8 @@ export default async function Page() {
 		getTagSummaries(),
 	]);
 	const blocks: Array<Keyed<InlineImage | TextSection | RecipePreview>> = content ?? [];
-	// On phones the first large recipe preview's photo fills the screen width, so it is usually the
-	// largest thing in view. Fetch it early instead of lazily.
+	// The first large recipe preview's photo is near the top and often the largest thing in view on
+	// wider screens. Fetch it early instead of lazily.
 	const leadPreviewKey = blocks.find((block) => block._type === "recipePreview" && block.large === true)?._key;
 
 	// Keep the raw (possibly stega-encoded) values so visual editing can map them to fields.
