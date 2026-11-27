@@ -34,11 +34,16 @@ deployment.
 
 - The Studio is deployed to Sanity hosting with `sanity deploy`. Its URL is the value of
   `NEXT_PUBLIC_SANITY_STUDIO_URL`, and `/studio` on the website redirects there.
-- Deploy from the **Deploy CMS** workflow (`.github/workflows/deploy-cms.yml`): run it by hand on
-  `main`. It uses the `production` GitHub environment, runs typegen and the Studio build, then
-  deploys with the `SANITY_AUTH_TOKEN` secret.
+- The **Deploy CMS** workflow (`.github/workflows/deploy-cms.yml`) deploys the Studio, and its
+  schema, every time a change to `apps/cms`, the root `package.json`, the lockfile, the workspace
+  config or the workflow itself merges to `main`. You can also run it by hand from the Actions tab.
+  It uses the `production` GitHub environment, runs typegen and the Studio build, then deploys with
+  the `SANITY_AUTH_TOKEN` secret. Only one deploy runs at a time, and the newest merge wins.
+- `deployment.appId` in `apps/cms/sanity.cli.ts` names the hosted Studio, so the deploy never
+  prompts. If the Studio is ever recreated, update it from the project's Studios page in Sanity
+  Manage.
 - Or deploy from a machine that is signed in to Sanity: `pnpm deploy:cms`.
-- Deploy the Studio after merging any schema change. Until then, editors use the old schema.
+- A schema change reaches editors as soon as the deploy after its merge finishes.
 
 ## GitHub Actions
 
@@ -48,7 +53,7 @@ deployment.
 | `pr-title.yml`               | PRs (opened, edited, updated)         | Runs commitlint on the PR title (`.github/commitlint-pr-title.config.mjs`: repo rules, no default ignores), because squash merges use it as the commit message. Skips bot PRs. |
 | `codeql.yml`                 | PRs, pushes to `main`, weekly, manual | CodeQL (`security-extended`) for JavaScript/TypeScript and for the workflows themselves |
 | `dependabot-autoapprove.yml` | Dependabot PRs                        | Turns on squash auto-merge for single-commit patch and minor updates; the rest wait for a person |
-| `deploy-cms.yml`             | Manual, `main` only                   | Builds and deploys the Studio |
+| `deploy-cms.yml`             | Pushes to `main` that touch the Studio, manual | Builds and deploys the Studio and its schema |
 
 `ci.yml` has no path filter on purpose: the `main` ruleset requires the **Verify (typegen, biome,
 tsc)** and **Build (non-fork PRs + main)** checks, and a skipped workflow would leave them pending.
@@ -59,7 +64,7 @@ Local composite actions:
 - `.github/actions/setup` enables Corepack, sets up Node with the pnpm store cache and runs
   `pnpm install --frozen-lockfile`.
 - `.github/actions/write-website-env` writes `apps/website/.env` from repository variables and
-  secrets for the Build job and the Studio deploy. Dependabot PRs read **Dependabot** secrets, so
+  secrets for the Build job. Dependabot PRs read **Dependabot** secrets, so
   `SANITY_REVALIDATE_SECRET` and `SANITY_VIEWER_TOKEN` must be set there too for their Build job.
 
 ### Repository variables and secrets
