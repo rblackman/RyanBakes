@@ -22,7 +22,8 @@
 			"!**/build",
 			"!**/shared/shadcn/*.tsx",
 			"!**/.agents",
-			"!**/.claude"
+			"!**/.claude",
+			"!**/skills-lock.json"
 		]
 	},
 	"formatter": {

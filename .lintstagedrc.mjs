@@ -8,13 +8,17 @@ const toRepoRelative = (filenames) => {
 };
 
 const isIgnored = (f) => {
+	// Paths are repo-relative, so root-level folders have no leading slash
+	const segments = f.split("/");
+
 	return (
 		f.startsWith("packages/sanity-types/") ||
 		f.includes("/.next/") ||
 		f.includes("/dist/") ||
 		f.includes("/build/") ||
-		f.includes("/.agents/") ||
-		f.includes("/.claude/") ||
+		segments.includes(".agents") ||
+		segments.includes(".claude") ||
+		f === "skills-lock.json" ||
 		f.includes("/out/") ||
 		f.includes("/coverage/")
 	);
